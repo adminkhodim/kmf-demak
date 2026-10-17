@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>KMF Demak - Keluarga Mathali'ul Falah</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#132644">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KMF Demak">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kmf: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                            700: '#1e3a68',
+                            800: '#132644',
+                            900: '#0d1b32',
+                            gold: '#f59e0b',
+                            'gold-light': '#fcd34d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="h-full flex flex-col bg-slate-50 text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900">
+
+    <!-- ==================== HEADER MOBILE (ALA ASNAWIYYAH) ==================== -->
+    <header id="main-mobile-header"
+        class="md:hidden bg-gradient-to-r from-kmf-800 via-kmf-700 to-kmf-800 text-white px-3.5 py-2.5 sticky top-0 z-50 flex justify-between items-center shadow-md border-b border-kmf-600/40">
+        <!-- Logo & Nama KMF Demak -->
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="App.navigateTo('home')">
+            <img src="assets/img/logo.png" alt="KMF Demak" class="w-10 h-10 rounded-xl shadow-sm object-contain bg-white/10 p-0.5 border border-white/20">
+            <div>
+                <div class="flex items-center gap-1.5 leading-tight">
+                    <span class="font-bold text-sm tracking-wide text-white">KMF DEMAK</span>
+                    <span class="text-[9px] bg-kmf-gold text-slate-950 px-1.5 py-0.2 rounded-full font-bold">Cabang</span>
+                </div>
+                <p class="text-[10px] text-blue-100/90 font-medium leading-tight">Keluarga Mathali'ul Falah</p>
+            </div>
+        </div>
+
+        <!-- Tombol Aksi Kanan: Install PWA & Notifikasi Admin -->
+        <div class="flex items-center gap-1.5">
+            <!-- Tombol Pasang PWA Mobile -->
+            <button id="mobile-btn-install-app" onclick="App.installPWA()"
+                class="hidden bg-kmf-gold hover:bg-amber-400 text-slate-950 font-bold px-2.5 py-1 rounded-xl text-[10.5px] shadow-sm items-center gap-1 transition active:scale-95">
+                <i class="fa-solid fa-cloud-arrow-down text-slate-950 text-xs"></i>
+                <span>Pasang</span>
+            </button>
+
+            <!-- Tombol Shortcut Panel Admin / Notifikasi -->
+            <button onclick="App.navigateTo('admin')"
+                class="relative w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-amber-300 flex items-center justify-center text-sm border border-white/15 shadow-sm transition active:scale-95"
+                title="Panel Pengurus KMF">
+                <i class="fa-solid fa-user-shield"></i>
+                <span id="mobile-badge-pending-count" class="hidden absolute -top-1 -right-1 min-w-[17px] h-[17px] px-1 bg-rose-600 text-white text-[9.5px] font-black rounded-full flex items-center justify-center shadow border-2 border-kmf-800 leading-none badge-pulse">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== HEADER DESKTOP (Sembunyi di Layar Ponsel) ==================== -->
+    <header id="main-desktop-header" class="hidden md:block sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
+        <div class="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between">
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="App.navigateTo('home')">
+                <img src="assets/img/logo.png" alt="Logo KMF Demak" class="w-10 h-10 rounded-xl shadow-sm object-contain">
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="font-bold text-lg leading-tight text-kmf-700 tracking-wide font-['Poppins']">KMF DEMAK</span>
+                        <span class="text-[10px] bg-blue-50 text-kmf-700 border border-kmf-600/20 px-1.5 py-0.5 rounded-full font-semibold">Cabang</span>
+                    </div>
+                    <p class="text-[11px] text-slate-500 font-medium">Keluarga Mathali'ul Falah</p>
+                </div>
+            </div>
+
+            <!-- Action Controls Desktop -->
+            <div class="flex items-center gap-2">
+                <!-- PWA Install Button Desktop -->
+                <button id="btn-install-pwa" class="hidden items-center gap-1.5 text-xs bg-kmf-gold text-slate-900 font-semibold px-3 py-1.5 rounded-full shadow hover:bg-amber-400 active:scale-95 transition">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Pasang App</span>
+                </button>
+
+                <!-- Shortcut Panel Pengurus -->
+                <button onclick="App.navigateTo('admin')" title="Panel Pengurus KMF" class="relative p-2 text-slate-600 hover:text-kmf-600 hover:bg-slate-100 rounded-full transition active:scale-95">
+                    <i class="fa-solid fa-user-shield text-lg"></i>
+                    <span id="badge-pending-count" class="hidden absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center badge-pulse">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Desktop Navigation Bar -->
+        <nav class="bg-kmf-600 text-white shadow-inner">
+            <div class="max-w-5xl mx-auto px-4 flex items-center gap-1">
+                <button onclick="App.navigateTo('home')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2 bg-kmf-700 border-b-2 border-kmf-gold" data-target="home">
+                    <i class="fa-solid fa-house"></i> Beranda
+                </button>
+                <button onclick="App.navigateTo('berita')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="berita">
+                    <i class="fa-solid fa-newspaper"></i> Berita
+                </button>
+                <button onclick="App.navigateTo('usaha')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="usaha">
+                    <i class="fa-solid fa-store"></i> Katalog Usaha
+                </button>
+                <button onclick="App.navigateTo('amalan')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="amalan">
+                    <i class="fa-solid fa-book-quran"></i> Amalan & Doa
+                </button>
+                <button onclick="App.navigateTo('pengaturan')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="pengaturan">
+                    <i class="fa-solid fa-gear"></i> Pengaturan
+                </button>
+                <button onclick="App.navigateTo('admin')" class="nav-desktop-btn ml-auto px-4 py-2.5 text-sm font-medium bg-kmf-700 hover:bg-kmf-800 transition flex items-center gap-2" data-target="admin">
+                    <i class="fa-solid fa-shield-halved"></i> Panel Admin
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ==================== MAIN CONTENT AREA ==================== -->
+    <main class="flex-1 overflow-y-auto max-w-5xl w-full mx-auto p-3 sm:p-4 pb-24 md:pb-8">
+
+        <!-- ==================== TAB 1: BERANDA ==================== -->
+        <section id="view-home" class="tab-content space-y-4 md:space-y-6">
+
+            <!-- 1. KHUSUS TAMPILAN MOBILE (Persis Gaya Proyek Asnawiyyah) -->
+            <div id="beranda-mobile-section" class="block md:hidden max-w-xl mx-auto space-y-3.5">
+                
+                <!-- Widget Lokasi, Kalender & Jadwal Sholat Demak (Aesthetic & Compact ala Asnawiyyah) -->
+                <section onclick="KMF_PRAYER.openJadwalSholatModal()" title="Buka Detail Jadwal Sholat Demak"
+                    class="bg-gradient-to-r from-kmf-800 via-kmf-700 to-blue-900 text-white px-3.5 py-2.5 rounded-2xl shadow-sm border border-kmf-600/70 relative overflow-hidden space-y-1.5 cursor-pointer active:scale-[0.99] transition hover:brightness-105">
+                    <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl pointer-events-none">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+
+                    <!-- Baris 1: Kiri (Lokasi & Hari Pasaran) | Kanan (Shalat Terdekat & Countdown Digital) -->
+                    <div class="flex justify-between items-start gap-2 relative z-10">
+                        <!-- Kiri -->
+                        <div class="flex flex-col items-start space-y-1 min-w-0 flex-1">
+                            <div class="flex items-center space-x-1.5 font-bold text-white leading-tight min-w-0 w-full" style="font-size: 11px;">
+                                <i class="fa-solid fa-location-dot text-amber-400 shrink-0 text-xs"></i>
+                                <span id="home-prayer-location" class="truncate tracking-tight">Kab. Demak, Jawa Tengah</span>
+                            </div>
+                            <div id="home-current-day"
+                                class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/20 shadow-inner inline-flex items-center tracking-wide"
+                                style="font-size: 10.5px; line-height: 1;">
+                                Memuat Hari...
+                            </div>
+                        </div>
+
+                        <!-- Kanan -->
+                        <div class="flex flex-col items-end space-y-1 shrink-0 ml-1">
+                            <div id="home-next-prayer-name" class="font-bold text-white text-right leading-tight" style="font-size: 11.5px;">
+                                Zuhur <span class="text-amber-300 font-semibold ml-1">11:38 WIB</span>
+                            </div>
+                            <div id="home-prayer-countdown"
+                                class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/20 shadow-inner inline-flex items-center tracking-wider"
+                                style="font-size: 10.5px; line-height: 1;">
+                                00:00:00
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Baris 2: Tanggal Masehi & Tanggal Hijriyah -->
+                    <div class="flex justify-between items-center text-blue-100/90 relative z-10 pt-0.5" style="font-size: 10px; line-height: 1.2;">
+                        <div id="home-date-masehi" class="flex items-center space-x-1.5 text-slate-200/90" style="white-space: nowrap;">
+                            <i class="fa-regular fa-calendar text-blue-300 text-[10px]"></i>
+                            <span id="home-date-masehi-val" class="font-medium">-</span>
+                        </div>
+                        <div id="home-date-hijri" class="flex items-center space-x-1.5 text-amber-200/90" style="white-space: nowrap;">
+                            <i class="fa-solid fa-moon text-amber-300 text-[10px]"></i>
+                            <span id="home-date-hijri-val" class="font-medium">-</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Menu Grid Layanan & Filantropi Mobile (4 Kolom Ala Asnawiyyah) -->
+                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
+                    <div class="flex items-center justify-between px-0.5">
+                        <span class="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-hand-holding-dollar text-kmf-600"></i> Layanan & Filantropi Santri
+                        </span>
+                        <span class="text-[10px] bg-blue-50 text-kmf-700 font-bold px-2 py-0.5 rounded-full border border-blue-200/60">ZISWAF & Khazanah</span>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2 text-center pt-1">
+                        <!-- 1. Wakaf KMF -->
+                        <button onclick="App.openDonasiModal('wakaf')" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-500 group-hover:text-white transition duration-200 border border-amber-200/50">
+                                <i class="fa-solid fa-hand-holding-heart"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Wakaf KMF</span>
+                        </button>
+                        <!-- 2. Infaq & Sedekah -->
+                        <button onclick="App.openDonasiModal('infaq')" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-blue-50 text-kmf-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-kmf-600 group-hover:text-white transition duration-200 border border-blue-200/50">
+                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Infaq</span>
+                        </button>
+                        <!-- 3. Zakat Santri -->
+                        <button onclick="App.openDonasiModal('zakat')" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-sky-600 group-hover:text-white transition duration-200 border border-sky-200/50">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Zakat Santri</span>
+                        </button>
+                        <!-- 4. Peduli Santri -->
+                        <button onclick="App.openDonasiModal('peduli')" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-purple-600 group-hover:text-white transition duration-200 border border-purple-200/50">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Peduli Santri</span>
+                        </button>
+
+                        <!-- 5. Agenda Cabang -->
+                        <button onclick="App.scrollToAgenda()" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition duration-200 border border-rose-200/50">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Agenda</span>
+                        </button>
+                        <!-- 6. Fiqh Sosial / Mutiara -->
+                        <button onclick="App.openMutiaraModal()" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-indigo-600 group-hover:text-white transition duration-200 border border-indigo-200/50">
+                                <i class="fa-solid fa-book-open-reader"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Fiqh Sosial</span>
+                        </button>
+                        <!-- 7. Kabar Duka (Lelayu) -->
+                        <button onclick="App.openKabarDukaModal()" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-slate-100 text-slate-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-slate-700 group-hover:text-white transition duration-200 border border-slate-200">
+                                <i class="fa-solid fa-ribbon"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Kabar Duka</span>
+                        </button>
+                        <!-- 8. Layanan Bantuan WA -->
+                        <button onclick="App.openKmfWaCenter()" class="flex flex-col items-center group transition active:scale-95">
+                            <div class="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-green-600 group-hover:text-white transition duration-200 border border-green-200/50">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <span class="text-[11px] mt-1.5 font-semibold text-slate-700">Bantuan</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Banner Slider 3:1 (Mobile Ala Asnawiyyah - Menggantikan 4 KPI Cards) -->
+                <section class="space-y-1.5">
+                    <div class="relative w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-xs bg-slate-900 border border-slate-100">
+                        <div id="hero-slider-container" class="w-full h-full relative">
+                            <!-- Dinamis via initBannerSlider -->
+                            <div class="w-full h-full animate-pulse bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 flex items-center justify-center text-slate-400">
+                                <i class="fa-regular fa-image text-xl opacity-40"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="hero-dots-container" class="flex justify-center items-center space-x-1.5 pt-0.5">
+                        <!-- Dots dinamis -->
+                    </div>
+                </section>
+
+                <!-- Headline Warta & Berita KMF Demak (Mobile - Ala Desain Asnawiyyah) -->
+                <section class="space-y-2.5">
+                    <div class="flex items-center justify-between px-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-4.5 bg-amber-500 rounded-full"></span>
+                            <h3 class="text-sm font-extrabold text-slate-800 tracking-tight">Headline</h3>
+                        </div>
+                        <button onclick="App.navigateTo('berita')" class="text-[11px] text-kmf-600 hover:text-kmf-700 font-bold hover:underline flex items-center gap-1 transition">
+                            Lihat Semua <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                        </button>
+                    </div>
+
+                    <div id="mobile-headline-container" class="space-y-2.5">
+                        <!-- Dinamis via App.renderMobileHeadline() -->
+                    </div>
+                </section>
+
+                <!-- Agenda Terdekat KMF Demak (Mobile Card) -->
+                <section id="mobile-agenda-card" class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-4 bg-kmf-600 rounded-full"></span>
+                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide">Agenda Terdekat</h3>
+                        </div>
+                        <span class="text-[10px] bg-emerald-50 text-kmf-700 px-2 py-0.5 rounded-full font-bold">KMF Demak</span>
+                    </div>
+                    <div id="mobile-agenda-container" class="space-y-2.5">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </section>
+
+                <!-- Etalase Usaha Santri (Mobile) -->
+                <section class="space-y-2.5">
+                    <div class="flex items-center justify-between px-1">
+                        <div class="flex items-center gap-2">
+                            <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span>
+                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide">Bursa Usaha Santri</h3>
+                        </div>
+                        <button onclick="App.navigateTo('usaha')" class="text-[11px] text-kmf-600 font-bold hover:underline flex items-center gap-1">
+                            Semua <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                        </button>
+                    </div>
+                    <div id="mobile-spotlight-usaha" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </section>
+
+                <!-- Mutiara Kalam Fiqh Sosial Mbah Sahal (Mobile) -->
+                <section class="bg-gradient-to-br from-blue-950 to-kmf-800 text-white p-4 rounded-2xl shadow-sm relative overflow-hidden space-y-2 border border-blue-900/50">
+                    <div class="absolute -right-4 -bottom-4 text-white/5 text-7xl pointer-events-none">
+                        <i class="fa-solid fa-quote-right"></i>
+                    </div>
+                    <div class="flex items-center gap-2 text-kmf-gold text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>Fiqh Sosial Mbah Sahal</span>
+                    </div>
+                    <p class="text-xs text-slate-100 italic leading-relaxed">
+                        "Fiqh tidak boleh berhenti pada teks hukum yang beku, melainkan harus hadir sebagai solusi sosial dan pemberdaya martabat umat manusia."
+                    </p>
+                    <div class="text-[10px] text-amber-300 font-semibold pt-1">
+                        — Hadhratusy Syaikh KH. MA. Sahal Mahfudh
+                    </div>
+                </section>
+            </div>
+
+            <!-- 2. TAMPILAN DESKTOP (Hanya tampil di Layar Komputer / md: >= 768px) -->
+            <div id="beranda-desktop-section" class="hidden md:block space-y-6">
+                <!-- Hero Banner Desktop -->
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-kmf-600 via-kmf-700 to-kmf-800 text-white p-6 md:p-8 shadow-md">
+                    <div class="relative z-10 max-w-2xl space-y-3">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-xs font-medium text-kmf-gold-light">
+                            <i class="fa-solid fa-mosque"></i>
+                            <span>Wadah Silaturrahim Alumni Mathali'ul Falah</span>
+                        </div>
+                        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight font-['Poppins']">
+                            Keluarga Mathali'ul Falah (KMF) Cabang Demak
+                        </h1>
+                        <p class="text-slate-200 text-xs md:text-sm leading-relaxed">
+                            Mempererat ukhuwah alumni Kajen di Kabupaten Demak dalam dimensi keagamaan, sosial kemasyarakatan, dan pemberdayaan ekonomi umat berlandaskan nilai <em>Shalih Akram</em>.
+                        </p>
+                        <div class="pt-2 flex flex-wrap gap-2.5">
+                            <button onclick="App.navigateTo('register')" class="bg-kmf-gold hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-xl text-xs md:text-sm shadow-md transition active:scale-95 flex items-center gap-2">
+                                <i class="fa-solid fa-address-card"></i> Sensus Mandiri Alumni
+                            </button>
+                            <button onclick="App.navigateTo('usaha')" class="bg-white/10 hover:bg-white/20 text-white font-medium px-4 py-2 rounded-xl text-xs md:text-sm backdrop-blur-sm border border-white/20 transition active:scale-95 flex items-center gap-2">
+                                <i class="fa-solid fa-briefcase"></i> Jelajah Usaha Santri
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Background Geometric Decoration -->
+                    <div class="absolute -right-8 -bottom-8 w-48 h-48 md:w-64 md:h-64 opacity-15 pointer-events-none">
+                        <img src="assets/img/logo.png" alt="Decoration" class="w-full h-full object-contain">
+                    </div>
+                </div>
+
+                <!-- Statistik Kilas Desktop -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-kmf-50 text-kmf-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <div id="stat-alumni" class="text-xl font-bold text-slate-800">0</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Alumni Terdata</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-shop"></i>
+                        </div>
+                        <div>
+                            <div id="stat-usaha" class="text-xl font-bold text-slate-800">0</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Usaha Santri</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <div>
+                            <div id="stat-kecamatan" class="text-xl font-bold text-slate-800">14</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Kecamatan Demak</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-slate-800">2</div>
+                            <div class="text-[11px] text-slate-500 font-medium">Agenda Terdekat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Menu Cepat Desktop -->
+                <div>
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-kmf-600"></i> Layanan Cepat KMF Demak
+                    </h3>
+                    <div class="grid grid-cols-4 gap-2.5 text-center">
+                        <div onclick="App.navigateTo('alumni')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
+                            <div class="w-11 h-11 mx-auto rounded-full bg-kmf-50 text-kmf-600 flex items-center justify-center text-lg group-hover:bg-kmf-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-address-book"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-700 block mt-2">Database Alumni</span>
+                        </div>
+                        <div onclick="App.navigateTo('usaha')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
+                            <div class="w-11 h-11 mx-auto rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-lg group-hover:bg-amber-500 group-hover:text-white transition">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-700 block mt-2">Bursa Usaha</span>
+                        </div>
+                        <div onclick="App.navigateTo('amalan')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
+                            <div class="w-11 h-11 mx-auto rounded-full bg-sky-50 text-sky-600 flex items-center justify-center text-lg group-hover:bg-sky-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-hands-praying"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-700 block mt-2">Amalan Doa</span>
+                        </div>
+                        <div onclick="App.navigateTo('register')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
+                            <div class="w-11 h-11 mx-auto rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg group-hover:bg-indigo-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-id-card-clip"></i>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-700 block mt-2">Sensus Mandiri</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Agenda Terdekat Desktop -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
+                            <i class="fa-regular fa-calendar-days text-kmf-600"></i> Agenda & Kegiatan KMF Demak
+                        </h3>
+                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">Terkini</span>
+                    </div>
+                    <div id="home-agenda-container" class="space-y-3">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </div>
+
+                <!-- Spotlight Usaha Desktop -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
+                                <i class="fa-solid fa-store text-amber-500"></i> Etalase Usaha Santri Kajen di Demak
+                            </h3>
+                            <p class="text-xs text-slate-500">Beli dan gunakan produk sesama alumni untuk menguatkan ekonomi jama'ah.</p>
+                        </div>
+                        <button onclick="App.navigateTo('usaha')" class="text-xs text-kmf-600 font-semibold hover:underline flex items-center gap-1">
+                            Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                        </button>
+                    </div>
+                    <div id="home-spotlight-usaha" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </div>
+
+                <!-- Mutiara Kalam Desktop -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-4 text-center space-y-2">
+                    <i class="fa-solid fa-quote-left text-kmf-600 text-xl opacity-60"></i>
+                    <p class="text-xs md:text-sm text-slate-700 italic font-serif leading-relaxed">
+                        "Fiqh tidak boleh berhenti pada teks hukum yang beku, melainkan harus hadir sebagai solusi sosial dan pemberdaya martabat umat manusia."
+                    </p>
+                    <div class="text-[11px] font-bold text-kmf-700 uppercase tracking-wide">
+                        — Hadhratusy Syaikh KH. MA. Sahal Mahfudh
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ==================== TAB 2: WARTA & BERITA KMF DEMAK ==================== -->
+        <section id="view-berita" class="tab-content hidden space-y-3 sm:space-y-4">
+            <!-- Header & Filter Berita -->
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-newspaper text-kmf-600"></i> Warta & Berita KMF Demak
+                        </h2>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Kabar kegiatan, kajian Fiqh Sosial, dan kiprah alumni Mathali'ul Falah di Demak.</p>
+                    </div>
+                    <span class="text-[10px] bg-blue-50 text-kmf-700 font-bold px-2.5 py-1 rounded-full border border-blue-200 self-start sm:self-auto">
+                        Warta Terkini
+                    </span>
+                </div>
+
+                <!-- Input Pencarian Berita -->
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                    <input type="text" id="filter-berita-keyword" placeholder="Cari judul berita, kegiatan, kajian..." oninput="App.renderBeritaList()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition">
+                </div>
+
+                <!-- Chips Kategori Berita -->
+                <div id="berita-category-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+                    <button onclick="App.filterBeritaCategory('')" class="chip-berita-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-kmf-600 text-white font-medium text-xs active:scale-95 transition" data-cat="">Semua Warta</button>
+                    <button onclick="App.filterBeritaCategory('Organisasi')" class="chip-berita-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Organisasi">Organisasi</button>
+                    <button onclick="App.filterBeritaCategory('Kegiatan')" class="chip-berita-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Kegiatan">Kegiatan</button>
+                    <button onclick="App.filterBeritaCategory('Ekonomi')" class="chip-berita-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Ekonomi">Ekonomi Santri</button>
+                </div>
+            </div>
+
+            <!-- Counter Hasil Berita -->
+            <div class="flex items-center justify-between text-xs px-1 text-slate-500">
+                <span>Menampilkan <strong id="berita-count-badge" class="text-slate-800">0</strong> warta</span>
+                <span class="text-[10.5px] text-slate-400">Ketuk berita untuk membaca</span>
+            </div>
+
+            <!-- List Grid Berita -->
+            <div id="berita-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                <!-- Dinamis via JS -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 3: KATALOG USAHA (ALA TOKOPEDIA) ==================== -->
+        <section id="view-usaha" class="tab-content hidden space-y-3.5 max-w-5xl mx-auto">
+            
+            <!-- 1. Header Hijau Khas Tokopedia dengan Search Bar Pill -->
+            <div class="bg-gradient-to-r from-[#00AA5B] via-[#029b53] to-[#03AC0E] text-white p-3 sm:p-4 rounded-3xl shadow-sm space-y-2.5">
+                <!-- Baris Search Input & Action Icons -->
+                <div class="flex items-center gap-2">
+                    <div class="relative flex-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="filter-usaha-keyword" placeholder="Cari sarung batik, kitab, madu, bandeng..." oninput="App.renderUsahaList()" class="w-full pl-9 pr-14 py-2 text-xs bg-white text-slate-800 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-amber-300 shadow-inner">
+                        <button type="button" onclick="App.renderUsahaList()" class="absolute right-1.5 top-1 bg-[#00AA5B] hover:bg-[#028e4d] text-white text-[10px] font-bold px-2.5 py-1.5 rounded-full transition active:scale-95">
+                            Cari
+                        </button>
+                    </div>
+
+                    <!-- Shortcut Icons Ala Toped Header -->
+                    <div class="flex items-center gap-1 shrink-0 text-white">
+                        <button onclick="App.openKmfWaCenter()" title="Chat Helpdesk" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center text-xs transition active:scale-95">
+                            <i class="fa-regular fa-comment-dots"></i>
+                        </button>
+                        <button onclick="App.openUsahaRegisterModal()" title="Buka Toko / Pasang Usaha" class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-bold flex items-center justify-center text-xs transition active:scale-95 shadow-sm">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Baris Alamat Kirim Ala Tokopedia -->
+                <div class="flex items-center justify-between text-[11px] text-blue-50 px-1 pt-0.5">
+                    <div class="flex items-center gap-1.5 truncate">
+                        <i class="fa-solid fa-location-dot text-amber-300 text-xs"></i>
+                        <span class="truncate">Dikirim ke: <strong>Kabupaten Demak, Jawa Tengah</strong></span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-75"></i>
+                    </div>
+                    <span class="text-[9.5px] bg-white/20 backdrop-blur-xs px-2 py-0.5 rounded-full font-bold text-white shrink-0">
+                        Marketplace Santri
+                    </span>
+                </div>
+            </div>
+
+            <!-- 2. Greeting Banner Topper Santri -->
+            <div class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-[#00AA5B] border border-emerald-200/60 flex items-center justify-center text-lg shrink-0 shadow-2xs">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-xs font-bold text-slate-800 truncate flex items-center gap-1.5">
+                            <span>Hai, Topper Santri!</span>
+                            <span class="text-[9px] bg-emerald-100 text-[#00AA5B] font-bold px-1.5 py-0.2 rounded">KMF Mart</span>
+                        </div>
+                        <p class="text-[10.5px] text-slate-500 truncate">Beli berkah dari sesama alumni Mathali'ul Falah</p>
+                    </div>
+                </div>
+                <button onclick="App.openUsahaRegisterModal()" class="shrink-0 bg-[#00AA5B] hover:bg-[#028e4d] text-white font-bold text-[11px] px-3 py-1.5 rounded-xl transition active:scale-95 shadow-2xs flex items-center gap-1">
+                    <i class="fa-solid fa-shop"></i> Buka Toko
+                </button>
+            </div>
+
+            <!-- 3. Grid 8 Shortcut Kategori Ikon Bulat Tokopedia -->
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-2">
+                <div class="flex items-center justify-between px-0.5">
+                    <span class="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip text-[#00AA5B]"></i> Kategori Pilihan
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-medium">Geser untuk melihat</span>
+                </div>
+
+                <!-- 8 Ikon Bulat Warna-Warni Ala Tokopedia (Scrollable Horizontal) -->
+                <div class="flex items-start gap-3 overflow-x-auto no-scrollbar pt-1 pb-1 text-center">
+                    <!-- 1. Kitab & Buku -->
+                    <button onclick="App.filterUsahaCategory('Percetakan, Penerbitan & Kitab')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition duration-200 border border-blue-200/60">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Kitab Kuning</span>
+                    </button>
+                    <!-- 2. Busana & Sarung -->
+                    <button onclick="App.filterUsahaCategory('Konveksi, Busana Muslim & Sarung')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-amber-600 group-hover:text-white transition duration-200 border border-amber-200/60">
+                            <i class="fa-solid fa-shirt"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Sarung & Koko</span>
+                    </button>
+                    <!-- 3. Kuliner Santri -->
+                    <button onclick="App.filterUsahaCategory('Kuliner & Makanan Ringan')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-rose-600 group-hover:text-white transition duration-200 border border-rose-200/60">
+                            <i class="fa-solid fa-utensils"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Kuliner Demak</span>
+                    </button>
+                    <!-- 4. Madu & Herbal -->
+                    <button onclick="App.filterUsahaCategory('Kesehatan, Herbal & Apotek')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-emerald-50 text-[#00AA5B] rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-[#00AA5B] group-hover:text-white transition duration-200 border border-emerald-200/60">
+                            <i class="fa-solid fa-jar"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Madu & Herbal</span>
+                    </button>
+                    <!-- 5. Agrobisnis / Tambak -->
+                    <button onclick="App.filterUsahaCategory('Agrobisnis, Pertanian & Perikanan')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-teal-600 group-hover:text-white transition duration-200 border border-teal-200/60">
+                            <i class="fa-solid fa-wheat-awn"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Agrobisnis</span>
+                    </button>
+                    <!-- 6. Jasa & Teknik -->
+                    <button onclick="App.filterUsahaCategory('Jasa Teknik, Bengkel & Konstruksi')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-indigo-600 group-hover:text-white transition duration-200 border border-indigo-200/60">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Jasa Santri</span>
+                    </button>
+                    <!-- 7. Promo KMF -->
+                    <button onclick="App.filterUsahaPromo()" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-red-600 group-hover:text-white transition duration-200 border border-red-200/60">
+                            <i class="fa-solid fa-percent"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Promo Diskon</span>
+                    </button>
+                    <!-- 8. Semua Usaha -->
+                    <button onclick="App.filterUsahaCategory('')" class="flex flex-col items-center shrink-0 w-16 group transition active:scale-95">
+                        <div class="w-12 h-12 bg-slate-100 text-slate-700 rounded-full flex items-center justify-center text-lg shadow-2xs group-hover:bg-slate-700 group-hover:text-white transition duration-200 border border-slate-200">
+                            <i class="fa-solid fa-border-all"></i>
+                        </div>
+                        <span class="text-[10.5px] mt-1.5 font-semibold text-slate-700 leading-tight">Semua Usaha</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Baris Filter Horizontal Ala Tokopedia (For You, Official, Terlaris + Filter Wilayah) -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between gap-2">
+                    <!-- Filter Pills Horizontal -->
+                    <div id="usaha-category-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs py-0.5">
+                        <button onclick="App.filterUsahaCategory('')" class="chip-usaha-btn whitespace-nowrap px-3 py-1 rounded-full bg-[#00AA5B] text-white font-bold text-xs shadow-2xs" data-cat="">
+                            🔥 For You
+                        </button>
+                        <button onclick="App.filterUsahaOfficialOnly()" id="chip-usaha-official" class="chip-usaha-btn whitespace-nowrap px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200">
+                            <i class="fa-solid fa-circle-check text-[#00AA5B] text-[11px] mr-1"></i> Official Store
+                        </button>
+                        <button onclick="App.filterUsahaCategory('Konveksi, Busana Muslim & Sarung')" class="chip-usaha-btn whitespace-nowrap px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200" data-cat="Konveksi, Busana Muslim & Sarung">
+                            Sarung & Busana
+                        </button>
+                        <button onclick="App.filterUsahaCategory('Percetakan, Penerbitan & Kitab')" class="chip-usaha-btn whitespace-nowrap px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200" data-cat="Percetakan, Penerbitan & Kitab">
+                            Kitab Pesantren
+                        </button>
+                        <button onclick="App.filterUsahaCategory('Kuliner & Makanan Ringan')" class="chip-usaha-btn whitespace-nowrap px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200" data-cat="Kuliner & Makanan Ringan">
+                            Kuliner
+                        </button>
+                        <button onclick="App.filterUsahaCategory('Kesehatan, Herbal & Apotek')" class="chip-usaha-btn whitespace-nowrap px-3 py-1 rounded-full bg-slate-100 text-slate-700 font-medium text-xs hover:bg-slate-200" data-cat="Kesehatan, Herbal & Apotek">
+                            Madu & Herbal
+                        </button>
+                    </div>
+
+                    <!-- Dropdown Filter Kecamatan Demak -->
+                    <div class="shrink-0 w-32 sm:w-44">
+                        <select id="filter-usaha-kecamatan" onchange="App.renderUsahaList()" class="w-full px-2.5 py-1 text-[11px] font-semibold bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#00AA5B] shadow-2xs">
+                            <option value="">Semua Kecamatan</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. List Grid Usaha / Produk (Persis 2 Kolom Mobile Ala Tokopedia) -->
+            <div id="usaha-cards-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-3.5">
+                <!-- Dinamis via renderUsahaList() -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 4: AMALAN & DOA ==================== -->
+        <section id="view-amalan" class="tab-content hidden space-y-3 sm:space-y-4">
+            <!-- Amalan Navigation Pills & Font Adjuster -->
+            <div class="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between gap-2 overflow-x-auto no-scrollbar">
+                <div class="flex items-center gap-1.5 min-w-max">
+                    <button onclick="App.switchAmalanTab('tahlil')" id="btn-amalan-tahlil" class="amalan-subtab-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 text-white transition active:scale-95">
+                        Tahlil & Doa
+                    </button>
+                    <button onclick="App.switchAmalanTab('wirid')" id="btn-amalan-wirid" class="amalan-subtab-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition active:scale-95">
+                        Wirid Ba'da Shalat
+                    </button>
+                    <button onclick="App.switchAmalanTab('istighotsah')" id="btn-amalan-istighotsah" class="amalan-subtab-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition active:scale-95">
+                        Istighotsah
+                    </button>
+                    <button onclick="App.switchAmalanTab('yasin')" id="btn-amalan-yasin" class="amalan-subtab-btn px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition active:scale-95">
+                        Surat Yasin
+                    </button>
+                </div>
+
+                <!-- Text Size Adjuster for Elders -->
+                <div class="flex items-center gap-1 border-l border-slate-200 pl-2 shrink-0">
+                    <button onclick="App.adjustArabicSize(-2)" title="Perkecil Teks" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 active:scale-95">A-</button>
+                    <button onclick="App.adjustArabicSize(2)" title="Perbesar Teks" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 active:scale-95">A+</button>
+                </div>
+            </div>
+
+            <!-- Amalan Content Body -->
+            <div id="amalan-content-container" class="space-y-4">
+                <!-- Dinamis via JS -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 5: PENGATURAN & PUSAT APLIKASI ==================== -->
+        <section id="view-pengaturan" class="tab-content hidden space-y-3 sm:space-y-4 max-w-2xl mx-auto">
+            <!-- Header Kartu Akun / PWA -->
+            <div class="bg-gradient-to-r from-kmf-800 via-kmf-700 to-blue-900 text-white p-4 sm:p-5 rounded-2xl shadow-sm border border-kmf-600/70 relative overflow-hidden flex items-center gap-3.5">
+                <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl shrink-0">
+                    <i class="fa-solid fa-gear text-amber-300"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h2 class="text-base font-bold text-white leading-tight">Pengaturan & Pusat Aplikasi</h2>
+                    <p class="text-xs text-blue-100/90 mt-0.5">KMF Demak • Versi 1.4.0 (PWA Standalone)</p>
+                    <span class="inline-block mt-1 text-[9.5px] bg-kmf-gold text-slate-950 font-bold px-2 py-0.5 rounded-full">
+                        Status Offline Ready
+                    </span>
+                </div>
+            </div>
+
+            <!-- Menu Kelompok 1: Navigasi Cepat Sensus & Database Alumni -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
+                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    Pendataan & Jejaring Santri
+                </div>
+                <button onclick="App.navigateTo('register')" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-address-card"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Formulir Sensus Alumni</div>
+                            <div class="text-[11px] text-slate-500">Daftarkan diri atau perbarui data alumni Kajen</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </button>
+                <button onclick="App.navigateTo('alumni')" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Direktori Alumni Terverifikasi</div>
+                            <div class="text-[11px] text-slate-500">Cari sesama alumni di 14 kecamatan Demak</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </button>
+                <button onclick="App.openUsahaRegisterModal()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Daftarkan Usaha / Bisnis Baru</div>
+                            <div class="text-[11px] text-slate-500">Promosikan produk Anda di Bursa Usaha Santri</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </button>
+            </div>
+
+            <!-- Menu Kelompok 2: Ibadah & Preferensi -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
+                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    Ibadah & Tampilan
+                </div>
+                <button onclick="KMF_PRAYER.openJadwalSholatModal()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-kaaba"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Jadwal Sholat Demak</div>
+                            <div class="text-[11px] text-slate-500">Hisab astronomis presisi standar LF PBNU</div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-kmf-600 font-bold flex items-center gap-1">
+                        Lihat <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                    </span>
+                </button>
+                <div class="px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-font"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Ukuran Teks Arab Amalan</div>
+                            <div class="text-[11px] text-slate-500">Sesuaikan ukuran font doa untuk orang tua</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="App.adjustArabicSize(-2)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700">A-</button>
+                        <button onclick="App.adjustArabicSize(2)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700">A+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Kelompok 3: Sistem, Pengurus & Bantuan -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
+                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                    Sistem & Bantuan
+                </div>
+                <button onclick="App.navigateTo('admin')" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Panel Verifikasi Pengurus (Admin)</div>
+                            <div class="text-[11px] text-slate-500">Kelola dan setujui data pendaftaran sensus</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                </button>
+                <button onclick="App.openKmfWaCenter()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-sm">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">WhatsApp Center Pengurus KMF Demak</div>
+                            <div class="text-[11px] text-slate-500">Hubungi pengurus untuk konfirmasi atau pertanyaan</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
+                </button>
+                <button onclick="App.shareApp()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-share-nodes"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Bagikan Aplikasi KMF Demak</div>
+                            <div class="text-[11px] text-slate-500">Ajak sesama santri Mathole' di Demak menginstal PWA</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-share text-xs text-slate-400"></i>
+                </button>
+                <button onclick="App.clearAppCache()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-rotate"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800">Bersihkan Cache & Perbarui PWA</div>
+                            <div class="text-[11px] text-slate-500">Segarkan aset aplikasi ke versi terbaru</div>
+                        </div>
+                    </div>
+                    <span class="text-[11px] text-rose-600 font-bold">Refresh</span>
+                </button>
+            </div>
+
+            <!-- Footer Keterangan -->
+            <div class="text-center pt-2 pb-4 text-slate-400 text-[11px] space-y-1">
+                <p class="font-semibold text-slate-600">Keluarga Mathali'ul Falah (KMF) Cabang Demak</p>
+                <p>Berkhidmat Meneladani Nilai <em>Shalih Akram</em> Masyayikh Kajen-Pati.</p>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 6: DIREKTORI ALUMNI (Sub-Tab) ==================== -->
+        <section id="view-alumni" class="tab-content hidden space-y-3 sm:space-y-4">
+            <!-- Header & Filter Bar -->
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-users text-kmf-600"></i> Direktori Alumni KMF Demak
+                        </h2>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Menghubungkan alumni lintas marhalah dan angkatan di seluruh Kabupaten Demak.</p>
+                    </div>
+                    <button onclick="App.navigateTo('register')" class="self-start sm:self-auto bg-kmf-600 hover:bg-kmf-700 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 shadow-xs active:scale-95">
+                        <i class="fa-solid fa-address-card"></i> Gabung Sensus
+                    </button>
+                </div>
+
+                <!-- Input Pencarian & Filter -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2 pt-1">
+                    <div class="relative md:col-span-1">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="filter-alumni-keyword" placeholder="Cari nama, pondok, profesi..." oninput="App.renderAlumniList()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition">
+                    </div>
+                    <div>
+                        <select id="filter-alumni-kecamatan" onchange="App.renderAlumniList()" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition">
+                            <option value="">Semua Kecamatan (14 Wilayah)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="filter-alumni-profesi" onchange="App.renderAlumniList()" class="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition">
+                            <option value="">Semua Bidang Profesi</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Counter Hasil -->
+            <div class="flex items-center justify-between text-xs px-1 text-slate-500">
+                <span>Menampilkan <strong id="alumni-count-badge" class="text-slate-800">0</strong> alumni terverifikasi</span>
+                <span class="text-[10.5px] text-slate-400">Ketuk kartu untuk detail</span>
+            </div>
+
+            <!-- List Card Alumni (Clickable to Modal) -->
+            <div id="alumni-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3.5">
+                <!-- Dinamis via JS -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 7: FORM SENSUS / PENDAFTARAN (Sub-Tab) ==================== -->
+        <section id="view-register" class="tab-content hidden space-y-4">
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-xs max-w-2xl mx-auto space-y-4 sm:space-y-5">
+                <div class="border-b border-slate-100 pb-3">
+                    <div class="inline-flex items-center gap-1.5 text-xs text-kmf-600 font-semibold mb-1">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                        <span>Sensus Mandiri Alumni KMF Demak</span>
+                    </div>
+                    <h2 class="font-bold text-lg sm:text-xl text-slate-800">Formulir Pendataan Alumni</h2>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                        Data ini digunakan oleh Pengurus KMF Cabang Demak untuk memetakan sebaran alumni dan membuka peluang jejaring ukhuwah.
+                    </p>
+                </div>
+
+                <form id="form-sensus-alumni" onsubmit="App.handleFormSubmit(event)" class="space-y-4">
+                    <!-- Bagian 1: Identitas Diri -->
+                    <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200/80 space-y-3">
+                        <h3 class="text-xs font-bold text-kmf-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-user"></i> 1. Identitas Alumni
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Nama Lengkap & Gelar <span class="text-red-500">*</span></label>
+                                <input type="text" name="nama" required placeholder="Contoh: H. Ahmad Fauzi, S.Pd.I" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Nama Panggilan <span class="text-red-500">*</span></label>
+                                <input type="text" name="panggilan" required placeholder="Contoh: Kang Fauzi" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Nomor WhatsApp Aktif <span class="text-red-500">*</span></label>
+                                <input type="tel" name="noWa" required placeholder="Contoh: 081234567890" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                            <div class="flex items-center pt-2 sm:pt-5">
+                                <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-600">
+                                    <input type="checkbox" name="tampilkanWa" checked class="rounded border-slate-300 text-kmf-600 focus:ring-kmf-500">
+                                    <span>Tampilkan nomor WA di direktori sesama alumni</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Upload Foto Profil (WAJIB dengan Auto-Kompresi) -->
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">
+                                Foto Profil Diri <span class="text-red-500">* (Otomatis dikompres)</span>
+                            </label>
+                            <div class="flex items-center gap-3">
+                                <div id="preview-foto-profil-container" class="w-14 h-14 rounded-xl bg-slate-200 border border-slate-300 flex items-center justify-center overflow-hidden shrink-0">
+                                    <i class="fa-solid fa-camera text-slate-400 text-lg"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <input type="file" id="input-foto-profil" accept="image/*" required onchange="App.handleProfilePhotoSelect(event)" class="text-xs text-slate-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-kmf-50 file:text-kmf-700 hover:file:bg-kmf-100 cursor-pointer">
+                                    <p id="foto-profil-info" class="text-[10px] text-slate-500 mt-0.5">Ukuran foto akan otomatis diperkecil agar hemat kuota.</p>
+                                </div>
+                            </div>
+                            <input type="hidden" name="fotoProfilBase64" id="foto-profil-base64">
+                        </div>
+                    </div>
+
+                    <!-- Bagian 2: Riwayat di Kajen -->
+                    <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200/80 space-y-3">
+                        <h3 class="text-xs font-bold text-kmf-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-graduation-cap"></i> 2. Riwayat Pendidikan di Kajen
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Tahun Lulus / Mondok <span class="text-red-500">*</span></label>
+                                <input type="number" name="tahunLulus" required placeholder="Contoh: 2012" min="1950" max="2026" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Marhalah Terakhir di Mathali'ul Falah <span class="text-red-500">*</span></label>
+                                <select name="marhalah" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <option value="">Pilih Marhalah</option>
+                                    <option value="MA Mathali'ul Falah (Kajen)">MA Mathali'ul Falah Putra / Putri</option>
+                                    <option value="MTs Mathali'ul Falah (Kajen)">MTs Mathali'ul Falah</option>
+                                    <option value="MI Mathali'ul Falah (Kajen)">MI Mathali'ul Falah</option>
+                                    <option value="KMI Mathali'ul Falah">Kuliyyatul Mu'allimin Al-Islamiyyah (KMI)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Nama Asrama / Pondok di Kajen <span class="text-red-500">*</span></label>
+                                <input type="text" name="pondokKajen" required placeholder="Contoh: Maslakul Huda, Polgar, PMH, dll." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Nama Guru / Masyayikh yang Diangsu</label>
+                                <input type="text" name="guruKajen" placeholder="Contoh: Mbah Sahal, Mbah Dullah Salam, dll." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bagian 3: Domisili Demak & Profesi -->
+                    <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200/80 space-y-3">
+                        <h3 class="text-xs font-bold text-kmf-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-location-dot"></i> 3. Domisili di Demak & Profesi
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Kecamatan Tinggal <span class="text-red-500">*</span></label>
+                                <select name="kecamatan" id="register-kecamatan" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <option value="">Pilih Kecamatan di Kab. Demak</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Desa / Kelurahan <span class="text-red-500">*</span></label>
+                                <input type="text" name="desa" required placeholder="Contoh: Bintoro / Buko" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-700 mb-1">Alamat Lengkap</label>
+                            <input type="text" name="alamat" placeholder="Jalan, RT/RW, Dusun..." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Kategori Profesi <span class="text-red-500">*</span></label>
+                                <select name="profesiKategori" id="register-profesi" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <option value="">Pilih Bidang Profesi</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Uraian Pekerjaan / Instansi</label>
+                                <input type="text" name="profesiDetail" placeholder="Contoh: Guru Madrasah / Wiraswasta" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bagian 4: Opsi Pendaftaran Usaha -->
+                    <div class="bg-amber-50/70 p-3.5 sm:p-4 rounded-xl border border-amber-200/80 space-y-3">
+                        <label class="flex items-center gap-2.5 cursor-pointer">
+                            <input type="checkbox" id="check-has-usaha" onchange="App.toggleUsahaFields(this.checked)" class="rounded border-amber-400 text-amber-600 focus:ring-amber-500 w-4 h-4">
+                            <span class="text-xs font-bold text-amber-900">
+                                <i class="fa-solid fa-store mr-1 text-amber-600"></i> Saya memiliki usaha dan ingin didaftarkan ke Katalog Usaha KMF
+                            </span>
+                        </label>
+
+                        <!-- Sub-Form Usaha -->
+                        <div id="subform-usaha-container" class="hidden space-y-3 pt-2 border-t border-amber-200/60">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">Nama Usaha / Merk <span class="text-red-500">*</span></label>
+                                    <input type="text" name="namaUsaha" placeholder="Contoh: Berkah Sablon Santri" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">Kategori Usaha <span class="text-red-500">*</span></label>
+                                    <select name="kategoriUsaha" id="register-usaha-kategori" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                        <option value="">Pilih Kategori Usaha</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Deskripsi Produk & Jasa Unggulan <span class="text-red-500">*</span></label>
+                                <textarea name="deskripsiUsaha" rows="2" placeholder="Jelaskan produk/jasa yang ditawarkan..." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">Nomor WhatsApp Pemesanan</label>
+                                    <input type="tel" name="waBisnis" placeholder="Kosongkan jika sama dengan nomor pribadi" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-700 mb-1">Tautan Google Maps Toko (Opsional)</label>
+                                    <input type="url" name="linkGmaps" placeholder="https://maps.google.com/..." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">
+                                    Foto Produk / Toko <span class="text-red-500">* (Otomatis dikompres)</span>
+                                </label>
+                                <div class="flex items-center gap-3">
+                                    <div id="preview-foto-usaha-container" class="w-16 h-14 rounded-xl bg-slate-200 border border-slate-300 flex items-center justify-center overflow-hidden shrink-0">
+                                        <i class="fa-solid fa-image text-slate-400 text-lg"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <input type="file" id="input-foto-usaha" accept="image/*" onchange="App.handleUsahaPhotoSelect(event)" class="text-xs text-slate-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-amber-100 file:text-amber-800 hover:file:bg-amber-200 cursor-pointer">
+                                        <p id="foto-usaha-info" class="text-[10px] text-slate-500 mt-0.5">Foto produk/toko yang menarik perhatian pembeli.</p>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="fotoUsahaBase64" id="foto-usaha-base64">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="btn-submit-sensus" class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-bold py-3 rounded-xl shadow-md transition active:scale-98 flex items-center justify-center gap-2 text-sm">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Kirim Formulir Sensus KMF</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 8: PANEL PENGURUS (ADMIN) ==================== -->
+        <section id="view-admin" class="tab-content hidden space-y-4">
+            <!-- Admin Login Box -->
+            <div id="admin-login-box" class="max-w-md mx-auto bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs text-center space-y-4">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-kmf-50 text-kmf-600 flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-base sm:text-lg text-slate-800">Akses Pengurus KMF Demak</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Masukkan PIN Pengurus untuk memverifikasi pendaftaran alumni baru.</p>
+                </div>
+                <form onsubmit="App.handleAdminLogin(event)" class="space-y-3">
+                    <div>
+                        <input type="password" id="admin-pin-input" placeholder="Masukkan PIN Pengurus" required maxlength="8" class="text-center tracking-widest text-lg font-bold w-full py-2.5 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition">
+                        <p class="text-[10px] text-slate-400 mt-1">PIN Default: 1912 (Tahun Berdiri Mathali'ul Falah)</p>
+                    </div>
+                    <button type="submit" class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-semibold py-2.5 rounded-xl transition text-xs shadow-xs active:scale-98">
+                        Buka Panel Verifikasi
+                    </button>
+                </form>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="admin-dashboard-box" class="hidden space-y-4">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                            <h2 class="font-bold text-slate-800 text-sm md:text-base">Panel Verifikasi KMF Cabang Demak</h2>
+                        </div>
+                        <p class="text-xs text-slate-500">Memeriksa keabsahan alumni Kajen sebelum data dipublikasikan.</p>
+                    </div>
+                    <button onclick="App.handleAdminLogout()" class="text-xs text-red-600 hover:bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg transition font-medium active:scale-95">
+                        Keluar
+                    </button>
+                </div>
+
+                <!-- Tab Menu Admin -->
+                <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                    <button onclick="App.switchAdminTab('pending')" id="admin-tab-pending" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 text-white transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Menunggu Verifikasi
+                        <span id="admin-badge-pending" class="bg-white/20 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
+                    </button>
+                    <button onclick="App.switchAdminTab('settings')" id="admin-tab-settings" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-gear"></i> Konfigurasi Integrasi
+                    </button>
+                </div>
+
+                <!-- Sub-tab Admin 1: Daftar Pending Verifikasi -->
+                <div id="admin-view-pending" class="space-y-3">
+                    <div id="admin-pending-container" class="space-y-3">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </div>
+
+                <!-- Sub-tab Admin 2: Konfigurasi Google Apps Script -->
+                <div id="admin-view-settings" class="hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4 max-w-xl">
+                    <div>
+                        <h3 class="font-bold text-slate-800 text-sm">Integrasi Google Apps Script (GAS)</h3>
+                        <p class="text-xs text-slate-500">Hubungkan web app ini langsung ke Web App URL Google Spreadsheet Anda.</p>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-medium text-slate-700">URL Web App Google Apps Script</label>
+                        <input type="url" id="admin-gas-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kmf-500 focus:outline-none">
+                        <p class="text-[10px] text-slate-400">Jika dikosongkan, aplikasi beroperasi menggunakan penyimpanan lokal (LocalStorage/Offline PWA).</p>
+                    </div>
+                    <button onclick="App.saveGasSettings()" class="bg-kmf-600 text-white font-semibold text-xs px-4 py-2 rounded-xl hover:bg-kmf-700 transition">
+                        Simpan Pengaturan
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== MOBILE BOTTOM NAVIGATION BAR (ALA ASNAWIYYAH) ==================== -->
+    <div id="mobile-bottom-nav"
+        class="md:hidden fixed bottom-0 left-0 right-0 z-50 px-2 py-2 flex justify-around items-center pb-safe">
+        <!-- 1. Beranda -->
+        <button onclick="App.navigateTo('home')" id="mobile-nav-home" data-target="home"
+            class="nav-mob-btn active flex flex-col items-center">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[9.5px] mt-1">Beranda</span>
+        </button>
+        <!-- 2. Berita (Menggantikan Alumni) -->
+        <button onclick="App.navigateTo('berita')" id="mobile-nav-berita" data-target="berita"
+            class="nav-mob-btn flex flex-col items-center">
+            <i class="fa-solid fa-newspaper text-base"></i>
+            <span class="text-[9.5px] mt-1">Berita</span>
+        </button>
+        <!-- 3. Usaha -->
+        <button onclick="App.navigateTo('usaha')" id="mobile-nav-usaha" data-target="usaha"
+            class="nav-mob-btn flex flex-col items-center">
+            <i class="fa-solid fa-store text-base"></i>
+            <span class="text-[9.5px] mt-1">Usaha</span>
+        </button>
+        <!-- 4. Amalan -->
+        <button onclick="App.navigateTo('amalan')" id="mobile-nav-amalan" data-target="amalan"
+            class="nav-mob-btn flex flex-col items-center">
+            <i class="fa-solid fa-book-quran text-base"></i>
+            <span class="text-[9.5px] mt-1">Amalan</span>
+        </button>
+        <!-- 5. Pengaturan (Menggantikan Sensus) -->
+        <button onclick="App.navigateTo('pengaturan')" id="mobile-nav-pengaturan" data-target="pengaturan"
+            class="nav-mob-btn flex flex-col items-center relative">
+            <i class="fa-solid fa-gear text-base"></i>
+            <span id="mobile-nav-pengaturan-badge" class="hidden absolute top-0.5 right-3 min-w-[7px] h-[7px] bg-rose-500 rounded-full ring-2 ring-kmf-800 animate-pulse"></span>
+            <span class="text-[9.5px] mt-1">Pengaturan</span>
+        </button>
+    </div>
+
+    <!-- ==================== MODAL DETAIL BERITA ==================== -->
+    <div id="modal-detail-berita" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter">
+            <div class="relative h-48 sm:h-56 bg-slate-100 overflow-hidden">
+                <img id="modal-berita-foto" src="" alt="Berita" class="w-full h-full object-cover">
+                <span id="modal-berita-kategori" class="absolute top-3 left-3 text-[10px] bg-kmf-800/90 backdrop-blur-sm text-blue-200 px-2.5 py-1 rounded-md font-bold">
+                    Kategori
+                </span>
+                <button type="button" onclick="App.closeBeritaDetail()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/70 text-white flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            <div class="p-5 space-y-3.5 max-h-[60vh] overflow-y-auto">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                        <span id="modal-berita-tanggal">Tanggal</span>
+                        <span>•</span>
+                        <span id="modal-berita-penulis">Penulis</span>
+                    </div>
+                    <h3 id="modal-berita-judul" class="text-base sm:text-lg font-bold text-slate-800 leading-snug">Judul Berita</h3>
+                </div>
+                <div id="modal-berita-konten" class="space-y-3 pt-2 border-t border-slate-100">
+                    <!-- Dinamis via JS -->
+                </div>
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <a id="modal-berita-wa-share" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-xs">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Bagikan Warta
+                    </a>
+                    <button type="button" onclick="App.closeBeritaDetail()" class="text-slate-500 hover:text-slate-700 text-xs font-semibold px-3 py-2 rounded-xl border border-slate-200">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DETAIL ALUMNI (ALA ASNAWIYYAH) ==================== -->
+    <div id="modal-detail-alumni" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter">
+            <!-- Modal Header -->
+            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm shadow-2xs">
+                        <i class="fa-solid fa-id-badge"></i>
+                    </div>
+                    <h3 class="text-sm font-bold text-slate-800">Profil Lengkap Alumni KMF Demak</h3>
+                </div>
+                <button type="button" onclick="App.closeAlumniDetail()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-5 space-y-4 max-h-[78vh] overflow-y-auto">
+                <!-- Profile Header Card -->
+                <div class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-blue-50/70 to-indigo-50/50 border border-blue-100/80">
+                    <div class="w-16 h-16 rounded-2xl bg-white border border-blue-200 overflow-hidden shrink-0 shadow-xs">
+                        <img id="modal-alumni-foto" src="assets/img/logo.png" alt="Foto Alumni" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0 space-y-1">
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <h4 id="modal-alumni-nama" class="text-sm font-extrabold text-slate-800 leading-tight">Nama Alumni</h4>
+                            <span class="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">Sahih</span>
+                        </div>
+                        <p id="modal-alumni-panggilan" class="text-xs text-kmf-600 font-semibold"></p>
+                        <p class="text-[11px] text-slate-500 font-medium">Lulusan Tahun: <strong id="modal-alumni-lulus" class="text-slate-800">2012</strong></p>
+                    </div>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="space-y-2.5 text-xs">
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Riwayat di Mathali'ul Falah (Kajen)</span>
+                        <div class="text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-school text-kmf-600 w-3.5"></i>
+                            <span id="modal-alumni-marhalah" class="font-medium">MA Mathali'ul Falah</span>
+                        </div>
+                        <div class="text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-mosque text-kmf-600 w-3.5"></i>
+                            <span id="modal-alumni-pondok" class="font-medium">Pondok Maslakul Huda</span>
+                        </div>
+                        <div class="text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-user-tie text-kmf-600 w-3.5"></i>
+                            <span>Guru/Masyayikh: <strong id="modal-alumni-guru">Mbah Sahal</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Domisili di Kabupaten Demak</span>
+                        <div class="text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-rose-500 w-3.5"></i>
+                            <span id="modal-alumni-domisili" class="font-medium">Kecamatan Demak</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Bidang Profesi & Pengabdian</span>
+                        <div class="text-slate-700 flex items-center gap-2">
+                            <i class="fa-solid fa-briefcase text-amber-600 w-3.5"></i>
+                            <span id="modal-alumni-profesi" class="font-medium">Pendidik</span>
+                        </div>
+                        <div id="modal-alumni-profesi-detail" class="text-slate-500 text-[11px] pl-5.5"></div>
+                    </div>
+                </div>
+
+                <!-- Kontak Cepat WA -->
+                <div id="modal-alumni-wa-container" class="pt-2">
+                    <a id="modal-alumni-wa-btn" href="#" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 shadow-xs active:scale-98">
+                        <i class="fa-brands fa-whatsapp text-base"></i>
+                        <span>Sapa Silaturrahim via WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DETAIL USAHA (ALA TOKOPEDIA PRODUCT DETAIL) ==================== -->
+    <div id="modal-detail-usaha" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter max-h-[92vh] flex flex-col">
+            <!-- Header Modal Tokopedia dengan Tombol Tutup -->
+            <div class="p-3.5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50/80">
+                <div class="flex items-center gap-2">
+                    <span class="text-[9.5px] bg-[#00AA5B] text-white font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> Official KMF Mart
+                    </span>
+                    <span class="text-xs font-bold text-slate-700">Detail Produk Santri</span>
+                </div>
+                <button type="button" onclick="App.closeUsahaDetail()" class="w-8 h-8 rounded-full bg-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Body Scrollable -->
+            <div class="overflow-y-auto p-4 space-y-3.5 text-xs text-slate-700">
+                <!-- Foto Produk Persegi Tokopedia -->
+                <div class="relative w-full aspect-video sm:aspect-[4/3] rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 shadow-2xs">
+                    <img id="modal-usaha-foto" src="assets/img/logo.png" alt="Usaha" class="w-full h-full object-cover">
+                    <span id="modal-usaha-diskon-badge" class="absolute top-2.5 right-2.5 text-[10px] bg-red-600 text-white font-black px-2 py-0.5 rounded-md shadow-xs">
+                        15%
+                    </span>
+                    <span id="modal-usaha-kategori" class="absolute bottom-2.5 left-2.5 text-[9.5px] bg-slate-900/80 backdrop-blur-sm text-white px-2 py-0.5 rounded-md font-medium">
+                        Kategori
+                    </span>
+                </div>
+
+                <!-- Bagian Harga & Rating Ala Tokopedia -->
+                <div class="space-y-1">
+                    <div class="flex items-baseline gap-2">
+                        <span id="modal-usaha-harga" class="text-xl font-extrabold text-slate-900">Rp 115.000</span>
+                        <span id="modal-usaha-harga-coret" class="text-xs text-slate-400 line-through">Rp 135.000</span>
+                        <span id="modal-usaha-diskon-text" class="text-[10px] font-bold text-red-600 bg-red-50 px-1 rounded">15%</span>
+                    </div>
+
+                    <!-- Badge Bebas Ongkir & Cashback -->
+                    <div class="flex items-center gap-2 pt-0.5">
+                        <span class="inline-flex items-center gap-1 text-[9.5px] font-bold text-[#00AA5B] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+                            <i class="fa-solid fa-bolt text-[#00AA5B] text-[10px]"></i> Bebas Ongkir
+                        </span>
+                        <span id="modal-usaha-cashback" class="inline-flex items-center text-[9.5px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
+                            Hemat Belanja
+                        </span>
+                    </div>
+
+                    <!-- Nama Produk -->
+                    <h3 id="modal-usaha-nama" class="text-sm sm:text-base font-bold text-slate-900 pt-1 leading-snug">
+                        Nama Produk
+                    </h3>
+
+                    <!-- Rating & Penjualan -->
+                    <div class="flex items-center gap-2 text-[11px] text-slate-500 pt-0.5">
+                        <span class="flex items-center gap-1 text-slate-800 font-bold">
+                            <i class="fa-solid fa-star text-amber-400 text-xs"></i>
+                            <span id="modal-usaha-rating">4.9</span>
+                        </span>
+                        <span>•</span>
+                        <span id="modal-usaha-terjual" class="text-slate-600">250+ terjual</span>
+                        <span>•</span>
+                        <span class="text-[#00AA5B] font-semibold">100% Karya Santri</span>
+                    </div>
+                </div>
+
+                <!-- Box Profil Toko / Alumni Tokopedia Style -->
+                <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200/90 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-10 h-10 rounded-full bg-emerald-100 text-[#00AA5B] flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-300">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-xs font-bold text-slate-900 truncate flex items-center gap-1">
+                                <span id="modal-usaha-pemilik" class="truncate">Alumni Penjual</span>
+                                <i class="fa-solid fa-circle-check text-[#00AA5B] text-xs"></i>
+                            </div>
+                            <div id="modal-usaha-lokasi" class="text-[10.5px] text-slate-500 truncate">
+                                Kec. Demak Kota
+                            </div>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-bold text-[#00AA5B] bg-white border border-slate-200 px-2.5 py-1 rounded-xl shrink-0">
+                        Alumni Mathole'
+                    </span>
+                </div>
+
+                <!-- Box Deskripsi Produk -->
+                <div class="space-y-1.5 pt-1">
+                    <span class="text-xs font-bold text-slate-900 uppercase tracking-wide block">
+                        Deskripsi Produk
+                    </span>
+                    <p id="modal-usaha-deskripsi" class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-2xl border border-slate-100 whitespace-pre-line">
+                        Deskripsi produk...
+                    </p>
+                </div>
+            </div>
+
+            <!-- Sticky Bottom Action Bar Tokopedia -->
+            <div class="p-3 border-t border-slate-100 bg-white flex items-center gap-2 shrink-0 shadow-lg">
+                <a id="modal-usaha-maps-btn" href="#" target="_blank" class="p-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl transition text-xs font-bold flex items-center justify-center shrink-0 shadow-2xs" title="Lihat Lokasi Toko">
+                    <i class="fa-solid fa-diamond-turn-right text-base text-[#00AA5B]"></i>
+                </a>
+                <a id="modal-usaha-wa-btn" href="#" target="_blank" class="flex-1 py-2.5 bg-[#00AA5B] hover:bg-[#028e4d] text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm active:scale-98">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>Chat Penjual / Beli Sekarang</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL JADWAL SHOLAT DEMAK ==================== -->
+    <div id="modal-jadwal-sholat" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter space-y-4 p-5">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm shadow-2xs">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">Jadwal Sholat Demak</h3>
+                        <p class="text-[10px] text-slate-500">Hisab Falakiyah Standar LF PBNU</p>
+                    </div>
+                </div>
+                <button type="button" onclick="KMF_PRAYER.closeJadwalSholatModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <div id="modal-jadwal-date" class="text-xs text-center font-semibold text-kmf-700 bg-blue-50/70 p-2 rounded-xl border border-blue-100">
+                Kabupaten Demak, Jawa Tengah
+            </div>
+
+            <!-- 8 Waktu Sholat -->
+            <div id="modal-jadwal-container" class="space-y-2">
+                <!-- Dinamis via jadwal-sholat.js -->
+            </div>
+
+            <button type="button" onclick="KMF_PRAYER.closeJadwalSholatModal()" class="w-full bg-kmf-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95 transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL MUTIARA FIQH SOSIAL ==================== -->
+    <div id="modal-mutiara-kalam" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter p-6 text-center space-y-4">
+            <div class="w-12 h-12 mx-auto rounded-2xl bg-kmf-50 text-kmf-600 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-quote-left"></i>
+            </div>
+            <div class="space-y-2">
+                <h3 class="text-sm font-bold text-kmf-700 uppercase tracking-wider">Kalam Hikmah Mathali'ul Falah</h3>
+                <p class="text-xs sm:text-sm text-slate-700 italic font-serif leading-relaxed">
+                    "Fiqh tidak boleh berhenti pada teks hukum yang beku, melainkan harus hadir sebagai solusi sosial dan pemberdaya martabat umat manusia."
+                </p>
+                <div class="text-[11px] font-bold text-slate-800 uppercase tracking-wide pt-1">
+                    — Hadhratusy Syaikh KH. MA. Sahal Mahfudh
+                </div>
+            </div>
+            <p class="text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100 text-left">
+                Prinsip Fiqh Sosial mengajarkan kita bahwa pengabdian santri Mathole' di tengah masyarakat harus menebarkan kemaslahatan nyata, baik di bidang pendidikan, keagamaan, maupun penguatan ekonomi jama'ah.
+            </p>
+            <button type="button" onclick="App.closeMutiaraModal()" class="w-full bg-kmf-600 text-white font-bold py-2.5 rounded-xl text-xs active:scale-95 transition">
+                Tutup & Teladani
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL SUKSES SUBMIT ==================== -->
+    <div id="modal-success" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-xl modal-animate-enter">
+            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="font-bold text-lg text-slate-800">Alhamdulillah!</h3>
+                <p id="modal-success-message" class="text-xs text-slate-600 leading-relaxed">
+                    Formulir sensus berhasil dikirimkan.
+                </p>
+            </div>
+            <button onclick="App.closeSuccessModal()" class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">
+                Tutup & Kembali
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL FILANTROPI, ZISWAF & DONASI SANTRI ==================== -->
+    <div id="modal-donasi-filantropi" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter space-y-4 p-5 max-h-[92vh] flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-blue-50 text-kmf-600 flex items-center justify-center text-lg border border-blue-200/60 shadow-2xs">
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">Filantropi & ZISWAF Santri</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Keluarga Mathali'ul Falah Cabang Demak</p>
+                    </div>
+                </div>
+                <button type="button" onclick="App.closeDonasiModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Body Modal (Scrollable) -->
+            <div class="overflow-y-auto space-y-4 pr-1 text-slate-700">
+                <!-- 4 Tabs Program Pilihan -->
+                <div class="grid grid-cols-4 gap-1.5 p-1 bg-slate-100 rounded-2xl text-[11px] font-semibold text-center">
+                    <button type="button" onclick="App.selectDonasiProgram('wakaf')" id="tab-program-wakaf" class="tab-donasi-btn py-2 px-1 rounded-xl transition duration-150 flex flex-col items-center gap-1 active:scale-95">
+                        <i class="fa-solid fa-hand-holding-heart text-amber-500"></i>
+                        <span class="truncate w-full text-[10.5px]">Wakaf</span>
+                    </button>
+                    <button type="button" onclick="App.selectDonasiProgram('infaq')" id="tab-program-infaq" class="tab-donasi-btn py-2 px-1 rounded-xl transition duration-150 flex flex-col items-center gap-1 active:scale-95">
+                        <i class="fa-solid fa-hand-holding-dollar text-kmf-600"></i>
+                        <span class="truncate w-full text-[10.5px]">Infaq</span>
+                    </button>
+                    <button type="button" onclick="App.selectDonasiProgram('zakat')" id="tab-program-zakat" class="tab-donasi-btn py-2 px-1 rounded-xl transition duration-150 flex flex-col items-center gap-1 active:scale-95">
+                        <i class="fa-solid fa-calculator text-sky-600"></i>
+                        <span class="truncate w-full text-[10.5px]">Zakat</span>
+                    </button>
+                    <button type="button" onclick="App.selectDonasiProgram('peduli')" id="tab-program-peduli" class="tab-donasi-btn py-2 px-1 rounded-xl transition duration-150 flex flex-col items-center gap-1 active:scale-95">
+                        <i class="fa-solid fa-graduation-cap text-purple-600"></i>
+                        <span class="truncate w-full text-[10.5px]">Peduli</span>
+                    </button>
+                </div>
+
+                <!-- Banner Informasi Program Terpilih -->
+                <div id="donasi-banner-card" class="bg-gradient-to-r from-kmf-800 to-blue-900 text-white p-3.5 rounded-2xl space-y-1 relative overflow-hidden shadow-xs">
+                    <div class="flex items-center justify-between">
+                        <span id="donasi-program-badge" class="text-[9.5px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-white/20 text-amber-200">
+                            WAKAF PRODUKTIF
+                        </span>
+                        <a id="donasi-external-link" href="https://wakaf.kmf.or.id/" target="_blank" class="text-[10px] text-amber-300 font-bold hover:underline flex items-center gap-1">
+                            wakaf.kmf.or.id <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                        </a>
+                    </div>
+                    <h4 id="donasi-program-title" class="font-bold text-sm text-white pt-0.5">Wakaf Produktif KMF</h4>
+                    <p id="donasi-program-deskripsi" class="text-xs text-slate-200 leading-relaxed">
+                        Wakaf uang & tanah untuk fasilitas dakwah, asrama santri Mathali'ul Falah dan dana abadi pendidikan umat.
+                    </p>
+                </div>
+
+                <!-- ================= KALKULATOR ZAKAT MAL / PROFESI ================= -->
+                <div id="donasi-kalkulator-zakat-box" class="hidden bg-sky-50/70 border border-sky-200 p-3.5 rounded-2xl space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-sky-700"></i>
+                            <span class="text-xs font-bold text-sky-900">Kalkulator Zakat Mal / Profesi</span>
+                        </div>
+                        <span class="text-[10px] bg-sky-100 text-sky-800 font-bold px-2 py-0.5 rounded">Kadar: 2.5%</span>
+                    </div>
+                    <p class="text-[10.5px] text-sky-800 leading-snug">
+                        Nisab setara 85 gr emas (± Rp 85.000.000/tahun atau Rp 7.083.333/bulan). Masukkan total tabungan / penghasilan Anda:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] font-bold text-sky-900 block mb-1">Periode Hitung</label>
+                            <select id="calc-zakat-periode" onchange="App.hitungZakatOtomatis()" class="w-full text-xs p-2 bg-white rounded-xl border border-sky-200 font-medium focus:ring-1 focus:ring-sky-500">
+                                <option value="bulan">Per Bulan (Nisab Rp 7.083.333)</option>
+                                <option value="tahun">Per Tahun (Nisab Rp 85.000.000)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-sky-900 block mb-1">Total Tabungan / Penghasilan</label>
+                            <input type="number" id="calc-zakat-input" oninput="App.hitungZakatOtomatis()" placeholder="Contoh: 10000000" class="w-full text-xs p-2 bg-white rounded-xl border border-sky-200 font-bold text-sky-900 focus:ring-1 focus:ring-sky-500">
+                        </div>
+                    </div>
+                    <div class="p-2.5 bg-white rounded-xl border border-sky-200/80 flex items-center justify-between">
+                        <div>
+                            <div class="text-[10px] text-slate-500">Kewajiban Zakat (2.5%):</div>
+                            <div id="calc-zakat-hasil" class="text-sm font-extrabold text-sky-700">Rp 0</div>
+                        </div>
+                        <button type="button" onclick="App.terapkanZakatKeNominal()" id="calc-btn-terapkan" class="bg-sky-600 hover:bg-sky-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition active:scale-95 shadow-2xs">
+                            Gunakan Nominal Ini
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Input Nominal Donasi & Quick-Pills -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-700 flex items-center justify-between">
+                        <span>Nominal Donasi / Infaq</span>
+                        <span class="text-[10px] font-normal text-slate-400">Minimal <span id="donasi-min-nominal">Rp 10.000</span></span>
+                    </label>
+                    
+                    <!-- Quick Nominal Pills -->
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                        <button type="button" onclick="App.setDonasiNominal(10000)" class="chip-nominal py-2 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-xl font-bold transition active:scale-95">
+                            Rp 10.000
+                        </button>
+                        <button type="button" onclick="App.setDonasiNominal(25000)" class="chip-nominal py-2 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-xl font-bold transition active:scale-95">
+                            Rp 25.000
+                        </button>
+                        <button type="button" onclick="App.setDonasiNominal(50000)" class="chip-nominal py-2 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-xl font-bold transition active:scale-95">
+                            Rp 50.000
+                        </button>
+                        <button type="button" onclick="App.setDonasiNominal(100000)" class="chip-nominal py-2 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-xl font-bold transition active:scale-95">
+                            Rp 100.000
+                        </button>
+                        <button type="button" onclick="App.setDonasiNominal(250000)" class="chip-nominal py-2 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-xl font-bold transition active:scale-95">
+                            Rp 250.000
+                        </button>
+                        <button type="button" onclick="App.setDonasiNominal(500000)" class="chip-nominal py-2 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 rounded-xl font-bold transition active:scale-95">
+                            Rp 500.000
+                        </button>
+                    </div>
+
+                    <!-- Input Nominal Manual -->
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-2.5 text-xs font-bold text-slate-400">Rp</span>
+                        <input type="number" id="input-donasi-nominal" placeholder="0" class="w-full text-base font-extrabold text-slate-800 pl-10 pr-3.5 py-2.5 bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-kmf-600 focus:ring-1 focus:ring-kmf-600 transition">
+                    </div>
+                </div>
+
+                <!-- Data Donatur & Doa -->
+                <div class="space-y-2.5 pt-1 border-t border-slate-100">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs font-bold text-slate-700">Nama Donatur</label>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] text-slate-500 cursor-pointer">
+                            <input type="checkbox" id="check-hamba-allah" onchange="App.toggleHambaAllah(this)" class="rounded text-kmf-600 focus:ring-kmf-500">
+                            <span>Hamba Allah</span>
+                        </label>
+                    </div>
+                    <input type="text" id="input-donasi-nama" placeholder="Tuliskan nama Anda / atas nama almarhum" class="w-full text-xs p-2.5 bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-kmf-600">
+
+                    <label class="text-xs font-bold text-slate-700 block">Doa / Hajat Khusus (Opsional)</label>
+                    <textarea id="input-donasi-doa" rows="2" placeholder="Tuliskan doa hajat Anda agar diaminkan para santri..." class="w-full text-xs p-2.5 bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-kmf-600 leading-relaxed"></textarea>
+                </div>
+
+                <!-- Pilihan Pembayaran: QRIS Statis & Rekening Bank -->
+                <div class="space-y-3 pt-2 border-t border-slate-100">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700">Metode Penyaluran</span>
+                        <div class="flex rounded-xl bg-slate-100 p-0.5 text-[10px] font-bold">
+                            <button type="button" onclick="App.togglePaymentMethod('qris')" id="btn-pay-qris" class="px-2.5 py-1 rounded-lg bg-white shadow-2xs text-kmf-700 transition">
+                                QRIS Statis
+                            </button>
+                            <button type="button" onclick="App.togglePaymentMethod('bank')" id="btn-pay-bank" class="px-2.5 py-1 rounded-lg text-slate-500 transition">
+                                Transfer Bank
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 1. Tampilan QRIS Statis Resmi -->
+                    <div id="payment-view-qris" class="bg-gradient-to-b from-white to-slate-50 p-4 rounded-2xl border border-slate-200 text-center space-y-3 shadow-xs">
+                        <!-- Header Standar QRIS -->
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-red-600 text-white font-black text-[9px] px-1.5 py-0.5 rounded tracking-wider">QRIS</span>
+                                <span class="text-[9.5px] font-bold text-slate-600">STANDAR PEMBAYARAN NASIONAL</span>
+                            </div>
+                            <span class="text-[9.5px] text-slate-400 font-mono">NMID: ID1020038918231</span>
+                        </div>
+
+                        <!-- Info Merchant -->
+                        <div class="space-y-0.5">
+                            <div class="font-extrabold text-xs text-slate-800" id="qris-merchant-name">KMF CABANG DEMAK / WAKAF KMF</div>
+                            <div class="text-[10px] text-slate-500">Mendukung BCA, Mandiri, BRI, BNI, BSI, GoPay, OVO, ShopeePay, Dana, LinkAja</div>
+                        </div>
+
+                        <!-- Gambar / SVG QR Code Statis High Quality -->
+                        <div class="relative w-48 h-48 mx-auto bg-white p-3 rounded-2xl border-2 border-slate-800/80 shadow-md flex items-center justify-center">
+                            <!-- SVG QR Statis KMF -->
+                            <svg class="w-full h-full" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="white"/>
+                                <!-- Corner Position Detection 1 (Top Left) -->
+                                <rect x="15" y="15" width="45" height="45" rx="6" stroke="#0f172a" stroke-width="6"/>
+                                <rect x="27" y="27" width="21" height="21" rx="3" fill="#0f172a"/>
+                                <!-- Corner Position Detection 2 (Top Right) -->
+                                <rect x="140" y="15" width="45" height="45" rx="6" stroke="#0f172a" stroke-width="6"/>
+                                <rect x="152" y="27" width="21" height="21" rx="3" fill="#0f172a"/>
+                                <!-- Corner Position Detection 3 (Bottom Left) -->
+                                <rect x="15" y="140" width="45" height="45" rx="6" stroke="#0f172a" stroke-width="6"/>
+                                <rect x="27" y="152" width="21" height="21" rx="3" fill="#0f172a"/>
+                                <!-- Matrix Patterns -->
+                                <g fill="#0f172a">
+                                    <rect x="70" y="20" width="8" height="8"/>
+                                    <rect x="85" y="20" width="8" height="8"/>
+                                    <rect x="115" y="20" width="8" height="8"/>
+                                    <rect x="70" y="35" width="8" height="8"/>
+                                    <rect x="100" y="35" width="8" height="8"/>
+                                    <rect x="120" y="35" width="8" height="8"/>
+                                    <rect x="85" y="50" width="8" height="8"/>
+                                    <rect x="100" y="50" width="8" height="8"/>
+                                    <rect x="20" y="70" width="8" height="8"/>
+                                    <rect x="35" y="70" width="8" height="8"/>
+                                    <rect x="50" y="70" width="8" height="8"/>
+                                    <rect x="70" y="70" width="8" height="8"/>
+                                    <rect x="110" y="70" width="8" height="8"/>
+                                    <rect x="130" y="70" width="8" height="8"/>
+                                    <rect x="150" y="70" width="8" height="8"/>
+                                    <rect x="170" y="70" width="8" height="8"/>
+                                    <rect x="20" y="85" width="8" height="8"/>
+                                    <rect x="40" y="85" width="8" height="8"/>
+                                    <rect x="60" y="85" width="8" height="8"/>
+                                    <rect x="130" y="85" width="8" height="8"/>
+                                    <rect x="160" y="85" width="8" height="8"/>
+                                    <rect x="20" y="100" width="8" height="8"/>
+                                    <rect x="50" y="100" width="8" height="8"/>
+                                    <rect x="140" y="100" width="8" height="8"/>
+                                    <rect x="170" y="100" width="8" height="8"/>
+                                    <rect x="70" y="125" width="8" height="8"/>
+                                    <rect x="90" y="125" width="8" height="8"/>
+                                    <rect x="110" y="125" width="8" height="8"/>
+                                    <rect x="130" y="125" width="8" height="8"/>
+                                    <rect x="160" y="125" width="8" height="8"/>
+                                    <rect x="70" y="145" width="8" height="8"/>
+                                    <rect x="100" y="145" width="8" height="8"/>
+                                    <rect x="140" y="145" width="8" height="8"/>
+                                    <rect x="170" y="145" width="8" height="8"/>
+                                    <rect x="85" y="165" width="8" height="8"/>
+                                    <rect x="115" y="165" width="8" height="8"/>
+                                    <rect x="150" y="165" width="8" height="8"/>
+                                    <rect x="170" y="165" width="8" height="8"/>
+                                </g>
+                                <!-- Center Badge Logo KMF -->
+                                <circle cx="100" cy="100" r="20" fill="white" stroke="#026b2c" stroke-width="3"/>
+                                <text x="100" y="104" font-family="sans-serif" font-size="9" font-weight="900" fill="#01451b" text-anchor="middle">KMF</text>
+                            </svg>
+                        </div>
+
+                        <div class="flex items-center justify-center gap-2 pt-1">
+                            <button type="button" onclick="App.downloadQris()" class="text-[11px] font-bold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl transition active:scale-95 flex items-center gap-1.5 shadow-2xs">
+                                <i class="fa-solid fa-download text-kmf-600"></i> Unduh Gambar QRIS
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. Tampilan Rekening Bank -->
+                    <div id="payment-view-bank" class="hidden space-y-2">
+                        <div id="donasi-rekening-list" class="space-y-2">
+                            <!-- Dinamis via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal Action -->
+            <div class="pt-2 border-t border-slate-100 flex items-center gap-2 shrink-0">
+                <button type="button" onclick="App.kirimKonfirmasiDonasiWA()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-xs active:scale-98">
+                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <span>Konfirmasi Donasi via WA</span>
+                </button>
+                <button type="button" onclick="App.closeDonasiModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition active:scale-98">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL KABAR DUKA / LELAYU SANTRI ==================== -->
+    <div id="modal-kabar-duka" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter space-y-4 p-5 max-h-[92vh] flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-slate-100 text-slate-800 flex items-center justify-center text-lg border border-slate-200">
+                        <i class="fa-solid fa-ribbon text-slate-700"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">Kabar Duka & Doa Bersama</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Keluarga Besar Mathali'ul Falah Demak</p>
+                    </div>
+                </div>
+                <button type="button" onclick="App.closeKabarDukaModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Content Modal (Scrollable) -->
+            <div class="overflow-y-auto space-y-3.5 pr-1">
+                <!-- Banner Ta'ziyah -->
+                <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-3.5 rounded-2xl text-center space-y-1">
+                    <div class="text-[11px] font-arabic font-bold text-amber-300">
+                        إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ
+                    </div>
+                    <p class="text-[10.5px] text-slate-300 leading-relaxed">
+                        Keluarga Besar KMF Cabang Demak turut berbelasungkawa yang mendalam atas wafatnya para masyayikh, alumni, dan keluarga santri.
+                    </p>
+                </div>
+
+                <!-- Daftar Lelayu -->
+                <div id="kabar-duka-container" class="space-y-3">
+                    <!-- Dinamis via JS -->
+                </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="pt-2 border-t border-slate-100 flex items-center gap-2 shrink-0">
+                <a href="https://wa.me/6281234567890?text=Assalamu'alaikum%20Sekretariat%20KMF%20Demak,%20saya%20ingin%20mengabarkan%20kabar%20duka%20lelayu%20keluarga%20alumni." target="_blank" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs active:scale-98">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                    <span>Laporkan Kabar Duka</span>
+                </a>
+                <button type="button" onclick="App.closeKabarDukaModal()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition active:scale-98">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Scripts -->
+    <script src="js/compressor.js"></script>
+    <script src="js/jadwal-sholat.js"></script>
+    <script src="js/data-amalan.js"></script>
+    <script src="js/data-mock.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('KMF PWA Service Worker terdaftar:', reg.scope))
+                    .catch(err => console.warn('PWA Service Worker gagal:', err));
+            });
+        }
+    </script>
+</body>
+</html>

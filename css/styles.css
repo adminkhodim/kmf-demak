@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  --kmf-primary: #1e3a68;
+  --kmf-primary-light: #2563eb;
+  --kmf-primary-dark: #132644;
+  --kmf-gold: #f59e0b;
+  --kmf-gold-light: #fcd34d;
+  --kmf-bg: #f8fafc;
+}
+
+body {
+  font-family: 'Poppins', 'Roboto', sans-serif;
+  background-color: var(--kmf-bg);
+  color: #1e293b;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Tipografi Khusus Naskah Arab Amalan */
+.font-arabic {
+  font-family: 'Amiri', 'Traditional Arabic', serif;
+  line-height: 2.2rem;
+  direction: rtl;
+  text-align: right;
+  word-spacing: 2px;
+}
+
+/* Pola Hiasan Islami Halus */
+.bg-islamic-pattern {
+  background-color: var(--kmf-primary);
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 2px, transparent 2px);
+  background-size: 24px 24px;
+}
+
+/* Utility No Scrollbar untuk Horizontal Chips / Scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Safe Area Insets untuk Layar Ponsel Berponi / Notch & Gesture Bar */
+.pb-safe {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0.75rem));
+}
+
+.pt-safe {
+  padding-top: max(0.5rem, env(safe-area-inset-top, 0.5rem));
+}
+
+/* Mobile Bottom Navigation Bar (Sleek Dark Navy Blue KMF) */
+#mobile-bottom-nav {
+  background: linear-gradient(180deg, #132644 0%, #0d1b32 100%);
+  border-top: 1px solid rgba(37, 99, 235, 0.35);
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.28);
+}
+
+.nav-mob-btn {
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: rgba(219, 234, 254, 0.75);
+}
+
+.nav-mob-btn:active {
+  transform: scale(0.92);
+}
+
+.nav-mob-btn.active {
+  color: #fbbf24 !important; /* Gold terang */
+  font-weight: 700 !important;
+}
+
+.nav-mob-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  width: 14px;
+  height: 3px;
+  background-color: #f59e0b;
+  border-radius: 9999px;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+}
+
+/* Animasi Halus Transisi Tab */
+.tab-content {
+  animation: fadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Badge Notifikasi Pending */
+.badge-pulse {
+  animation: pulseBadge 2s infinite;
+}
+
+@keyframes pulseBadge {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+/* Animasi Masuk Modal Dialog */
+.modal-animate-enter {
+  animation: modalEnter 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

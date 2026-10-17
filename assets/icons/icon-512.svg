@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="gradBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#03a142"/>
+      <stop offset="100%" stop-color="#026b2c"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#013d19" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background Circle / Rounded Box -->
+  <rect width="512" height="512" rx="112" fill="url(#gradBg)"/>
+  
+  <!-- Subtle Islamic Geometric Ring -->
+  <circle cx="256" cy="256" r="215" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="3"/>
+  <circle cx="256" cy="256" r="195" fill="none" stroke="url(#goldGrad)" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="8 6"/>
+
+  <!-- Inner Crest Container -->
+  <g filter="url(#shadow)">
+    <!-- Shield Outline -->
+    <path d="M256 95 L375 135 C375 250 325 345 256 385 C187 345 137 250 137 135 Z" fill="#ffffff" stroke="url(#goldGrad)" stroke-width="5"/>
+    
+    <!-- Inner Green Shield -->
+    <path d="M256 112 L360 148 C360 245 315 328 256 365 C197 328 152 245 152 148 Z" fill="url(#gradBg)"/>
+  </g>
+
+  <!-- Open Quran / Book Symbol -->
+  <g transform="translate(256, 230) scale(1.15)">
+    <!-- Book Spine & Pages -->
+    <path d="M0 35 C-25 15 -60 15 -85 28 L-85 -30 C-60 -42 -25 -42 0 -22 C25 -42 60 -42 85 -30 L85 28 C60 15 25 15 0 35 Z" fill="#ffffff" opacity="0.95"/>
+    <path d="M0 32 C-24 14 -58 14 -82 26 L-82 -27 C-58 -38 -24 -38 0 -20 C24 -38 58 -38 82 -27 L82 26 C58 14 24 14 0 32 Z" fill="#F8FAFC"/>
+    <!-- Book Center Fold -->
+    <line x1="0" y1="-20" x2="0" y2="35" stroke="#026b2c" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Quran Arabic Rehal Text Accent -->
+    <circle cx="0" cy="-45" r="9" fill="url(#goldGrad)"/>
+    <polygon points="0,-62 4,-50 16,-50 7,-42 10,-30 0,-38 -10,-30 -7,-42 -16,-50 -4,-50" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- Monogram / Typography "KMF" -->
+  <text x="256" y="325" font-family="'Poppins', 'Arial', sans-serif" font-weight="900" font-size="44" fill="#ffffff" text-anchor="middle" letter-spacing="4">KMF</text>
+  <text x="256" y="348" font-family="'Poppins', 'Arial', sans-serif" font-weight="700" font-size="19" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="5">DEMAK</text>
+
+  <!-- Subtitle Ribbon -->
+  <g transform="translate(256, 435)">
+    <rect x="-170" y="-22" width="340" height="44" rx="22" fill="#ffffff" filter="url(#shadow)"/>
+    <text x="0" y="6" font-family="'Poppins', 'Arial', sans-serif" font-weight="700" font-size="15" fill="#026b2c" text-anchor="middle" letter-spacing="1">MATHALI'UL FALAH KAJEN</text>
+  </g>
+</svg>
