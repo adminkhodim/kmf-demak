@@ -148,51 +148,18 @@
             <!-- 1. KHUSUS TAMPILAN MOBILE (Persis Gaya Proyek Asnawiyyah) -->
             <div id="beranda-mobile-section" class="block md:hidden max-w-xl mx-auto space-y-3.5">
                 
-                <!-- Widget Lokasi, Kalender & Jadwal Sholat Demak (Aesthetic & Compact ala Asnawiyyah) -->
-                <section onclick="KMF_PRAYER.openJadwalSholatModal()" title="Buka Detail Jadwal Sholat Demak"
-                    class="bg-gradient-to-r from-kmf-800 via-kmf-700 to-blue-900 text-white px-3.5 py-2.5 rounded-2xl shadow-sm border border-kmf-600/70 relative overflow-hidden space-y-1.5 cursor-pointer active:scale-[0.99] transition hover:brightness-105">
-                    <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl pointer-events-none">
-                        <i class="fa-solid fa-kaaba"></i>
-                    </div>
-
-                    <!-- Baris 1: Kiri (Lokasi & Hari Pasaran) | Kanan (Shalat Terdekat & Countdown Digital) -->
-                    <div class="flex justify-between items-start gap-2 relative z-10">
-                        <!-- Kiri -->
-                        <div class="flex flex-col items-start space-y-1 min-w-0 flex-1">
-                            <div class="flex items-center space-x-1.5 font-bold text-white leading-tight min-w-0 w-full" style="font-size: 11px;">
-                                <i class="fa-solid fa-location-dot text-amber-400 shrink-0 text-xs"></i>
-                                <span id="home-prayer-location" class="truncate tracking-tight">Kab. Demak, Jawa Tengah</span>
-                            </div>
-                            <div id="home-current-day"
-                                class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/20 shadow-inner inline-flex items-center tracking-wide"
-                                style="font-size: 10.5px; line-height: 1;">
-                                Memuat Hari...
-                            </div>
-                        </div>
-
-                        <!-- Kanan -->
-                        <div class="flex flex-col items-end space-y-1 shrink-0 ml-1">
-                            <div id="home-next-prayer-name" class="font-bold text-white text-right leading-tight" style="font-size: 11.5px;">
-                                Zuhur <span class="text-amber-300 font-semibold ml-1">11:38 WIB</span>
-                            </div>
-                            <div id="home-prayer-countdown"
-                                class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/20 shadow-inner inline-flex items-center tracking-wider"
-                                style="font-size: 10.5px; line-height: 1;">
-                                00:00:00
+                <!-- Banner Slider 3:1 (Mobile Ala Asnawiyyah - Hero Top Banner) -->
+                <section class="space-y-1.5">
+                    <div class="relative w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-xs bg-slate-900 border border-slate-100">
+                        <div id="hero-slider-container" class="w-full h-full relative">
+                            <!-- Dinamis via initBannerSlider -->
+                            <div class="w-full h-full animate-pulse bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 flex items-center justify-center text-slate-400">
+                                <i class="fa-regular fa-image text-xl opacity-40"></i>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Baris 2: Tanggal Masehi & Tanggal Hijriyah -->
-                    <div class="flex justify-between items-center text-blue-100/90 relative z-10 pt-0.5" style="font-size: 10px; line-height: 1.2;">
-                        <div id="home-date-masehi" class="flex items-center space-x-1.5 text-slate-200/90" style="white-space: nowrap;">
-                            <i class="fa-regular fa-calendar text-blue-300 text-[10px]"></i>
-                            <span id="home-date-masehi-val" class="font-medium">-</span>
-                        </div>
-                        <div id="home-date-hijri" class="flex items-center space-x-1.5 text-amber-200/90" style="white-space: nowrap;">
-                            <i class="fa-solid fa-moon text-amber-300 text-[10px]"></i>
-                            <span id="home-date-hijri-val" class="font-medium">-</span>
-                        </div>
+                    <div id="hero-dots-container" class="flex justify-center items-center space-x-1.5 pt-0.5">
+                        <!-- Dots dinamis -->
                     </div>
                 </section>
 
@@ -266,18 +233,51 @@
                     </div>
                 </div>
 
-                <!-- Banner Slider 3:1 (Mobile Ala Asnawiyyah - Menggantikan 4 KPI Cards) -->
-                <section class="space-y-1.5">
-                    <div class="relative w-full aspect-[3/1] rounded-2xl overflow-hidden shadow-xs bg-slate-900 border border-slate-100">
-                        <div id="hero-slider-container" class="w-full h-full relative">
-                            <!-- Dinamis via initBannerSlider -->
-                            <div class="w-full h-full animate-pulse bg-gradient-to-r from-slate-200 via-slate-100 to-slate-200 flex items-center justify-center text-slate-400">
-                                <i class="fa-regular fa-image text-xl opacity-40"></i>
+                <!-- Widget Lokasi, Kalender & Jadwal Sholat Demak (Aesthetic & Compact ala Asnawiyyah) -->
+                <section onclick="KMF_PRAYER.openJadwalSholatModal()" title="Buka Detail Jadwal Sholat Demak"
+                    class="bg-gradient-to-r from-kmf-800 via-kmf-700 to-blue-900 text-white px-3.5 py-2.5 rounded-2xl shadow-sm border border-kmf-600/70 relative overflow-hidden space-y-1.5 cursor-pointer active:scale-[0.99] transition hover:brightness-105">
+                    <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl pointer-events-none">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+
+                    <!-- Baris 1: Kiri (Lokasi & Hari Pasaran) | Kanan (Shalat Terdekat & Countdown Digital) -->
+                    <div class="flex justify-between items-start gap-2 relative z-10">
+                        <!-- Kiri -->
+                        <div class="flex flex-col items-start space-y-1 min-w-0 flex-1">
+                            <div class="flex items-center space-x-1.5 font-bold text-white leading-tight min-w-0 w-full" style="font-size: 11px;">
+                                <i class="fa-solid fa-location-dot text-amber-400 shrink-0 text-xs"></i>
+                                <span id="home-prayer-location" class="truncate tracking-tight">Kab. Demak, Jawa Tengah</span>
+                            </div>
+                            <div id="home-current-day"
+                                class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/20 shadow-inner inline-flex items-center tracking-wide"
+                                style="font-size: 10.5px; line-height: 1;">
+                                Memuat Hari...
+                            </div>
+                        </div>
+
+                        <!-- Kanan -->
+                        <div class="flex flex-col items-end space-y-1 shrink-0 ml-1">
+                            <div id="home-next-prayer-name" class="font-bold text-white text-right leading-tight" style="font-size: 11.5px;">
+                                Zuhur <span class="text-amber-300 font-semibold ml-1">11:38 WIB</span>
+                            </div>
+                            <div id="home-prayer-countdown"
+                                class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded border border-amber-400/20 shadow-inner inline-flex items-center tracking-wider"
+                                style="font-size: 10.5px; line-height: 1;">
+                                00:00:00
                             </div>
                         </div>
                     </div>
-                    <div id="hero-dots-container" class="flex justify-center items-center space-x-1.5 pt-0.5">
-                        <!-- Dots dinamis -->
+
+                    <!-- Baris 2: Tanggal Masehi & Tanggal Hijriyah -->
+                    <div class="flex justify-between items-center text-blue-100/90 relative z-10 pt-0.5" style="font-size: 10px; line-height: 1.2;">
+                        <div id="home-date-masehi" class="flex items-center space-x-1.5 text-slate-200/90" style="white-space: nowrap;">
+                            <i class="fa-regular fa-calendar text-blue-300 text-[10px]"></i>
+                            <span id="home-date-masehi-val" class="font-medium">-</span>
+                        </div>
+                        <div id="home-date-hijri" class="flex items-center space-x-1.5 text-amber-200/90" style="white-space: nowrap;">
+                            <i class="fa-solid fa-moon text-amber-300 text-[10px]"></i>
+                            <span id="home-date-hijri-val" class="font-medium">-</span>
+                        </div>
                     </div>
                 </section>
 
