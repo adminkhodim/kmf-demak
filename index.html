@@ -196,7 +196,7 @@
                         </button>
 
                         <!-- 5. Agenda Cabang -->
-                        <button onclick="App.scrollToAgenda()" class="flex flex-col items-center group transition active:scale-95">
+                        <button onclick="App.openAgendaModal()" class="flex flex-col items-center group transition active:scale-95">
                             <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition duration-200 border border-rose-200/50">
                                 <i class="fa-solid fa-calendar-check"></i>
                             </div>
@@ -258,53 +258,6 @@
 
                     <div id="mobile-headline-container" class="space-y-2.5">
                         <!-- Dinamis via App.renderMobileHeadline() -->
-                    </div>
-                </section>
-
-                <!-- Agenda Terdekat KMF Demak (Mobile Card) -->
-                <section id="mobile-agenda-card" class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-                    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                        <div class="flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-kmf-600 rounded-full"></span>
-                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide">Agenda Terdekat</h3>
-                        </div>
-                        <span class="text-[10px] bg-emerald-50 text-kmf-700 px-2 py-0.5 rounded-full font-bold">KMF Demak</span>
-                    </div>
-                    <div id="mobile-agenda-container" class="space-y-2.5">
-                        <!-- Dinamis via JS -->
-                    </div>
-                </section>
-
-                <!-- Etalase Usaha Santri (Mobile) -->
-                <section class="space-y-2.5">
-                    <div class="flex items-center justify-between px-1">
-                        <div class="flex items-center gap-2">
-                            <span class="w-1.5 h-4 bg-amber-500 rounded-full"></span>
-                            <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide">Bursa Usaha Santri</h3>
-                        </div>
-                        <button onclick="App.navigateTo('usaha')" class="text-[11px] text-kmf-600 font-bold hover:underline flex items-center gap-1">
-                            Semua <i class="fa-solid fa-chevron-right text-[9px]"></i>
-                        </button>
-                    </div>
-                    <div id="mobile-spotlight-usaha" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <!-- Dinamis via JS -->
-                    </div>
-                </section>
-
-                <!-- Mutiara Kalam Fiqh Sosial Mbah Sahal (Mobile) -->
-                <section class="bg-gradient-to-br from-blue-950 to-kmf-800 text-white p-4 rounded-2xl shadow-sm relative overflow-hidden space-y-2 border border-blue-900/50">
-                    <div class="absolute -right-4 -bottom-4 text-white/5 text-7xl pointer-events-none">
-                        <i class="fa-solid fa-quote-right"></i>
-                    </div>
-                    <div class="flex items-center gap-2 text-kmf-gold text-xs font-bold uppercase tracking-wider">
-                        <i class="fa-solid fa-book-open-reader"></i>
-                        <span>Fiqh Sosial Mbah Sahal</span>
-                    </div>
-                    <p class="text-xs text-slate-100 italic leading-relaxed">
-                        "Fiqh tidak boleh berhenti pada teks hukum yang beku, melainkan harus hadir sebagai solusi sosial dan pemberdaya martabat umat manusia."
-                    </p>
-                    <div class="text-[10px] text-amber-300 font-semibold pt-1">
-                        — Hadhratusy Syaikh KH. MA. Sahal Mahfudh
                     </div>
                 </section>
             </div>
@@ -1480,6 +1433,39 @@
             <button type="button" onclick="KMF_PRAYER.closeJadwalSholatModal()" class="w-full bg-kmf-600 text-white font-bold py-2 rounded-xl text-xs active:scale-95 transition">
                 Tutup
             </button>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL AGENDA KEGIATAN KMF DEMAK ==================== -->
+    <div id="modal-agenda-kegiatan" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter space-y-4 p-5 max-h-[90vh] flex flex-col">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg border border-rose-200/60 shadow-2xs">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">Agenda Kegiatan KMF Demak</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Jadwal Pertemuan, Selapanan & Silaturrahim Alumni</p>
+                    </div>
+                </div>
+                <button type="button" onclick="App.closeAgendaModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- List Agenda Container (Scrollable) -->
+            <div id="modal-agenda-container" class="overflow-y-auto space-y-3 pr-1 text-slate-700">
+                <!-- Rendered dinamis via App.openAgendaModal() -->
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="pt-2 border-t border-slate-100 shrink-0">
+                <button type="button" onclick="App.closeAgendaModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl text-xs active:scale-95 transition">
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 

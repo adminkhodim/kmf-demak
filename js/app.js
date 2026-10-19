@@ -1053,12 +1053,54 @@ const App = {
         }
     },
 
+    /**
+     * Modal Agenda Kegiatan KMF Demak
+     */
+    openAgendaModal: function() {
+        const modal = document.getElementById('modal-agenda-kegiatan');
+        if (!modal) return;
+
+        const container = document.getElementById('modal-agenda-container');
+        if (container && window.KMF_DATA && window.KMF_DATA.agendaList) {
+            container.innerHTML = window.KMF_DATA.agendaList.map(item => `
+                <div class="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-kmf-500 transition space-y-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200/70">
+                            ${item.kategori}
+                        </span>
+                        <span class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                            <i class="fa-regular fa-clock text-kmf-600"></i> ${item.tanggal}
+                        </span>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-sm sm:text-base leading-snug">${item.title}</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">${item.deskripsi}</p>
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 gap-2">
+                        <div class="flex items-center gap-1.5 text-[11.5px] font-medium min-w-0">
+                            <i class="fa-solid fa-location-dot text-rose-500 shrink-0"></i>
+                            <span class="truncate">${item.tempat}</span>
+                        </div>
+                        <a href="https://wa.me/?text=${encodeURIComponent('Undangan Kegiatan KMF Demak: *' + item.title + '* pada ' + item.tanggal + ' di ' + item.tempat)}" target="_blank" class="shrink-0 text-xs text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1.5 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 active:scale-95 transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Bagikan
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    },
+
+    closeAgendaModal: function() {
+        const modal = document.getElementById('modal-agenda-kegiatan');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    },
+
     scrollToAgenda: function() {
-        this.navigateTo('home');
-        setTimeout(() => {
-            const el = document.getElementById('mobile-agenda-card') || document.getElementById('home-agenda-container');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
+        this.openAgendaModal();
     },
 
     /**
