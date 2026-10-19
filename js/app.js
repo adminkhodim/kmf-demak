@@ -1848,10 +1848,14 @@ const App = {
         const detailEl = document.getElementById('kta-detail');
 
         if (avatarEl) avatarEl.innerText = initials;
-        if (namaEl) namaEl.innerText = user.nama;
+        if (namaEl) namaEl.innerText = user.nama || 'Santri KMF Demak';
         const lastDigits = user.whatsapp ? user.whatsapp.slice(-4) : '1912';
         if (idEl) idEl.innerText = `ID: KMF-DMK-${user.tahunLulus || '2020'}-${lastDigits}`;
-        if (detailEl) detailEl.innerText = `Alumni Mathole' Kajen • Kec. ${user.kecamatan || 'Demak'}`;
+        
+        const angkatanEl = document.getElementById('kta-angkatan');
+        const kecEl = document.getElementById('kta-kecamatan');
+        if (angkatanEl) angkatanEl.innerText = `Alumni Kajen '` + (user.tahunLulus ? String(user.tahunLulus).slice(-2) : '15');
+        if (kecEl) kecEl.innerText = `Kec. ` + (user.kecamatan || 'Demak');
 
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -1862,6 +1866,21 @@ const App = {
         if (modal) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
+        }
+    },
+
+    shareKta: function() {
+        const user = this.currentUser || { nama: 'Santri KMF Demak' };
+        const text = `Kartu Tanda Anggota (e-KTA) Digital KMF Demak milik ${user.nama}. Keluarga Mathali'ul Falah (KMF) Cabang Demak.`;
+        if (navigator.share) {
+            navigator.share({
+                title: 'e-KTA Virtual KMF Demak',
+                text: text,
+                url: window.location.href
+            }).catch(() => {});
+        } else {
+            navigator.clipboard.writeText(text + "\nBuka di: " + window.location.href);
+            alert("Informasi e-KTA Virtual berhasil disalin ke clipboard!");
         }
     },
 

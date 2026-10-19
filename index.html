@@ -1734,18 +1734,18 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL KTA DIGITAL SANTRI (VIRTUAL CARD) ==================== -->
+    <!-- ==================== MODAL KTA DIGITAL SANTRI (VIRTUAL CARD REDESAIN) ==================== -->
     <div id="modal-kta-santri" onclick="if(event.target === this) App.closeKtaModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col p-5 space-y-4">
-            <!-- Header Modal -->
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col p-4 sm:p-6 space-y-4">
+            <!-- Header Dialog -->
             <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm shadow-2xs">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-base shadow-2xs border border-amber-200/50">
                         <i class="fa-solid fa-id-card"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-800">KTA Virtual Alumni</h3>
-                        <p class="text-[10px] text-slate-500">Kartu Tanda Anggota Digital</p>
+                        <h3 class="text-sm sm:text-base font-bold text-slate-800">Kartu Tanda Anggota (e-KTA)</h3>
+                        <p class="text-[10.5px] text-slate-500">Keluarga Mathali'ul Falah Cabang Demak</p>
                     </div>
                 </div>
                 <button type="button" onclick="App.closeKtaModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
@@ -1753,50 +1753,108 @@
                 </button>
             </div>
 
-            <!-- FISIK KARTU KTA VIRTUAL ELEGAN -->
-            <div id="kta-card-render" class="bg-gradient-to-br from-kmf-950 via-kmf-800 to-blue-900 text-white rounded-2xl p-4 sm:p-5 shadow-lg border-2 border-amber-400/50 relative overflow-hidden space-y-3.5">
-                <div class="absolute -right-10 -bottom-10 text-white/5 text-9xl pointer-events-none">
+            <!-- FISIK KARTU KTA VIRTUAL ELEGAN & MEWAH -->
+            <div id="kta-card-render" class="relative rounded-3xl p-5 shadow-2xl border-2 border-amber-400/90 text-white select-none overflow-hidden space-y-4"
+                style="background: linear-gradient(135deg, #061527 0%, #0c2542 45%, #153c66 100%); box-shadow: 0 15px 35px -5px rgba(6, 21, 39, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);">
+                
+                <!-- Efek Glow Ornamen & Watermark Kubah -->
+                <div class="absolute -top-16 -right-16 w-40 h-40 bg-amber-400/15 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute -bottom-16 -left-16 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="absolute right-2 -bottom-2 text-white/5 text-9xl pointer-events-none leading-none">
                     <i class="fa-solid fa-mosque"></i>
                 </div>
 
-                <!-- KTA Header -->
-                <div class="flex items-center justify-between relative z-10 border-b border-white/15 pb-2.5">
-                    <div class="flex items-center gap-2">
-                        <img src="assets/img/logo.png" alt="KMF" class="w-8 h-8 object-contain">
+                <!-- Bagian 1: Header Kartu -->
+                <div class="flex items-center justify-between relative z-10 border-b border-white/15 pb-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-10 h-10 rounded-full bg-white p-1 shadow-md border border-amber-300 flex items-center justify-center shrink-0">
+                            <img src="assets/img/logo.png" alt="Logo KMF" class="w-full h-full object-contain">
+                        </div>
                         <div>
-                            <span class="text-[9px] uppercase tracking-wider text-amber-300 font-extrabold block">KARTU TANDA ANGGOTA</span>
-                            <span class="text-[10.5px] font-bold text-white block leading-tight">KMF CABANG DEMAK</span>
+                            <span class="text-[8.5px] uppercase tracking-widest text-amber-300 font-extrabold block">e-KTA RESMI ALUMNI</span>
+                            <h4 class="text-xs sm:text-sm font-black text-white tracking-wide leading-tight">KMF CABANG DEMAK</h4>
+                            <span class="text-[9px] text-blue-200/90 block">Keluarga Mathali'ul Falah Kajen - Pati</span>
                         </div>
                     </div>
-                    <span class="text-[8px] bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded-full font-bold">
-                        AKTIF
-                    </span>
+                    <div class="flex flex-col items-end gap-1 shrink-0">
+                        <span class="text-[8px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 flex items-center gap-1 shadow-2xs">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> AKTIF
+                        </span>
+                        <span class="text-[8px] font-mono text-amber-300/90 tracking-wider">SMART PASS</span>
+                    </div>
                 </div>
 
-                <!-- KTA Body -->
-                <div class="relative z-10 flex items-center gap-3.5">
-                    <div id="kta-avatar" class="w-13 h-13 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-md border-2 border-white/40">
+                <!-- Bagian 2: EMV Chip & Contactless Wave -->
+                <div class="relative z-10 flex items-center justify-between pt-0.5">
+                    <!-- Chip Kartu Emas Realistis -->
+                    <div class="w-10 h-8 rounded-md bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 border border-amber-600 shadow-inner flex items-center justify-center p-0.5 shrink-0">
+                        <div class="w-full h-full border border-amber-800/30 rounded-xs grid grid-cols-2 gap-0.5 p-0.5">
+                            <div class="border-b border-r border-amber-800/30"></div>
+                            <div class="border-b border-amber-800/30"></div>
+                            <div class="border-r border-amber-800/30"></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- Contactless Wifi Icon -->
+                    <div class="text-right flex items-center gap-1.5 text-blue-200/80 font-mono text-[9px] tracking-widest">
+                        <i class="fa-solid fa-wifi rotate-90 text-[11px] text-amber-300"></i>
+                        <span>NFC VERIFIED</span>
+                    </div>
+                </div>
+
+                <!-- Bagian 3: Identitas Alumni (Foto/Avatar & Detail Lengkap) -->
+                <div class="relative z-10 flex items-center gap-3.5 pt-1">
+                    <div id="kta-avatar" class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-2xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white">
                         AF
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div id="kta-nama" class="text-sm font-bold text-white truncate leading-tight">Ahmad Fauzi, S.Pd.</div>
-                        <div id="kta-id" class="text-[10px] text-amber-300 font-mono tracking-wider mt-0.5">ID: KMF-DMK-2015-0812</div>
-                        <div id="kta-detail" class="text-[10px] text-blue-100/80 truncate mt-0.5">Alumni Mathole' Kajen • Kec. Sayung</div>
+                        <div id="kta-nama" class="text-sm sm:text-base font-black text-white tracking-wide truncate leading-tight drop-shadow-xs">
+                            Ahmad Fauzi, S.Pd.
+                        </div>
+                        <div id="kta-id" class="text-xs text-amber-300 font-mono font-bold tracking-widest mt-1">
+                            ID: KMF-DMK-2015-0812
+                        </div>
+                        <div class="flex items-center gap-1.5 mt-2 flex-wrap">
+                            <span id="kta-angkatan" class="text-[9.5px] bg-white/15 text-white px-2 py-0.5 rounded-md border border-white/20 font-bold backdrop-blur-xs">
+                                Alumni Kajen '15
+                            </span>
+                            <span id="kta-kecamatan" class="text-[9.5px] bg-white/15 text-white px-2 py-0.5 rounded-md border border-white/20 font-bold backdrop-blur-xs">
+                                Kec. Sayung
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- KTA Footer (Slogan Masyayikh) -->
-                <div class="relative z-10 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] text-blue-100/70">
-                    <span class="italic">"Shalih Akram" — Masyayikh Kajen</span>
-                    <span class="font-mono text-amber-300/80">KMF DEMAK PWA</span>
+                <!-- Bagian 4: Footer Kartu (QR Code & Kaligrafi Shalih Akram) -->
+                <div class="relative z-10 pt-2 border-t border-white/15 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 bg-white p-0.5 rounded-lg shadow-sm flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-qrcode text-slate-950 text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-[7.5px] text-blue-200/80 block uppercase tracking-wider font-semibold">Verifikasi Digital</span>
+                            <span class="text-[8.5px] font-mono text-amber-300 font-bold block">kmf-demak.or.id</span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-arabic text-amber-300 text-sm leading-none font-bold">صالح أكرم</div>
+                        <div class="text-[8.5px] text-blue-100/80 italic mt-0.5">"Shalih Akram"</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Tombol Tutup -->
-            <button type="button" onclick="App.closeKtaModal()"
-                class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition active:scale-95">
-                Tutup KTA
-            </button>
+            <!-- Tombol Aksi: Bagikan & Tutup -->
+            <div class="flex items-center gap-2 pt-1">
+                <button type="button" onclick="App.shareKta()"
+                    class="flex-1 py-2.5 bg-gradient-to-r from-kmf-700 to-blue-800 hover:from-kmf-800 text-white font-bold rounded-xl text-xs shadow-xs hover:shadow transition flex items-center justify-center gap-1.5 active:scale-95">
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <span>Bagikan e-KTA</span>
+                </button>
+                <button type="button" onclick="App.closeKtaModal()"
+                    class="py-2.5 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition active:scale-95">
+                    Tutup
+                </button>
+            </div>
         </div>
     </div>
 
