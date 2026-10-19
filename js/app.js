@@ -22,6 +22,7 @@ const App = {
         this.populateDropdowns();
 
         // 2. Render Komponen Utama
+        this.initArabicFontSize();
         this.initUserAuth();
         await this.renderHome();
         this.initBannerSlider();
@@ -968,9 +969,38 @@ const App = {
         });
     },
 
+    initArabicFontSize: function() {
+        try {
+            const saved = localStorage.getItem('kmf_arabic_font_size');
+            if (saved) {
+                this.arabicFontSize = parseInt(saved, 10) || 24;
+            } else {
+                this.arabicFontSize = 24;
+            }
+        } catch (e) {
+            this.arabicFontSize = 24;
+        }
+        this.updateArabicSizeIndicators();
+    },
+
+    updateArabicSizeIndicators: function() {
+        const size = this.arabicFontSize || 24;
+        const indicators = ['arabic-size-indicator', 'modal-arabic-size-indicator'];
+        indicators.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = `${size}px`;
+        });
+    },
+
     adjustArabicSize: function(delta) {
-        this.arabicFontSize = Math.max(16, Math.min(36, (this.arabicFontSize || 22) + delta));
-        this.selectIbadahFeature(this.currentIbadahFeature);
+        this.arabicFontSize = Math.max(16, Math.min(36, (this.arabicFontSize || 24) + delta));
+        try {
+            localStorage.setItem('kmf_arabic_font_size', this.arabicFontSize);
+        } catch (e) {}
+        this.updateArabicSizeIndicators();
+        if (this.currentIbadahFeature) {
+            this.selectIbadahFeature(this.currentIbadahFeature);
+        }
     },
 
     selectIbadahFeature: function(featureKey) {
@@ -1620,14 +1650,19 @@ const App = {
             }
             initials = initials.toUpperCase();
 
+            // Cek apakah santri memiliki foto profil terunggah
+            const avatarContent = (user.foto && user.foto.trim()) ?
+                `<img src="${user.foto}" alt="${user.nama}" class="w-full h-full object-cover rounded-2xl">` :
+                `<span>${initials}</span>`;
+
             cardContainer.innerHTML = `
                 <div class="bg-gradient-to-r from-kmf-900 via-kmf-800 to-blue-950 text-white p-4 sm:p-5 rounded-3xl shadow-sm border border-kmf-600/60 relative overflow-hidden space-y-3.5">
                     <div class="absolute -right-6 -bottom-6 text-white/5 text-8xl pointer-events-none">
                         <i class="fa-solid fa-id-card"></i>
                     </div>
                     <div class="relative z-10 flex items-center gap-3.5">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xl shrink-0 shadow-md border-2 border-white/30">
-                            ${initials}
+                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xl shrink-0 shadow-md border-2 border-white/30 overflow-hidden">
+                            ${avatarContent}
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-1.5 flex-wrap">
@@ -1673,7 +1708,7 @@ const App = {
                                 <span class="text-[9.5px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-400/30">PWA Ready</span>
                             </div>
                             <h2 class="text-sm sm:text-base font-bold text-white mt-1 leading-snug truncate">Ahlan wa Sahlan, Sahabat Santri!</h2>
-                            <p class="text-[11px] text-blue-100/80 truncate">Masuk akun atau isi sensus untuk akses penuh & e-KTA</p>
+                            <p class="text-[11.5px] text-blue-100/80 leading-normal">Akses kartu digital & direktori alumni Demak</p>
                         </div>
                     </div>
                     <div class="relative z-10 pt-1 flex items-center gap-2">
@@ -1750,11 +1785,29 @@ const App = {
     },
 
     handleUserLogout: function() {
-        if (confirm('Apakah Anda yakin ingin keluar dari akun santri ini?')) {
-            this.currentUser = null;
-            localStorage.removeItem('kmf_user_session');
-            this.renderUserProfileCard();
+        const modal = document.getElementById('modal-confirm-logout');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        } else {
+            this.confirmUserLogout();
         }
+    },
+
+    closeLogoutModal: function() {
+        const modal = document.getElementById('modal-confirm-logout');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    },
+
+    confirmUserLogout: function() {
+        this.currentUser = null;
+        localStorage.removeItem('kmf_user_session');
+        this.closeLogoutModal();
+        this.closeKtaModal();
+        this.renderUserProfileCard();
     },
 
     openKtaModal: function() {
@@ -2577,7 +2630,7 @@ const App = {
 
     updatePendingBadge: async function() {
         const pending = await window.KMF_API.getPendingList();
-        ['badge-pending-count', 'mobile-badge-pending-count', 'mobile-nav-pengaturan-badge'].forEach(id => {
+        ['badge-pending-count', 'mobile-badge-pending-count', 'mobile-nav-pengaturan-badge', 'badge-pending-pengaturan'].forEach(id => {
             const badge = document.getElementById(id);
             if (badge) {
                 if (pending.length > 0) {

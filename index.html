@@ -876,11 +876,12 @@
                             <div class="text-[11px] text-slate-500">Sesuaikan ukuran font doa untuk orang tua</div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-1">
+                    <div class="flex items-center gap-1.5">
+                        <span id="arabic-size-indicator" class="text-[11px] font-bold text-kmf-700 bg-kmf-50 px-2 py-1 rounded-lg border border-kmf-200 shadow-2xs min-w-[38px] text-center">24px</span>
                         <button type="button" onclick="App.adjustArabicSize(-2)" title="Perkecil Font"
-                            class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 active:scale-95 transition">A-</button>
+                            class="w-8 h-8 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-xl text-slate-700 active:scale-95 transition flex items-center justify-center shadow-2xs">A-</button>
                         <button type="button" onclick="App.adjustArabicSize(2)" title="Perbesar Font"
-                            class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 active:scale-95 transition">A+</button>
+                            class="w-8 h-8 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-xl text-slate-700 active:scale-95 transition flex items-center justify-center shadow-2xs">A+</button>
                     </div>
                 </div>
             </div>
@@ -901,7 +902,10 @@
                             <i class="fa-solid fa-user-shield"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-bold text-slate-800">Panel Verifikasi Pengurus (Admin)</div>
+                            <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                <span>Panel Verifikasi Pengurus (Admin)</span>
+                                <span id="badge-pending-pengaturan" class="hidden text-[10px] bg-amber-500 text-slate-950 font-black px-2 py-0.2 rounded-full shadow-2xs">0</span>
+                            </div>
                             <div class="text-[11px] text-slate-500">Kelola dan setujui pendaftaran sensus santri</div>
                         </div>
                     </div>
@@ -955,7 +959,7 @@
             <div class="text-center pt-2 pb-4 text-slate-400 text-[11px] space-y-1">
                 <p class="font-bold text-slate-600">Keluarga Mathali'ul Falah (KMF) Cabang Demak</p>
                 <p class="italic">Berkhidmat Meneladani Nilai <em>Shalih Akram</em> Masyayikh Kajen-Pati.</p>
-                <p class="text-[10px] text-slate-400">PWA Standalone App • Versi 2.1.0</p>
+                <p class="text-[10px] text-slate-400">PWA Standalone App • Versi 2.2.0</p>
             </div>
         </section>
 
@@ -1636,6 +1640,31 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL KONFIRMASI KELUAR AKUN SANTRI ==================== -->
+    <div id="modal-confirm-logout" onclick="if(event.target === this) App.closeLogoutModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-5 text-center space-y-3.5 shadow-2xl modal-animate-enter border border-slate-100">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-red-50 text-red-500 flex items-center justify-center text-2xl border border-red-100 shadow-inner">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-sm text-slate-800">Keluar dari Akun Santri?</h3>
+                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                    Sesi di perangkat ini akan diakhiri. Anda dapat masuk kembali kapan saja dengan nomor WhatsApp Anda.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+                <button type="button" onclick="App.closeLogoutModal()"
+                    class="py-2.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition active:scale-95">
+                    Batal
+                </button>
+                <button type="button" onclick="App.confirmUserLogout()"
+                    class="py-2.5 px-3 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition shadow-xs active:scale-95">
+                    Ya, Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== MODAL KTA DIGITAL SANTRI (VIRTUAL CARD REDESAIN) ==================== -->
     <div id="modal-kta-santri" onclick="if(event.target === this) App.closeKtaModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col p-4 sm:p-6 space-y-4">
@@ -1783,6 +1812,7 @@
                     <!-- Text Size Adjuster for Arabic Reader -->
                     <div id="ibadah-font-controls" class="flex items-center gap-1 bg-white px-1.5 py-1 rounded-xl border border-slate-200 shadow-2xs">
                         <button type="button" onclick="App.adjustArabicSize(-2)" title="Perkecil Teks Arab" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 active:scale-95">A-</button>
+                        <span id="modal-arabic-size-indicator" class="text-[10px] font-bold text-slate-600 px-1 min-w-[28px] text-center">24px</span>
                         <button type="button" onclick="App.adjustArabicSize(2)" title="Perbesar Teks Arab" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 active:scale-95">A+</button>
                     </div>
                     <button type="button" onclick="App.closeIbadahModal()" title="Tutup Modal"
