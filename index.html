@@ -783,132 +783,166 @@
 
 
         <!-- ==================== TAB 5: PENGATURAN & PUSAT APLIKASI ==================== -->
-        <section id="view-pengaturan" class="tab-content hidden space-y-3 sm:space-y-4 max-w-2xl mx-auto">
-            <!-- Header Kartu Akun / PWA -->
-            <div class="bg-gradient-to-r from-kmf-800 via-kmf-700 to-blue-900 text-white p-4 sm:p-5 rounded-2xl shadow-sm border border-kmf-600/70 relative overflow-hidden flex items-center gap-3.5">
-                <div class="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl shrink-0">
-                    <i class="fa-solid fa-gear text-amber-300"></i>
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h2 class="text-base font-bold text-white leading-tight">Pengaturan & Pusat Aplikasi</h2>
-                    <p class="text-xs text-blue-100/90 mt-0.5">KMF Demak • Versi 1.4.0 (PWA Standalone)</p>
-                    <span class="inline-block mt-1 text-[9.5px] bg-kmf-gold text-slate-950 font-bold px-2 py-0.5 rounded-full">
-                        Status Offline Ready
-                    </span>
-                </div>
+        <section id="view-pengaturan" class="tab-content hidden space-y-3.5 max-w-2xl mx-auto">
+            <!-- 1. KARTU PROFIL SANTRI DINAMIS (GUEST VS LOGGED IN) -->
+            <div id="user-profile-card">
+                <!-- Dirender secara dinamis oleh App.renderUserProfileCard() -->
             </div>
 
-            <!-- Menu Kelompok 1: Navigasi Cepat Sensus & Database Alumni -->
+            <!-- 2. KELOMPOK 1: LAYANAN & JEJARING SANTRI -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
-                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                    Pendataan & Jejaring Santri
+                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-kmf-600"></i> Layanan & Jejaring Alumni
+                    </span>
+                    <span class="text-[9.5px] text-slate-400 font-normal">KMF Demak</span>
                 </div>
-                <button onclick="App.navigateTo('register')" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- KTA Digital (Tampil untuk Santri Terdaftar) -->
+                <button type="button" onclick="App.openKtaModal()" id="btn-menu-kta"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-amber-500 group-hover:text-white transition">
+                            <i class="fa-solid fa-id-card"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                                <span>Kartu Tanda Anggota (KTA) Digital</span>
+                                <span class="text-[9px] bg-amber-100 text-amber-800 font-extrabold px-1.5 py-0.2 rounded">Virtual</span>
+                            </div>
+                            <div class="text-[11px] text-slate-500">Lihat kartu identitas digital santri KMF Demak</div>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
+                </button>
+                <!-- Formulir Sensus Alumni -->
+                <button type="button" onclick="App.navigateTo('register')"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition">
                             <i class="fa-solid fa-address-card"></i>
                         </div>
                         <div>
                             <div class="text-xs font-bold text-slate-800">Formulir Sensus Alumni</div>
-                            <div class="text-[11px] text-slate-500">Daftarkan diri atau perbarui data alumni Kajen</div>
+                            <div class="text-[11px] text-slate-500">Daftarkan diri atau perbarui data sensus santri Kajen</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
                 </button>
-                <button onclick="App.navigateTo('alumni')" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- Direktori Alumni Terverifikasi -->
+                <button type="button" onclick="App.navigateTo('alumni')"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-kmf-600 group-hover:text-white transition">
                             <i class="fa-solid fa-users"></i>
                         </div>
                         <div>
                             <div class="text-xs font-bold text-slate-800">Direktori Alumni Terverifikasi</div>
-                            <div class="text-[11px] text-slate-500">Cari sesama alumni di 14 kecamatan Demak</div>
+                            <div class="text-[11px] text-slate-500">Cari sesama alumni santri di 14 kecamatan Demak</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
                 </button>
-                <button onclick="App.openUsahaRegisterModal()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- Daftarkan Usaha / Bisnis Santri -->
+                <button type="button" onclick="App.openUsahaRegisterModal()"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition">
                             <i class="fa-solid fa-store"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-bold text-slate-800">Daftarkan Usaha / Bisnis Baru</div>
-                            <div class="text-[11px] text-slate-500">Promosikan produk Anda di Bursa Usaha Santri</div>
+                            <div class="text-xs font-bold text-slate-800">Daftarkan Usaha / Produk Santri</div>
+                            <div class="text-[11px] text-slate-500">Promosikan produk Anda di Bursa Usaha Santri Demak</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
                 </button>
             </div>
 
-            <!-- Menu Kelompok 2: Ibadah & Preferensi -->
+            <!-- 3. KELOMPOK 2: PREFERENSI IBADAH & KENYAMANAN -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
-                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                    Ibadah & Tampilan
+                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-kaaba text-kmf-600"></i> Ibadah & Tampilan
+                    </span>
+                    <span class="text-[9.5px] text-slate-400 font-normal">Preferensi</span>
                 </div>
-                <button onclick="KMF_PRAYER.openJadwalSholatModal()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- Jadwal Sholat Demak -->
+                <button type="button" onclick="KMF_PRAYER.openJadwalSholatModal()"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm">
-                            <i class="fa-solid fa-kaaba"></i>
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-kmf-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-clock"></i>
                         </div>
                         <div>
                             <div class="text-xs font-bold text-slate-800">Jadwal Sholat Demak</div>
-                            <div class="text-[11px] text-slate-500">Hisab astronomis presisi standar LF PBNU</div>
+                            <div class="text-[11px] text-slate-500">Hisab astronomis presisi standar LF PBNU Demak</div>
                         </div>
                     </div>
                     <span class="text-xs text-kmf-600 font-bold flex items-center gap-1">
                         Lihat <i class="fa-solid fa-chevron-right text-[10px]"></i>
                     </span>
                 </button>
+                <!-- Ukuran Teks Arab Amaliah -->
                 <div class="px-4 py-3 flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-sm shadow-2xs">
                             <i class="fa-solid fa-font"></i>
                         </div>
                         <div>
-                            <div class="text-xs font-bold text-slate-800">Ukuran Teks Arab Amalan</div>
+                            <div class="text-xs font-bold text-slate-800">Ukuran Teks Arab Amaliah</div>
                             <div class="text-[11px] text-slate-500">Sesuaikan ukuran font doa untuk orang tua</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-1">
-                        <button onclick="App.adjustArabicSize(-2)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700">A-</button>
-                        <button onclick="App.adjustArabicSize(2)" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700">A+</button>
+                        <button type="button" onclick="App.adjustArabicSize(-2)" title="Perkecil Font"
+                            class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 active:scale-95 transition">A-</button>
+                        <button type="button" onclick="App.adjustArabicSize(2)" title="Perbesar Font"
+                            class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-xs font-bold rounded-lg text-slate-700 active:scale-95 transition">A+</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Menu Kelompok 3: Sistem, Pengurus & Bantuan -->
+            <!-- 4. KELOMPOK 3: PENGURUS, SISTEM & BANTUAN -->
             <div class="bg-white rounded-2xl border border-slate-200 shadow-xs divide-y divide-slate-100 overflow-hidden">
-                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                    Sistem & Bantuan
+                <div class="px-4 py-2.5 bg-slate-50/80 text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved text-purple-600"></i> Pengurus & Pusat Bantuan
+                    </span>
+                    <span class="text-[9.5px] text-slate-400 font-normal">Sistem</span>
                 </div>
-                <button onclick="App.navigateTo('admin')" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- Panel Verifikasi Pengurus (Admin) -->
+                <button type="button" onclick="App.navigateTo('admin')"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm">
-                            <i class="fa-solid fa-shield-halved"></i>
+                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-purple-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-user-shield"></i>
                         </div>
                         <div>
                             <div class="text-xs font-bold text-slate-800">Panel Verifikasi Pengurus (Admin)</div>
-                            <div class="text-[11px] text-slate-500">Kelola dan setujui data pendaftaran sensus</div>
+                            <div class="text-[11px] text-slate-500">Kelola dan setujui pendaftaran sensus santri</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-slate-400"></i>
+                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition"></i>
                 </button>
-                <button onclick="App.openKmfWaCenter()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- WhatsApp Center Pengurus KMF Demak -->
+                <button type="button" onclick="App.openKmfWaCenter()"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-[#25D366] group-hover:text-white transition">
                             <i class="fa-brands fa-whatsapp"></i>
                         </div>
                         <div>
                             <div class="text-xs font-bold text-slate-800">WhatsApp Center Pengurus KMF Demak</div>
-                            <div class="text-[11px] text-slate-500">Hubungi pengurus untuk konfirmasi atau pertanyaan</div>
+                            <div class="text-[11px] text-slate-500">Hubungi sekretariat pengurus untuk konfirmasi atau pertanyaan</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400"></i>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs text-slate-400 group-hover:text-green-600 transition"></i>
                 </button>
-                <button onclick="App.shareApp()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- Bagikan Aplikasi KMF Demak -->
+                <button type="button" onclick="App.shareApp()"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-orange-500 group-hover:text-white transition">
                             <i class="fa-solid fa-share-nodes"></i>
                         </div>
                         <div>
@@ -916,26 +950,29 @@
                             <div class="text-[11px] text-slate-500">Ajak sesama santri Mathole' di Demak menginstal PWA</div>
                         </div>
                     </div>
-                    <i class="fa-solid fa-share text-xs text-slate-400"></i>
+                    <i class="fa-solid fa-share text-xs text-slate-400 group-hover:text-orange-500 transition"></i>
                 </button>
-                <button onclick="App.clearAppCache()" class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99]">
+                <!-- Bersihkan Cache & Perbarui PWA -->
+                <button type="button" onclick="App.clearAppCache()"
+                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-rose-600 group-hover:text-white transition">
                             <i class="fa-solid fa-rotate"></i>
                         </div>
                         <div>
                             <div class="text-xs font-bold text-slate-800">Bersihkan Cache & Perbarui PWA</div>
-                            <div class="text-[11px] text-slate-500">Segarkan aset aplikasi ke versi terbaru</div>
+                            <div class="text-[11px] text-slate-500">Segarkan aset aplikasi ke versi terbaru (Offline Ready)</div>
                         </div>
                     </div>
-                    <span class="text-[11px] text-rose-600 font-bold">Refresh</span>
+                    <span class="text-[11px] text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded border border-rose-200">Refresh</span>
                 </button>
             </div>
 
-            <!-- Footer Keterangan -->
+            <!-- 5. FOOTER KETERANGAN RESMI -->
             <div class="text-center pt-2 pb-4 text-slate-400 text-[11px] space-y-1">
-                <p class="font-semibold text-slate-600">Keluarga Mathali'ul Falah (KMF) Cabang Demak</p>
-                <p>Berkhidmat Meneladani Nilai <em>Shalih Akram</em> Masyayikh Kajen-Pati.</p>
+                <p class="font-bold text-slate-600">Keluarga Mathali'ul Falah (KMF) Cabang Demak</p>
+                <p class="italic">Berkhidmat Meneladani Nilai <em>Shalih Akram</em> Masyayikh Kajen-Pati.</p>
+                <p class="text-[10px] text-slate-400">PWA Standalone App • Versi 2.1.0</p>
             </div>
         </section>
 
@@ -1525,6 +1562,241 @@
                     <span>Chat Penjual / Beli Sekarang</span>
                 </a>
             </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL AUTENTIKASI PENGGUNA BARU / SANTRI ==================== -->
+    <div id="modal-auth-user" onclick="if(event.target === this) App.closeAuthModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col max-h-[92vh]">
+            <!-- Header Modal -->
+            <div class="bg-gradient-to-r from-kmf-900 via-kmf-800 to-blue-950 p-4 sm:p-5 text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-amber-300 text-lg shadow-inner">
+                        <i class="fa-solid fa-mosque"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-bold text-white leading-tight">Akun Santri KMF Demak</h3>
+                        <p class="text-[11px] text-blue-100/80">Keluarga Mathali'ul Falah Kajen</p>
+                    </div>
+                </div>
+                <button type="button" onclick="App.closeAuthModal()" title="Tutup Modal"
+                    class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Tab Switcher (Masuk vs Daftar) -->
+            <div class="flex border-b border-slate-200 bg-slate-50 shrink-0">
+                <button type="button" id="auth-tab-btn-login" onclick="App.switchAuthTab('login')"
+                    class="flex-1 py-3 text-xs font-bold text-center border-b-2 border-kmf-600 text-kmf-700 bg-white transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
+                    <span>Masuk ke Akun</span>
+                </button>
+                <button type="button" id="auth-tab-btn-register" onclick="App.switchAuthTab('register')"
+                    class="flex-1 py-3 text-xs font-bold text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:bg-white/50 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-user-plus text-xs"></i>
+                    <span>Daftar Santri Baru</span>
+                </button>
+            </div>
+
+            <!-- Modal Body Scrollable -->
+            <div class="overflow-y-auto p-4 sm:p-6 flex-1 space-y-4">
+                <!-- FORMULIR 1: MASUK (LOGIN) -->
+                <div id="auth-view-login" class="space-y-4">
+                    <div class="p-3 bg-blue-50/70 rounded-2xl border border-blue-100 flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-info text-kmf-600 text-sm mt-0.5 shrink-0"></i>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Silakan masuk menggunakan <strong>Nomor WhatsApp</strong> dan <strong>PIN</strong> Anda yang sudah terdaftar di sensus alumni.
+                        </p>
+                    </div>
+
+                    <form id="form-user-login" onsubmit="App.handleUserLogin(event)" class="space-y-3.5">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp / HP</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-brands fa-whatsapp text-sm text-green-600"></i>
+                                </div>
+                                <input type="tel" id="auth-login-wa" required placeholder="08xxxxxxxxxx"
+                                    class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">PIN Keamanan (6 Digit)</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-solid fa-lock text-xs"></i>
+                                </div>
+                                <input type="password" id="auth-login-pin" required maxlength="6" placeholder="Masukkan 6 angka PIN"
+                                    class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 tracking-widest focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                            </div>
+                            <span class="text-[10px] text-slate-400 mt-1 block">PIN default akun baru: <strong>123456</strong></span>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-gradient-to-r from-kmf-700 to-blue-800 hover:from-kmf-800 hover:to-blue-900 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow transition flex items-center justify-center gap-2 active:scale-98">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            <span>Masuk ke Akun Santri</span>
+                        </button>
+                    </form>
+
+                    <div class="pt-2 text-center text-xs space-y-2 border-t border-slate-100">
+                        <p class="text-slate-500 text-[11.5px]">
+                            Belum punya akun?
+                            <button type="button" onclick="App.switchAuthTab('register')" class="text-kmf-700 font-bold hover:underline">
+                                Daftar Santri Baru
+                            </button>
+                        </p>
+                        <p class="text-[11px] text-slate-400">
+                            Pengurus KMF?
+                            <button type="button" onclick="App.closeAuthModal(); App.navigateTo('admin')" class="text-purple-600 font-bold hover:underline">
+                                Masuk Panel Pengurus
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FORMULIR 2: DAFTAR SANTRI BARU (REGISTRASI) -->
+                <div id="auth-view-register" class="space-y-4 hidden">
+                    <div class="p-3 bg-emerald-50/80 rounded-2xl border border-emerald-100 flex items-start gap-2.5">
+                        <i class="fa-solid fa-user-check text-emerald-600 text-sm mt-0.5 shrink-0"></i>
+                        <p class="text-[11px] text-slate-600 leading-relaxed">
+                            Pendaftaran santri / alumni Mathali'ul Falah yang berdomisili atau beraktivitas di Kabupaten Demak.
+                        </p>
+                    </div>
+
+                    <form id="form-user-register" onsubmit="App.handleUserRegister(event)" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+                            <input type="text" id="auth-reg-name" required placeholder="Contoh: Ahmad Fauzi, S.Pd."
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Aktif</label>
+                            <input type="tel" id="auth-reg-wa" required placeholder="08xxxxxxxxxx"
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Tahun Lulus Kajen</label>
+                                <input type="number" id="auth-reg-tahun" required placeholder="Contoh: 2016" min="1950" max="2035"
+                                    class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-700 mb-1">Kecamatan di Demak</label>
+                                <select id="auth-reg-kecamatan" required
+                                    class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                                    <option value="Demak">Demak (Kota)</option>
+                                    <option value="Sayung">Sayung</option>
+                                    <option value="Mranggen">Mranggen</option>
+                                    <option value="Karangawen">Karangawen</option>
+                                    <option value="Guntur">Guntur</option>
+                                    <option value="Karangtengah">Karangtengah</option>
+                                    <option value="Bonang">Bonang</option>
+                                    <option value="Wedung">Wedung</option>
+                                    <option value="Wonosalam">Wonosalam</option>
+                                    <option value="Dempet">Dempet</option>
+                                    <option value="Gajah">Gajah</option>
+                                    <option value="Karanganyar">Karanganyar</option>
+                                    <option value="Mijen">Mijen</option>
+                                    <option value="Kebonagung">Kebonagung</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Buat PIN Keamanan (6 Angka)</label>
+                            <input type="password" id="auth-reg-pin" required maxlength="6" placeholder="Contoh: 123456"
+                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 tracking-widest focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                            <span class="text-[10px] text-slate-400 mt-1 block">Gunakan angka rahasia yang mudah diingat</span>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow transition flex items-center justify-center gap-2 active:scale-98">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>Daftarkan Akun & Gabung KMF Demak</span>
+                        </button>
+                    </form>
+
+                    <div class="pt-2 text-center text-xs border-t border-slate-100">
+                        <p class="text-slate-500 text-[11.5px]">
+                            Sudah punya akun?
+                            <button type="button" onclick="App.switchAuthTab('login')" class="text-kmf-700 font-bold hover:underline">
+                                Masuk di sini
+                            </button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL KTA DIGITAL SANTRI (VIRTUAL CARD) ==================== -->
+    <div id="modal-kta-santri" onclick="if(event.target === this) App.closeKtaModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col p-5 space-y-4">
+            <!-- Header Modal -->
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm shadow-2xs">
+                        <i class="fa-solid fa-id-card"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800">KTA Virtual Alumni</h3>
+                        <p class="text-[10px] text-slate-500">Kartu Tanda Anggota Digital</p>
+                    </div>
+                </div>
+                <button type="button" onclick="App.closeKtaModal()" class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center transition active:scale-95">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- FISIK KARTU KTA VIRTUAL ELEGAN -->
+            <div id="kta-card-render" class="bg-gradient-to-br from-kmf-950 via-kmf-800 to-blue-900 text-white rounded-2xl p-4 sm:p-5 shadow-lg border-2 border-amber-400/50 relative overflow-hidden space-y-3.5">
+                <div class="absolute -right-10 -bottom-10 text-white/5 text-9xl pointer-events-none">
+                    <i class="fa-solid fa-mosque"></i>
+                </div>
+
+                <!-- KTA Header -->
+                <div class="flex items-center justify-between relative z-10 border-b border-white/15 pb-2.5">
+                    <div class="flex items-center gap-2">
+                        <img src="assets/img/logo.png" alt="KMF" class="w-8 h-8 object-contain">
+                        <div>
+                            <span class="text-[9px] uppercase tracking-wider text-amber-300 font-extrabold block">KARTU TANDA ANGGOTA</span>
+                            <span class="text-[10.5px] font-bold text-white block leading-tight">KMF CABANG DEMAK</span>
+                        </div>
+                    </div>
+                    <span class="text-[8px] bg-emerald-500/30 text-emerald-300 border border-emerald-400/40 px-2 py-0.5 rounded-full font-bold">
+                        AKTIF
+                    </span>
+                </div>
+
+                <!-- KTA Body -->
+                <div class="relative z-10 flex items-center gap-3.5">
+                    <div id="kta-avatar" class="w-13 h-13 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-md border-2 border-white/40">
+                        AF
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div id="kta-nama" class="text-sm font-bold text-white truncate leading-tight">Ahmad Fauzi, S.Pd.</div>
+                        <div id="kta-id" class="text-[10px] text-amber-300 font-mono tracking-wider mt-0.5">ID: KMF-DMK-2015-0812</div>
+                        <div id="kta-detail" class="text-[10px] text-blue-100/80 truncate mt-0.5">Alumni Mathole' Kajen • Kec. Sayung</div>
+                    </div>
+                </div>
+
+                <!-- KTA Footer (Slogan Masyayikh) -->
+                <div class="relative z-10 pt-2 border-t border-white/10 flex items-center justify-between text-[9px] text-blue-100/70">
+                    <span class="italic">"Shalih Akram" — Masyayikh Kajen</span>
+                    <span class="font-mono text-amber-300/80">KMF DEMAK PWA</span>
+                </div>
+            </div>
+
+            <!-- Tombol Tutup -->
+            <button type="button" onclick="App.closeKtaModal()"
+                class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition active:scale-95">
+                Tutup KTA
+            </button>
         </div>
     </div>
 
