@@ -934,7 +934,31 @@ const App = {
     arabicFontSize: 22,
 
     renderIbadah: function() {
-        this.selectIbadahFeature(this.currentIbadahFeature || 'tahlil');
+        // Halaman Portal Ibadah menampilkan 8 kotak menu (4 baris x 2 menu)
+        // Isi fitur disimpan di dalam masing-masing menu dan tampil saat diklik.
+    },
+
+    openIbadahModal: function(featureKey) {
+        this.currentIbadahFeature = featureKey || 'tahlil';
+        const modal = document.getElementById('modal-ibadah-fitur');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+        this.selectIbadahFeature(this.currentIbadahFeature);
+        const modalContainer = document.getElementById('modal-ibadah-body-container');
+        if (modalContainer) modalContainer.scrollTop = 0;
+    },
+
+    closeIbadahModal: function() {
+        const modal = document.getElementById('modal-ibadah-fitur');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        document.querySelectorAll('.ibadah-menu-card').forEach(btn => {
+            btn.classList.remove('ring-2', 'ring-kmf-500');
+        });
     },
 
     adjustArabicSize: function(delta) {
@@ -945,28 +969,13 @@ const App = {
     selectIbadahFeature: function(featureKey) {
         this.currentIbadahFeature = featureKey;
 
-        // Update highlight active pada 8 tombol menu ikon
-        document.querySelectorAll('.ibadah-feature-btn').forEach(btn => {
-            const iconDiv = btn.querySelector('div');
-            const spanText = btn.querySelector('span');
-            if (iconDiv) {
-                iconDiv.classList.remove('ring-2', 'ring-kmf-500', 'scale-105', 'shadow-md');
-            }
-            if (spanText) {
-                spanText.classList.remove('text-kmf-600', 'font-bold');
-            }
+        // Highlight kartu menu yang sedang aktif dibuka
+        document.querySelectorAll('.ibadah-menu-card').forEach(btn => {
+            btn.classList.remove('ring-2', 'ring-kmf-500');
         });
-
         const activeBtn = document.getElementById(`btn-ibadah-${featureKey}`);
         if (activeBtn) {
-            const iconDiv = activeBtn.querySelector('div');
-            const spanText = activeBtn.querySelector('span');
-            if (iconDiv) {
-                iconDiv.classList.add('ring-2', 'ring-kmf-500', 'scale-105', 'shadow-md');
-            }
-            if (spanText) {
-                spanText.classList.add('text-kmf-600', 'font-bold');
-            }
+            activeBtn.classList.add('ring-2', 'ring-kmf-500');
         }
 
         const titleEl = document.getElementById('ibadah-title');
@@ -1523,12 +1532,12 @@ const App = {
     switchAmalanTab: function(tabKey) {
         if (['tahlil', 'yasin'].includes(tabKey)) {
             this.currentTahlilSubTab = tabKey;
-            this.selectIbadahFeature('tahlil');
+            this.openIbadahModal('tahlil');
         } else if (['wirid', 'istighotsah'].includes(tabKey)) {
             this.currentWiridSubTab = tabKey;
-            this.selectIbadahFeature('wirid');
+            this.openIbadahModal('wirid');
         } else {
-            this.selectIbadahFeature(tabKey);
+            this.openIbadahModal(tabKey);
         }
     },
 

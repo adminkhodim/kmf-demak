@@ -660,110 +660,125 @@
                 </div>
             </section>
 
-            <!-- FITUR UTAMA IBADAH (TATANAN 1 BARIS 4 MENU SEIMBANG - 8 FITUR) -->
-            <section class="bg-white p-3 md:p-4 rounded-2xl shadow-xs border border-slate-200">
-                <div class="grid grid-cols-4 gap-y-3.5 gap-x-1.5 sm:gap-x-3">
-                    <!-- BARIS 1: AMALIAH UTAMA SANTRI -->
+            <!-- ==================== FITUR UTAMA IBADAH (4 BARIS, 1 BARIS = 2 MENU PERSEGI PANJANG) ==================== -->
+            <section class="space-y-2">
+                <div class="flex items-center justify-between px-1">
+                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-list-check text-kmf-600"></i> Menu Amaliah & Fitur
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-medium">8 Menu Pilihan</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+                    <!-- BARIS 1: MENU 1 & 2 -->
                     <!-- 1. Al-Qur'an Digital -->
-                    <button type="button" onclick="App.selectIbadahFeature('quran')" id="btn-ibadah-quran"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition duration-200 border border-emerald-200/50">
+                    <button type="button" onclick="App.openIbadahModal('quran')" id="btn-ibadah-quran"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-emerald-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-emerald-100 group-hover:bg-emerald-600 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-book-quran"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-emerald-600">Al-Qur'an</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-emerald-700">Al-Qur'an</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Surah Pilihan</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
                     <!-- 2. Kitab Maulid -->
-                    <button type="button" onclick="App.selectIbadahFeature('maulid')" id="btn-ibadah-maulid"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-purple-600 group-hover:text-white transition duration-200 border border-purple-200/50">
-                            <i class="fa-solid fa-kaaba"></i>
+                    <button type="button" onclick="App.openIbadahModal('maulid')" id="btn-ibadah-maulid"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-purple-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-purple-100 group-hover:bg-purple-600 group-hover:text-white transition duration-200 shadow-2xs">
+                            <i class="fa-solid fa-book-open"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-purple-600">Maulid</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-purple-700">Maulid Nabi</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Diba' & Burdah</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-purple-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
+                    <!-- BARIS 2: MENU 3 & 4 -->
                     <!-- 3. Tahlil & Yasin -->
-                    <button type="button" onclick="App.selectIbadahFeature('tahlil')" id="btn-ibadah-tahlil"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-blue-50 text-kmf-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-kmf-600 group-hover:text-white transition duration-200 border border-blue-200/50">
+                    <button type="button" onclick="App.openIbadahModal('tahlil')" id="btn-ibadah-tahlil"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-blue-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-blue-100 group-hover:bg-kmf-600 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-hands-holding"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-kmf-600">Tahlil & Yasin</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-kmf-700">Tahlil & Yasin</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Masyayikh Kajen</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
-                    <!-- 4. Wirid & Dzikir -->
-                    <button type="button" onclick="App.selectIbadahFeature('wirid')" id="btn-ibadah-wirid"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-indigo-600 group-hover:text-white transition duration-200 border border-indigo-200/50">
+                    <!-- 4. Wirid Santri -->
+                    <button type="button" onclick="App.openIbadahModal('wirid')" id="btn-ibadah-wirid"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-indigo-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-indigo-100 group-hover:bg-indigo-600 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-hands-praying"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-indigo-600">Wirid</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-indigo-700">Wirid Santri</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Ba'da Maktubah</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
-                    <!-- BARIS 2: PANDUAN WAKTU & KELENGKAPAN IBADAH -->
+                    <!-- BARIS 3: MENU 5 & 6 -->
                     <!-- 5. Jadwal Sholat -->
-                    <button type="button" onclick="App.selectIbadahFeature('sholat')" id="btn-ibadah-sholat"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-amber-500 group-hover:text-white transition duration-200 border border-amber-200/50">
+                    <button type="button" onclick="App.openIbadahModal('sholat')" id="btn-ibadah-sholat"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-amber-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-amber-100 group-hover:bg-amber-500 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-clock"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-amber-600">Jadwal Sholat</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-amber-700">Jadwal Sholat</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Falakiyah Demak</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-amber-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
                     <!-- 6. Kompas Arah Kiblat -->
-                    <button type="button" onclick="App.selectIbadahFeature('kiblat')" id="btn-ibadah-kiblat"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-teal-600 group-hover:text-white transition duration-200 border border-teal-200/50">
+                    <button type="button" onclick="App.openIbadahModal('kiblat')" id="btn-ibadah-kiblat"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-teal-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-teal-100 group-hover:bg-teal-600 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-compass"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-teal-600">Arah Kiblat</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-teal-700">Arah Kiblat</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Kompas 294.4°</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-teal-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
-                    <!-- 7. Kumpulan Doa -->
-                    <button type="button" onclick="App.selectIbadahFeature('doa')" id="btn-ibadah-doa"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-orange-500 group-hover:text-white transition duration-200 border border-orange-200/50">
+                    <!-- BARIS 4: MENU 7 & 8 -->
+                    <!-- 7. Kumpulan Doa Santri -->
+                    <button type="button" onclick="App.openIbadahModal('doa')" id="btn-ibadah-doa"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-orange-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-orange-100 group-hover:bg-orange-500 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-person-praying"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-orange-600">Doa</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-orange-700">Doa Santri</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Harian Mustajab</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-orange-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
 
-                    <!-- 8. Tutorial & Panduan Ibadah Santri -->
-                    <button type="button" onclick="App.selectIbadahFeature('tutorial')" id="btn-ibadah-tutorial"
-                        class="ibadah-feature-btn flex flex-col items-center group transition focus:outline-none active:scale-95">
-                        <div class="w-12 h-12 md:w-14 md:h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-lg sm:text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition duration-200 border border-emerald-200/50">
+                    <!-- 8. Tutorial & Fiqh Praktis -->
+                    <button type="button" onclick="App.openIbadahModal('tutorial')" id="btn-ibadah-tutorial"
+                        class="ibadah-menu-card bg-white p-3 sm:p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-cyan-300 transition duration-200 active:scale-[0.98] flex items-center gap-2.5 sm:gap-3 text-left w-full group cursor-pointer">
+                        <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center text-lg sm:text-xl shrink-0 border border-cyan-100 group-hover:bg-cyan-600 group-hover:text-white transition duration-200 shadow-2xs">
                             <i class="fa-solid fa-book-open-reader"></i>
                         </div>
-                        <span class="text-[10px] md:text-xs mt-1.5 font-semibold text-slate-700 text-center leading-tight group-hover:text-emerald-600">Tutorial Ibadah</span>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs sm:text-sm font-bold text-slate-800 leading-snug truncate group-hover:text-cyan-700">Tutorial Ibadah</h4>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate mt-0.5">Panduan Praktis</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-300 group-hover:text-cyan-600 group-hover:translate-x-0.5 transition shrink-0 ml-auto"></i>
                     </button>
                 </div>
             </section>
-
-            <!-- CONTAINER TEKS / KONTEN TERPILIH (ALA ASNAWIYYAH) -->
-            <div id="ibadah-content-box" class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3.5">
-                <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
-                    <h3 id="ibadah-title" class="text-xs md:text-sm font-bold text-slate-800 flex items-center">
-                        <i class="fa-solid fa-book-open text-kmf-600 mr-2"></i> Pilih Fitur Ibadah
-                    </h3>
-                    <div class="flex items-center gap-2">
-                        <span id="ibadah-tag" class="text-[9px] font-extrabold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full uppercase">
-                            Amaliah
-                        </span>
-                        <!-- Text Size Adjuster for Arabic Reader -->
-                        <div id="ibadah-font-controls" class="flex items-center gap-1 border-l border-slate-200 pl-2">
-                            <button onclick="App.adjustArabicSize(-2)" title="Perkecil Teks" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 active:scale-95">A-</button>
-                            <button onclick="App.adjustArabicSize(2)" title="Perbesar Teks" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 active:scale-95">A+</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Konten Dinamis Fitur Ibadah -->
-                <div id="ibadah-body" class="text-xs md:text-sm text-slate-600 space-y-3 leading-relaxed min-h-[140px]">
-                    <p class="text-slate-400 italic text-center py-8">
-                        Klik salah satu menu ikon di atas untuk memilih amaliah dan jadwal.
-                    </p>
-                </div>
-            </div>
         </section>
 
 
@@ -1509,6 +1524,56 @@
                     <i class="fa-brands fa-whatsapp text-sm"></i>
                     <span>Chat Penjual / Beli Sekarang</span>
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL FITUR PORTAL IBADAH ==================== -->
+    <div id="modal-ibadah-fitur" onclick="if(event.target === this) App.closeIbadahModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter max-h-[92vh] flex flex-col">
+            <!-- Header Modal Ibadah -->
+            <div class="px-4 sm:px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70 shrink-0">
+                <div class="flex items-center gap-2.5 min-w-0 pr-2">
+                    <button type="button" onclick="App.closeIbadahModal()" title="Kembali"
+                        class="w-8 h-8 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center transition active:scale-95 shrink-0 shadow-2xs">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                    </button>
+                    <div class="min-w-0">
+                        <h3 id="ibadah-title" class="text-xs sm:text-sm font-bold text-slate-800 truncate flex items-center">
+                            <i class="fa-solid fa-book-open text-kmf-600 mr-2"></i> Detail Ibadah
+                        </h3>
+                        <span id="ibadah-tag" class="text-[9px] font-extrabold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full uppercase inline-block mt-0.5">
+                            Amaliah
+                        </span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <!-- Text Size Adjuster for Arabic Reader -->
+                    <div id="ibadah-font-controls" class="flex items-center gap-1 bg-white px-1.5 py-1 rounded-xl border border-slate-200 shadow-2xs">
+                        <button type="button" onclick="App.adjustArabicSize(-2)" title="Perkecil Teks Arab" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 active:scale-95">A-</button>
+                        <button type="button" onclick="App.adjustArabicSize(2)" title="Perbesar Teks Arab" class="w-6 h-6 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-[10px] font-bold text-slate-700 active:scale-95">A+</button>
+                    </div>
+                    <button type="button" onclick="App.closeIbadahModal()" title="Tutup Modal"
+                        class="w-8 h-8 rounded-xl bg-slate-100 text-slate-500 hover:text-slate-800 hover:bg-slate-200 flex items-center justify-center transition active:scale-95">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Body Modal (Scrollable Content Fitur) -->
+            <div id="modal-ibadah-body-container" class="overflow-y-auto p-4 sm:p-5 flex-1 pr-2 space-y-4">
+                <div id="ibadah-body" class="text-xs md:text-sm text-slate-600 space-y-3 leading-relaxed">
+                    <!-- Konten dinamis dirender via App.openIbadahModal() -->
+                </div>
+            </div>
+
+            <!-- Footer Modal -->
+            <div class="p-3 sm:p-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-between shrink-0">
+                <span class="text-[10px] text-slate-400 italic">KMF Demak • Portal Ibadah Santri</span>
+                <button type="button" onclick="App.closeIbadahModal()"
+                    class="px-4 py-2 bg-slate-200/80 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs transition active:scale-95">
+                    Tutup
+                </button>
             </div>
         </div>
     </div>
