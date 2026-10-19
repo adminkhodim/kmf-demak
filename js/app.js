@@ -172,6 +172,7 @@ const App = {
      * Navigasi Antar Tab (SPA Router)
      */
     navigateTo: function(targetTab) {
+        if (targetTab === 'ibadah') targetTab = 'amalan';
         this.currentTab = targetTab;
 
         // Sembunyikan semua tab content
@@ -217,9 +218,9 @@ const App = {
             }
         }
 
-        // Tindakan spesifik jika membuka amalan
-        if (targetTab === 'amalan') {
-            this.renderAmalan();
+        // Tindakan spesifik jika membuka amalan / ibadah
+        if (targetTab === 'amalan' || targetTab === 'ibadah') {
+            this.renderIbadah();
         }
 
         // Tindakan spesifik jika membuka usaha (Katalog Tokopedia)
@@ -921,52 +922,231 @@ const App = {
     },
 
     /**
-     * Render Teks Amalan & Doa Masyayikh
+     * ==========================================
+     * MODUL PORTAL IBADAH & YAUMIYYAH SANTRI
+     * (Adopsi Presisi Desain Portal Ibadah Asnawiyyah)
+     * ==========================================
      */
-    renderAmalan: function() {
-        const container = document.getElementById('amalan-content-container');
-        if (!container || !window.KMF_AMALAN) return;
+    currentIbadahFeature: 'tahlil',
+    currentTahlilSubTab: 'tahlil',
+    currentWiridSubTab: 'wirid',
+    currentQuranSurahKey: 'fatihah',
+    arabicFontSize: 22,
 
-        const data = window.KMF_AMALAN[this.currentAmalanTab];
-        if (!data) return;
+    renderIbadah: function() {
+        this.selectIbadahFeature(this.currentIbadahFeature || 'tahlil');
+    },
 
-        container.innerHTML = `
-            <div class="bg-white p-5 md:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
-                    <div>
-                        <h2 class="font-bold text-lg text-slate-800 font-['Poppins']">${data.title}</h2>
-                        <p class="text-xs text-slate-500">${data.subtitle}</p>
-                    </div>
-                    <span class="text-xs bg-emerald-50 text-kmf-700 px-3 py-1 rounded-full font-semibold border border-emerald-200/80">
-                        ${data.items.length} Bagian
-                    </span>
+    adjustArabicSize: function(delta) {
+        this.arabicFontSize = Math.max(16, Math.min(36, (this.arabicFontSize || 22) + delta));
+        this.selectIbadahFeature(this.currentIbadahFeature);
+    },
+
+    selectIbadahFeature: function(featureKey) {
+        this.currentIbadahFeature = featureKey;
+
+        // Update highlight active pada 8 tombol menu ikon
+        document.querySelectorAll('.ibadah-feature-btn').forEach(btn => {
+            const iconDiv = btn.querySelector('div');
+            const spanText = btn.querySelector('span');
+            if (iconDiv) {
+                iconDiv.classList.remove('ring-2', 'ring-kmf-500', 'scale-105', 'shadow-md');
+            }
+            if (spanText) {
+                spanText.classList.remove('text-kmf-600', 'font-bold');
+            }
+        });
+
+        const activeBtn = document.getElementById(`btn-ibadah-${featureKey}`);
+        if (activeBtn) {
+            const iconDiv = activeBtn.querySelector('div');
+            const spanText = activeBtn.querySelector('span');
+            if (iconDiv) {
+                iconDiv.classList.add('ring-2', 'ring-kmf-500', 'scale-105', 'shadow-md');
+            }
+            if (spanText) {
+                spanText.classList.add('text-kmf-600', 'font-bold');
+            }
+        }
+
+        const titleEl = document.getElementById('ibadah-title');
+        const tagEl = document.getElementById('ibadah-tag');
+        const bodyEl = document.getElementById('ibadah-body');
+        const fontControls = document.getElementById('ibadah-font-controls');
+        if (!bodyEl) return;
+
+        // Kontrol tombol perbesar/perkecil teks Arab
+        if (fontControls) {
+            if (['sholat', 'kiblat', 'tutorial'].includes(featureKey)) {
+                fontControls.classList.add('hidden');
+            } else {
+                fontControls.classList.remove('hidden');
+            }
+        }
+
+        switch (featureKey) {
+            case 'tahlil':
+                this.renderIbadahTahlil(titleEl, tagEl, bodyEl);
+                break;
+            case 'wirid':
+                this.renderIbadahWirid(titleEl, tagEl, bodyEl);
+                break;
+            case 'sholat':
+                this.renderIbadahSholat(titleEl, tagEl, bodyEl);
+                break;
+            case 'kiblat':
+                this.renderIbadahKiblat(titleEl, tagEl, bodyEl);
+                break;
+            case 'quran':
+                this.renderIbadahQuran(titleEl, tagEl, bodyEl);
+                break;
+            case 'maulid':
+                this.renderIbadahMaulid(titleEl, tagEl, bodyEl);
+                break;
+            case 'doa':
+                this.renderIbadahDoa(titleEl, tagEl, bodyEl);
+                break;
+            case 'tutorial':
+                this.renderIbadahTutorial(titleEl, tagEl, bodyEl);
+                break;
+            default:
+                this.renderIbadahTahlil(titleEl, tagEl, bodyEl);
+                break;
+        }
+    },
+
+    // 1. TAHLIL & YASIN MASYAYIKH KAJEN
+    renderIbadahTahlil: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-hands-holding text-kmf-600 mr-2"></i> Tahlil & Yasin Masyayikh Kajen`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Lengkap + Doa";
+        }
+
+        const subTab = this.currentTahlilSubTab || 'tahlil';
+        const data = window.dataAmalan || window.KMF_AMALAN || {};
+
+        let contentHtml = '';
+        if (subTab === 'tahlil') {
+            const list = data.tahlil || [];
+            contentHtml = `
+                <div class="space-y-4">
+                    ${list.map((item, idx) => `
+                        <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-2.5">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-bold text-kmf-700 bg-white px-2 py-0.5 rounded border border-slate-200 shadow-2xs">#${item.no || idx + 1}</span>
+                                <span class="font-semibold text-slate-700 text-[11px]">${item.title}</span>
+                            </div>
+                            <div class="font-arabic text-slate-900 leading-loose text-right" style="font-size: ${this.arabicFontSize}px;">
+                                ${item.arabic}
+                            </div>
+                            ${item.latin ? `<div class="text-[11px] text-slate-500 italic border-t border-slate-200/60 pt-2">${item.latin}</div>` : ''}
+                            ${item.translation ? `<div class="text-xs text-slate-600 leading-relaxed font-sans">${item.translation}</div>` : ''}
+                        </div>
+                    `).join('')}
                 </div>
+            `;
+        } else if (subTab === 'yasin') {
+            contentHtml = `
+                <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Surat Yasin (يس) - 83 Ayat</h4>
+                            <p class="text-[11px] text-slate-500">Qalbul Qur'an • Makkiyyah</p>
+                        </div>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Surat ke-36</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 text-center space-y-2">
+                        <div class="font-arabic text-slate-900 leading-loose" style="font-size: ${this.arabicFontSize + 2}px;">
+                            بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ. يسٓ ۚ وَالْقُرْاٰنِ الْحَكِيْمِ ۙ إِنَّكَ لَمِنَ الْمُرْسَلِيْنَ ۙ عَلَىٰ صِرَاطٍ مُّسْتَقِيْمٍ ۗ
+                        </div>
+                        <p class="text-xs text-slate-500 italic">"Yā Sīn. Demi Al-Qur'an yang penuh hikmah. Sungguh, engkau (Muhammad) adalah salah seorang dari rasul-rasul."</p>
+                    </div>
+                    <div class="p-3 bg-blue-50/80 text-blue-900 rounded-xl border border-blue-200/70 text-xs leading-relaxed space-y-1">
+                        <strong>Fadhilah Surat Yasin bagi Jama'ah:</strong>
+                        <p class="text-[11px] text-blue-800">
+                            Rasulullah ﷺ bersabda bahwa Surat Yasin adalah jantung Al-Qur'an. Tradisi santri Kajen membacanya setiap malam Jum'at dan pada majelis tahlil untuk wasilah kemudahan hajat dan keselamatan arwah ahli kubur.
+                        </p>
+                    </div>
+                </div>
+            `;
+        } else if (subTab === 'doa') {
+            const doaItem = (data.tahlil || []).find(i => i.no === 7) || (data.tahlil || [])[data.tahlil?.length - 1];
+            contentHtml = `
+                <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+                        <h4 class="font-bold text-slate-800 text-sm">Doa Tahlil & Arwah Khusus Masyayikh Kajen</h4>
+                        <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full">Doa Penutup</span>
+                    </div>
+                    <div class="font-arabic text-slate-900 leading-loose text-right" style="font-size: ${this.arabicFontSize}px;">
+                        ${doaItem ? doaItem.arabic : 'اَللّٰهُمَّ اغْفِرْ لَهُمْ وَارْحَمْهُمْ وَعَافِهِمْ وَاعْفُ عَنْهُمْ...'}
+                    </div>
+                    <div class="text-xs text-slate-600 leading-relaxed font-sans border-t border-slate-200/60 pt-2">
+                        ${doaItem ? doaItem.translation : 'Ya Allah, sampaikanlah pahala bacaan kami kepada Masyayikh Kajen dan kaum muslimin...'}
+                    </div>
+                </div>
+            `;
+        }
 
-                <div class="space-y-6">
-                    ${data.items.map((item, idx) => `
-                        <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200/80 space-y-3">
-                            <div class="flex items-center justify-between text-xs text-slate-500">
-                                <span class="font-bold text-kmf-700 bg-white px-2.5 py-0.5 rounded-md border border-slate-200 shadow-2xs">
-                                    #${idx + 1}
-                                </span>
-                                ${item.dibaca ? `
-                                    <span class="font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                                        <i class="fa-solid fa-repeat text-[10px]"></i> ${item.dibaca}
-                                    </span>
-                                ` : ''}
+        bodyEl.innerHTML = `
+            <div class="space-y-3">
+                <!-- Sub Tabs Tahlil -->
+                <div class="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+                    <button onclick="App.currentTahlilSubTab='tahlil'; App.selectIbadahFeature('tahlil')" 
+                        class="flex-1 py-1.5 rounded-lg transition text-center ${subTab === 'tahlil' ? 'bg-white text-kmf-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
+                        Hadhrah & Tahlil
+                    </button>
+                    <button onclick="App.currentTahlilSubTab='yasin'; App.selectIbadahFeature('tahlil')" 
+                        class="flex-1 py-1.5 rounded-lg transition text-center ${subTab === 'yasin' ? 'bg-white text-kmf-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
+                        Surat Yasin
+                    </button>
+                    <button onclick="App.currentTahlilSubTab='doa'; App.selectIbadahFeature('tahlil')" 
+                        class="flex-1 py-1.5 rounded-lg transition text-center ${subTab === 'doa' ? 'bg-white text-kmf-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
+                        Doa Arwah
+                    </button>
+                </div>
+                ${contentHtml}
+            </div>
+        `;
+    },
+
+    // 2. WIRID & DZIKIR MACTUBAH / ISTIGHOTSAH
+    renderIbadahWirid: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-hands-praying text-indigo-600 mr-2"></i> Wirid Ba'da Shalat & Istighotsah`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Tradisi Mathole'";
+        }
+
+        const subTab = this.currentWiridSubTab || 'wirid';
+        const data = window.dataAmalan || window.KMF_AMALAN || {};
+        const list = subTab === 'wirid' ? (data.wirid || []) : (data.istighotsah || []);
+
+        bodyEl.innerHTML = `
+            <div class="space-y-3">
+                <!-- Sub Tabs Wirid -->
+                <div class="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl text-xs font-semibold">
+                    <button onclick="App.currentWiridSubTab='wirid'; App.selectIbadahFeature('wirid')" 
+                        class="flex-1 py-1.5 rounded-lg transition text-center ${subTab === 'wirid' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
+                        Wirid Ba'da Shalat
+                    </button>
+                    <button onclick="App.currentWiridSubTab='istighotsah'; App.selectIbadahFeature('wirid')" 
+                        class="flex-1 py-1.5 rounded-lg transition text-center ${subTab === 'istighotsah' ? 'bg-white text-indigo-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'}">
+                        Istighotsah Salaf
+                    </button>
+                </div>
+                <div class="space-y-3.5">
+                    ${list.map((item, idx) => `
+                        <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-2">
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="font-bold text-indigo-700 bg-white px-2 py-0.5 rounded border border-slate-200 shadow-2xs">#${item.no || idx + 1}</span>
+                                <span class="font-semibold text-slate-700 text-[11px]">${item.nama || item.title || ''}</span>
                             </div>
-
-                            <!-- Teks Arab -->
-                            <div class="font-arabic text-slate-900 py-1" style="font-size: ${this.arabicFontSize}px; line-height: 2.3rem;">
-                                ${item.arab}
+                            <div class="font-arabic text-slate-900 leading-loose text-right" style="font-size: ${this.arabicFontSize}px;">
+                                ${item.arabic || item.arab}
                             </div>
-
-                            <!-- Latin / Arti -->
-                            ${item.arti ? `
-                                <div class="text-xs text-slate-600 leading-relaxed pt-2 border-t border-slate-200/60 font-sans italic">
-                                    "${item.arti}"
-                                </div>
-                            ` : ''}
+                            ${item.latin ? `<div class="text-[11px] text-slate-500 italic border-t border-slate-200/60 pt-1.5">${item.latin}</div>` : ''}
+                            ${item.translation || item.arti ? `<div class="text-xs text-slate-600 leading-relaxed font-sans">${item.translation || item.arti}</div>` : ''}
                         </div>
                     `).join('')}
                 </div>
@@ -974,26 +1154,382 @@ const App = {
         `;
     },
 
-    switchAmalanTab: function(tabKey) {
-        this.currentAmalanTab = tabKey;
-
-        document.querySelectorAll('.amalan-subtab-btn').forEach(btn => {
-            btn.classList.remove('bg-kmf-600', 'text-white');
-            btn.classList.add('bg-slate-100', 'text-slate-700');
-        });
-
-        const activeBtn = document.getElementById(`btn-amalan-${tabKey}`);
-        if (activeBtn) {
-            activeBtn.classList.add('bg-kmf-600', 'text-white');
-            activeBtn.classList.remove('bg-slate-100', 'text-slate-700');
+    // 3. JADWAL SHOLAT & IMSAKIYAH DEMAK
+    renderIbadahSholat: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-clock text-amber-600 mr-2"></i> Jadwal Sholat Demak`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Falakiyah NU";
         }
 
-        this.renderAmalan();
+        const prayer = window.KMF_PRAYER ? window.KMF_PRAYER.getTodaySchedule() : null;
+        const times = prayer ? prayer.times : {
+            Imsak: "04:02", Subuh: "04:12", Terbit: "05:27", Dhuha: "05:51",
+            Dzuhur: "11:24", Ashar: "14:41", Maghrib: "17:34", Isya: "18:45"
+        };
+        const dateStr = prayer ? `${prayer.dateMasehi} • ${prayer.dateHijri}` : "Kabupaten Demak, Jawa Tengah";
+
+        const prayerList = [
+            { name: "Imsak", time: times.Imsak, icon: "fa-solid fa-cloud-moon" },
+            { name: "Subuh", time: times.Subuh, icon: "fa-solid fa-sun", active: true },
+            { name: "Terbit", time: times.Terbit, icon: "fa-regular fa-sun" },
+            { name: "Dhuha", time: times.Dhuha, icon: "fa-solid fa-certificate" },
+            { name: "Dzuhur", time: times.Dzuhur, icon: "fa-solid fa-sun" },
+            { name: "Ashar", time: times.Ashar, icon: "fa-regular fa-clock" },
+            { name: "Maghrib", time: times.Maghrib, icon: "fa-solid fa-moon" },
+            { name: "Isya", time: times.Isya, icon: "fa-solid fa-star-and-crescent" }
+        ];
+
+        bodyEl.innerHTML = `
+            <div class="space-y-3.5">
+                <div class="p-3 bg-gradient-to-r from-blue-900 to-kmf-800 text-white rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-[9.5px] uppercase font-bold text-amber-300 tracking-wider">Hisab Falakiyah Demak</span>
+                        <h4 class="font-bold text-sm text-white">${dateStr}</h4>
+                    </div>
+                    <span class="text-[10px] bg-white/20 px-2.5 py-1 rounded-full font-bold backdrop-blur-xs">WIB (GMT+7)</span>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    ${prayerList.map(p => `
+                        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <i class="${p.icon} text-amber-600 text-xs"></i>
+                                <span class="text-xs font-semibold text-slate-700">${p.name}</span>
+                            </div>
+                            <span class="text-xs font-extrabold text-slate-900">${p.time}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="pt-1">
+                    <button type="button" onclick="KMF_PRAYER.openJadwalSholatModal()" 
+                        class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-bold py-2.5 rounded-xl text-xs transition active:scale-98 flex items-center justify-center gap-1.5 shadow-xs">
+                        <i class="fa-solid fa-calendar-days text-sm"></i> Buka Jadwal Lengkap & Imsakiyah Bulanan
+                    </button>
+                </div>
+            </div>
+        `;
     },
 
-    adjustArabicSize: function(delta) {
-        this.arabicFontSize = Math.max(18, Math.min(36, this.arabicFontSize + delta));
-        this.renderAmalan();
+    // 4. KOMPAS ARAH KIBLAT FALAKIYAH
+    renderIbadahKiblat: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-compass text-teal-600 mr-2"></i> Kompas Presisi Arah Kiblat`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "294.4° W-NW";
+        }
+
+        bodyEl.innerHTML = `
+            <div class="space-y-4 text-center">
+                <!-- Kompas Visual Dial -->
+                <div class="relative w-48 h-48 mx-auto my-2 flex items-center justify-center">
+                    <div class="absolute inset-0 rounded-full border-4 border-slate-200 bg-gradient-to-br from-slate-50 to-teal-50 shadow-inner flex items-center justify-center">
+                        <!-- Label Arah Mata Angin -->
+                        <span class="absolute top-1 text-[11px] font-black text-rose-600">U</span>
+                        <span class="absolute right-2 text-[11px] font-bold text-slate-400">T</span>
+                        <span class="absolute bottom-1 text-[11px] font-bold text-slate-400">S</span>
+                        <span class="absolute left-2 text-[11px] font-bold text-slate-400">B</span>
+
+                        <!-- Jarum Kompas Menunjuk 294.4 Derajat -->
+                        <div class="w-full h-full absolute inset-0 flex items-center justify-center pointer-events-none" style="transform: rotate(294.4deg);">
+                            <div class="w-1.5 h-20 bg-teal-600 rounded-t-full shadow-md relative">
+                                <div class="absolute -top-3 -left-2.5 text-base text-amber-500">
+                                    <i class="fa-solid fa-kaaba"></i>
+                                </div>
+                            </div>
+                            <div class="w-1.5 h-20 bg-slate-300 rounded-b-full"></div>
+                        </div>
+
+                        <!-- Pusat Kompas -->
+                        <div class="w-8 h-8 rounded-full bg-white border-2 border-teal-600 shadow-md flex items-center justify-center z-10">
+                            <div class="w-2.5 h-2.5 rounded-full bg-teal-700"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Koordinat & Azimut -->
+                <div class="grid grid-cols-2 gap-2 text-left">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-0.5">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Azimut Kiblat Demak</span>
+                        <div class="text-sm font-extrabold text-teal-700">294° 26' 18"</div>
+                        <span class="text-[10px] text-slate-500">Serong Barat - Barat Laut</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-0.5">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Jarak ke Ka'bah</span>
+                        <div class="text-sm font-extrabold text-slate-800">± 8.420 km</div>
+                        <span class="text-[10px] text-slate-500">Makkah Al-Mukarramah</span>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-teal-50/70 border border-teal-200 rounded-xl text-left text-xs text-teal-900 leading-relaxed flex items-start gap-2">
+                    <i class="fa-solid fa-circle-info text-teal-600 mt-0.5 shrink-0"></i>
+                    <div>
+                        <strong>Petunjuk Penggunaan:</strong> Letakkan smartphone pada permukaan datar sejajar tanah. Arahkan badan menghadap jarum hijau berlambang Ka'bah untuk mendirikan sholat.
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // 5. AL-QUR'AN DIGITAL SANTRI
+    renderIbadahQuran: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-book-quran text-emerald-600 mr-2"></i> Al-Qur'an Digital Santri`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Surah Pilihan";
+        }
+
+        const surahKey = this.currentQuranSurahKey || 'fatihah';
+
+        const surahList = [
+            { key: 'fatihah', no: 1, name: 'Al-Fatihah', arab: 'الفاتحة', ayat: '7 Ayat', arti: 'Pembuka' },
+            { key: 'yasin', no: 36, name: 'Yā Sīn', arab: 'يس', ayat: '83 Ayat', arti: 'Jantung Al-Qur\'an' },
+            { key: 'rahman', no: 55, name: 'Ar-Rahman', arab: 'الرحمن', ayat: '78 Ayat', arti: 'Maha Pemurah' },
+            { key: 'waqiah', no: 56, name: 'Al-Waqi\'ah', arab: 'الواقعة', ayat: '96 Ayat', arti: 'Hari Kiamat' },
+            { key: 'mulk', no: 67, name: 'Al-Mulk', arab: 'الملك', ayat: '30 Ayat', arti: 'Kerajaan' },
+            { key: 'kahfi', no: 18, name: 'Al-Kahf', arab: 'الكهف', ayat: 'Ayat 1-10', arti: 'Gua' }
+        ];
+
+        let content = '';
+        if (surahKey === 'fatihah') {
+            content = `
+                <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-3">
+                    <div class="text-center border-b border-slate-200 pb-2">
+                        <h4 class="font-bold text-slate-800 text-sm">Surat Al-Fatihah (الفاتحة)</h4>
+                        <p class="text-[11px] text-slate-500">7 Ayat • Makkiyyah • Ummul Qur'an</p>
+                    </div>
+                    <div class="font-arabic text-slate-900 leading-loose text-right space-y-3" style="font-size: ${this.arabicFontSize}px;">
+                        <p>بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ ﴿١﴾</p>
+                        <p>اَلْحَمْدُ لِلّٰهِ رَبِّ الْعٰلَمِيْنَ ﴿٢﴾</p>
+                        <p>الرَّحْمٰنِ الرَّحِيْمِ ﴿٣﴾</p>
+                        <p>مٰلِكِ يَوْمِ الدِّيْنِ ﴿٤﴾</p>
+                        <p>إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِيْنُ ﴿٥﴾</p>
+                        <p>اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيْمَ ﴿٦﴾</p>
+                        <p>صِرَاطَ الَّذِيْنَ أَنْعَمْتَ عَلَيْهِمْ ەۙ غَيْرِ الْمَغْضُوْبِ عَلَيْهِمْ وَلَا الضَّآلِّيْنَ ﴿٧﴾</p>
+                    </div>
+                </div>
+            `;
+        } else if (surahKey === 'mulk') {
+            content = `
+                <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-3">
+                    <div class="text-center border-b border-slate-200 pb-2">
+                        <h4 class="font-bold text-slate-800 text-sm">Surat Al-Mulk (الملك)</h4>
+                        <p class="text-[11px] text-slate-500">30 Ayat • Tabarak • Penyelamat Siksa Kubur</p>
+                    </div>
+                    <div class="font-arabic text-slate-900 leading-loose text-right space-y-3" style="font-size: ${this.arabicFontSize}px;">
+                        <p>تَبٰرَكَ الَّذِيْ بِيَدِهِ الْمُلْكُۖ وَهُوَ عَلٰى كُلِّ شَيْءٍ قَدِيْرٌ ﴿١﴾</p>
+                        <p>الَّذِيْ خَلَقَ الْمَوْتَ وَالْحَيٰوةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًاۗ وَهُوَ الْعَزِيْزُ الْغَفُوْرُ ﴿٢﴾</p>
+                    </div>
+                    <p class="text-xs text-slate-500 italic">"Maha Suci Allah yang di tangan-Nya lah segala kerajaan, dan Dia Maha Kuasa atas segala sesuatu..."</p>
+                </div>
+            `;
+        } else {
+            content = `
+                <div class="p-4 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-3">
+                    <div class="text-center border-b border-slate-200 pb-2">
+                        <h4 class="font-bold text-slate-800 text-sm">Surat Pilihan Santri Kajen</h4>
+                        <p class="text-[11px] text-slate-500">Dzikir & Tilawah Harian</p>
+                    </div>
+                    <div class="font-arabic text-slate-900 leading-loose text-center py-2" style="font-size: ${this.arabicFontSize + 2}px;">
+                        بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed text-center">
+                        Basahilah lisan dengan membiasakan wirid surat-surat pilihan ini setiap ba'da Shubuh dan Maghrib sebagaimana ijazah masyayikh Mathali'ul Falah.
+                    </p>
+                </div>
+            `;
+        }
+
+        bodyEl.innerHTML = `
+            <div class="space-y-3">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                    ${surahList.map(s => `
+                        <div onclick="App.currentQuranSurahKey='${s.key}'; App.selectIbadahFeature('quran')"
+                            class="p-2.5 rounded-xl border transition cursor-pointer flex items-center justify-between ${surahKey === s.key ? 'bg-emerald-50 border-emerald-500 shadow-2xs' : 'bg-white border-slate-200 hover:border-emerald-300'}">
+                            <div>
+                                <span class="font-bold text-xs text-slate-800 block">${s.no}. ${s.name}</span>
+                                <span class="text-[10px] text-slate-400">${s.ayat}</span>
+                            </div>
+                            <span class="font-arabic text-base font-bold text-emerald-700">${s.arab}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                ${content}
+            </div>
+        `;
+    },
+
+    // 6. KITAB MAULID NABI & SHALAWAT
+    renderIbadahMaulid: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-kaaba text-purple-600 mr-2"></i> Kitab Maulid Nabi & Qasidah`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Diba' & Burdah";
+        }
+
+        bodyEl.innerHTML = `
+            <div class="space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 hover:border-purple-500 transition shadow-2xs space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">Maulid Ad-Diba'i</span>
+                            <span class="text-[10px] bg-purple-50 text-purple-700 font-bold px-2 py-0.5 rounded">الإمام الديبعي</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Kitab maulid rutin malam Jum'at di Kajen & pondok pesantren.</p>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 hover:border-purple-500 transition shadow-2xs space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">Qasidah Burdah</span>
+                            <span class="text-[10px] bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded">الإمام البوصيري</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Bait qasidah pujian kepada Rasulullah ﷺ penolak bala & obat hati.</p>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 hover:border-purple-500 transition shadow-2xs space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">Maulid Simtuddurar</span>
+                            <span class="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded">الحبيب علي الحبشي</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Untaian mutiara akhlak mulia dan kelahiran Sang Nabi Agung.</p>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-xl border border-slate-200 hover:border-purple-500 transition shadow-2xs space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-slate-800">Maulid Al-Barzanji</span>
+                            <span class="text-[10px] bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded">الشيخ البرزنجي</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Natsar dan syi'ir sirah nabawiyyah tradisi Nusantara.</p>
+                    </div>
+                </div>
+
+                <!-- Kutipan Shalawat Utama -->
+                <div class="p-4 bg-purple-50/60 rounded-xl border border-purple-200 text-center space-y-2">
+                    <span class="text-[10px] uppercase font-bold text-purple-700 tracking-wider">Bait Pembuka Maulid Diba'</span>
+                    <div class="font-arabic text-slate-900 leading-loose" style="font-size: ${this.arabicFontSize}px;">
+                        يَا رَبِّ صَلِّ عَلَى مُحَمَّدْ • يَا رَبِّ صَلِّ عَلَيْهِ وَسَلِّمْ
+                    </div>
+                    <div class="font-arabic text-slate-900 leading-loose border-t border-purple-200/60 pt-2" style="font-size: ${this.arabicFontSize}px;">
+                        مَوْلَايَ صَلِّ وَسَلِّمْ دَائِمًا أَبَدًا • عَلَى حَبِيْبِكَ خَيْرِ الْخَلْقِ كُلِّهِمِ
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    // 7. KUMPULAN DOA PILIHAN SANTRI
+    renderIbadahDoa: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-person-praying text-orange-600 mr-2"></i> Kumpulan Doa Pilihan Santri`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Mustajab";
+        }
+
+        const doaList = [
+            {
+                nama: "1. Doa Sapujagat (Kebaikan Dunia & Akhirat)",
+                arab: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+                arti: "Ya Tuhan kami, berilah kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari siksa neraka."
+            },
+            {
+                nama: "2. Doa Birrul Walidain (Kedua Orang Tua)",
+                arab: "رَبِّ اغْفِرْ لِيْ وَلِوَالِدَيَّ وَارْحَمْهُمَا كَمَا رَبَّيَانِيْ صَغِيْرًا",
+                arti: "Wahai Tuhanku, ampunilah aku dan kedua orang tuaku, dan sayangilah keduanya sebagaimana mereka mendidikku di waktu kecil."
+            },
+            {
+                nama: "3. Doa Tolak Bala (Li Khamsatun Ijazah Para Kyai)",
+                arab: "لِيْ خَمْسَةٌ أُطْفِيْ بِهَا • حَرَّ الْوَبَاءِ الْحَاطِمَةْ\nالْمُصْطَفَى وَالْمُرْتَضَى • وَابْنَاهُمَا وَالْفَاطِمَةْ",
+                arti: "Bagiku ada lima sosok yang kuharapkan untuk memadamkan panasnya wabah malapetaka: Nabi Al-Musthafa, Sayyidina Ali Al-Murtadha, kedua putranya (Hasan & Husain), dan Sayyidah Fathimah."
+            },
+            {
+                nama: "4. Doa Belajar & Faham Ilmu",
+                arab: "رَبِّ زِدْنِيْ عِلْمًا نَافِعًا وَارْزُقْنِيْ فَهْمًا، وَاجْعَلْنِيْ مِنَ الصَّالِحِيْنَ",
+                arti: "Ya Allah, tambahkanlah kepadaku ilmu yang bermanfaat, anugerahkanlah kepadaku pemahaman yang benar, dan jadikanlah aku termasuk golongan orang-orang shaleh."
+            }
+        ];
+
+        bodyEl.innerHTML = `
+            <div class="space-y-3">
+                ${doaList.map(d => `
+                    <div class="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-2">
+                        <span class="font-bold text-xs text-orange-800 block">${d.nama}</span>
+                        <div class="font-arabic text-slate-900 leading-loose text-right" style="font-size: ${this.arabicFontSize}px;">
+                            ${d.arab}
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed italic border-t border-slate-200/60 pt-1.5 font-sans">
+                            "${d.arti}"
+                        </p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    },
+
+    // 8. TUTORIAL & PANDUAN IBADAH SANTRI
+    renderIbadahTutorial: function(titleEl, tagEl, bodyEl) {
+        if (titleEl) titleEl.innerHTML = `<i class="fa-solid fa-book-open-reader text-emerald-600 mr-2"></i> Tutorial & Panduan Ibadah Santri`;
+        if (tagEl) {
+            tagEl.className = "text-[9px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full uppercase";
+            tagEl.innerText = "Fiqh Praktis";
+        }
+
+        bodyEl.innerHTML = `
+            <div class="space-y-3">
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                        <h4 class="font-bold text-xs text-slate-800">1. Sholat Jamak & Qashar Musafir</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Diperbolehkan bagi musafir dengan jarak perjalanan minimal 2 marhalah (±82 km). Sholat Zhuhur, Ashar, dan Isya dapat diringkas menjadi 2 rakaat (Qashar) serta digabungkan (Jamak Taqdim / Ta'khir).
+                    </p>
+                    <div class="text-[11px] font-arabic bg-slate-50 p-2 rounded-lg text-slate-700">
+                        أُصَلِّي فَرْضَ الظُّهْرِ رَكْعَتَيْنِ قَصْرًا مَجْمُوْعًا إِلَيْهِ الْعَصْرُ جَمْعَ تَقْدِيْمٍ لِلّٰهِ تَعَالَى
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+                        <h4 class="font-bold text-xs text-slate-800">2. Tata Cara Sholat Jenazah (4 Takbir)</h4>
+                    </div>
+                    <ul class="text-xs text-slate-600 space-y-1 pl-4 list-decimal leading-relaxed">
+                        <li><strong>Takbir 1:</strong> Membaca Surat Al-Fatihah.</li>
+                        <li><strong>Takbir 2:</strong> Membaca Shalawat Nabi (Shalawat Ibrahimiyyah).</li>
+                        <li><strong>Takbir 3:</strong> Membaca doa khusus jenazah (<em>Allâhummaghfir lahu warhamhu...</em>).</li>
+                        <li><strong>Takbir 4:</strong> Membaca doa penutup (<em>Allâhumma lâ tahrimnâ ajrahu...</em>) lalu salam ke kanan & kiri.</li>
+                    </ul>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-sky-600"></span>
+                        <h4 class="font-bold text-xs text-slate-800">3. Sujud Sahwi & Sujud Tilawah</h4>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Sujud sahwi dilakukan 2 kali sebelum salam saat lupa rakaat atau meninggalkan sunnah ab'adh. Bacaan: <em>"Subhâna man lâ yanâmu wa lâ yashû"</em> (Maha Suci Dzat yang tidak tidur dan tidak lupa).
+                    </p>
+                </div>
+            </div>
+        `;
+    },
+
+    // Backward compatibility alias for older calls
+    renderAmalan: function() {
+        this.renderIbadah();
+    },
+
+    switchAmalanTab: function(tabKey) {
+        if (['tahlil', 'yasin'].includes(tabKey)) {
+            this.currentTahlilSubTab = tabKey;
+            this.selectIbadahFeature('tahlil');
+        } else if (['wirid', 'istighotsah'].includes(tabKey)) {
+            this.currentWiridSubTab = tabKey;
+            this.selectIbadahFeature('wirid');
+        } else {
+            this.selectIbadahFeature(tabKey);
+        }
     },
 
     /**

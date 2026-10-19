@@ -164,4 +164,5 @@ const dataAmalan = {
 
 if (typeof window !== 'undefined') {
     window.dataAmalan = dataAmalan;
+    window.KMF_AMALAN = dataAmalan;
 }
