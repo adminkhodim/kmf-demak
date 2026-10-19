@@ -797,28 +797,11 @@
                     </span>
                     <span class="text-[9.5px] text-slate-400 font-normal">KMF Demak</span>
                 </div>
-                <!-- KTA Digital (Tampil untuk Santri Terdaftar) -->
-                <button type="button" onclick="App.openKtaModal()" id="btn-menu-kta"
-                    class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-amber-500 group-hover:text-white transition">
-                            <i class="fa-solid fa-id-card"></i>
-                        </div>
-                        <div>
-                            <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                                <span>Kartu Tanda Anggota (KTA) Digital</span>
-                                <span class="text-[9px] bg-amber-100 text-amber-800 font-extrabold px-1.5 py-0.2 rounded">Virtual</span>
-                            </div>
-                            <div class="text-[11px] text-slate-500">Lihat kartu identitas digital santri KMF Demak</div>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
-                </button>
                 <!-- Formulir Sensus Alumni -->
                 <button type="button" onclick="App.navigateTo('register')"
                     class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition">
+                        <div class="w-8 h-8 rounded-xl bg-kmf-50 text-kmf-700 flex items-center justify-center text-sm shadow-2xs group-hover:bg-kmf-700 group-hover:text-white transition">
                             <i class="fa-solid fa-address-card"></i>
                         </div>
                         <div>
@@ -832,7 +815,7 @@
                 <button type="button" onclick="App.navigateTo('alumni')"
                     class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
                     <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-kmf-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-kmf-600 group-hover:text-white transition">
+                        <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm shadow-2xs group-hover:bg-indigo-600 group-hover:text-white transition">
                             <i class="fa-solid fa-users"></i>
                         </div>
                         <div>
@@ -1565,17 +1548,17 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL AUTENTIKASI PENGGUNA BARU / SANTRI ==================== -->
+    <!-- ==================== MODAL AUTENTIKASI PENGGUNA SANTRI (MASUK AKUN) ==================== -->
     <div id="modal-auth-user" onclick="if(event.target === this) App.closeAuthModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col max-h-[92vh]">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col">
             <!-- Header Modal -->
             <div class="bg-gradient-to-r from-kmf-900 via-kmf-800 to-blue-950 p-4 sm:p-5 text-white flex items-center justify-between shrink-0">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-amber-300 text-lg shadow-inner">
-                        <i class="fa-solid fa-mosque"></i>
+                        <i class="fa-solid fa-right-to-bracket"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm sm:text-base font-bold text-white leading-tight">Akun Santri KMF Demak</h3>
+                        <h3 class="text-sm sm:text-base font-bold text-white leading-tight">Masuk Akun Santri</h3>
                         <p class="text-[11px] text-blue-100/80">Keluarga Mathali'ul Falah Kajen</p>
                     </div>
                 </div>
@@ -1585,150 +1568,69 @@
                 </button>
             </div>
 
-            <!-- Tab Switcher (Masuk vs Daftar) -->
-            <div class="flex border-b border-slate-200 bg-slate-50 shrink-0">
-                <button type="button" id="auth-tab-btn-login" onclick="App.switchAuthTab('login')"
-                    class="flex-1 py-3 text-xs font-bold text-center border-b-2 border-kmf-600 text-kmf-700 bg-white transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-right-to-bracket text-xs"></i>
-                    <span>Masuk ke Akun</span>
-                </button>
-                <button type="button" id="auth-tab-btn-register" onclick="App.switchAuthTab('register')"
-                    class="flex-1 py-3 text-xs font-bold text-center border-b-2 border-transparent text-slate-500 hover:text-slate-800 hover:bg-white/50 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-user-plus text-xs"></i>
-                    <span>Daftar Santri Baru</span>
-                </button>
-            </div>
-
-            <!-- Modal Body Scrollable -->
-            <div class="overflow-y-auto p-4 sm:p-6 flex-1 space-y-4">
-                <!-- FORMULIR 1: MASUK (LOGIN) -->
-                <div id="auth-view-login" class="space-y-4">
-                    <div class="p-3 bg-blue-50/70 rounded-2xl border border-blue-100 flex items-start gap-2.5">
-                        <i class="fa-solid fa-circle-info text-kmf-600 text-sm mt-0.5 shrink-0"></i>
-                        <p class="text-[11px] text-slate-600 leading-relaxed">
-                            Silakan masuk menggunakan <strong>Nomor WhatsApp</strong> dan <strong>PIN</strong> Anda yang sudah terdaftar di sensus alumni.
-                        </p>
-                    </div>
-
-                    <form id="form-user-login" onsubmit="App.handleUserLogin(event)" class="space-y-3.5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp / HP</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                                    <i class="fa-brands fa-whatsapp text-sm text-green-600"></i>
-                                </div>
-                                <input type="tel" id="auth-login-wa" required placeholder="08xxxxxxxxxx"
-                                    class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">PIN Keamanan (6 Digit)</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
-                                    <i class="fa-solid fa-lock text-xs"></i>
-                                </div>
-                                <input type="password" id="auth-login-pin" required maxlength="6" placeholder="Masukkan 6 angka PIN"
-                                    class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 tracking-widest focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
-                            </div>
-                            <span class="text-[10px] text-slate-400 mt-1 block">PIN default akun baru: <strong>123456</strong></span>
-                        </div>
-
-                        <button type="submit"
-                            class="w-full py-3 bg-gradient-to-r from-kmf-700 to-blue-800 hover:from-kmf-800 hover:to-blue-900 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow transition flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                            <span>Masuk ke Akun Santri</span>
-                        </button>
-                    </form>
-
-                    <div class="pt-2 text-center text-xs space-y-2 border-t border-slate-100">
-                        <p class="text-slate-500 text-[11.5px]">
-                            Belum punya akun?
-                            <button type="button" onclick="App.switchAuthTab('register')" class="text-kmf-700 font-bold hover:underline">
-                                Daftar Santri Baru
-                            </button>
-                        </p>
-                        <p class="text-[11px] text-slate-400">
-                            Pengurus KMF?
-                            <button type="button" onclick="App.closeAuthModal(); App.navigateTo('admin')" class="text-purple-600 font-bold hover:underline">
-                                Masuk Panel Pengurus
-                            </button>
-                        </p>
-                    </div>
+            <!-- Modal Body -->
+            <div class="p-4 sm:p-5 space-y-4">
+                <div class="p-3 bg-blue-50/70 rounded-2xl border border-blue-100 flex items-start gap-2.5">
+                    <i class="fa-solid fa-circle-info text-kmf-600 text-sm mt-0.5 shrink-0"></i>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Masukkan <strong>Nomor WhatsApp</strong> dan <strong>PIN</strong> Anda yang sudah terdaftar di sensus alumni.
+                    </p>
                 </div>
 
-                <!-- FORMULIR 2: DAFTAR SANTRI BARU (REGISTRASI) -->
-                <div id="auth-view-register" class="space-y-4 hidden">
-                    <div class="p-3 bg-emerald-50/80 rounded-2xl border border-emerald-100 flex items-start gap-2.5">
-                        <i class="fa-solid fa-user-check text-emerald-600 text-sm mt-0.5 shrink-0"></i>
-                        <p class="text-[11px] text-slate-600 leading-relaxed">
-                            Pendaftaran santri / alumni Mathali'ul Falah yang berdomisili atau beraktivitas di Kabupaten Demak.
-                        </p>
+                <form id="form-user-login" onsubmit="App.handleUserLogin(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp / HP</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                                <i class="fa-brands fa-whatsapp text-sm text-green-600"></i>
+                            </div>
+                            <input type="tel" id="auth-login-wa" required placeholder="08xxxxxxxxxx"
+                                class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                        </div>
                     </div>
 
-                    <form id="form-user-register" onsubmit="App.handleUserRegister(event)" class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                            <input type="text" id="auth-reg-name" required placeholder="Contoh: Ahmad Fauzi, S.Pd."
-                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Nomor WhatsApp Aktif</label>
-                            <input type="tel" id="auth-reg-wa" required placeholder="08xxxxxxxxxx"
-                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2.5">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1">Tahun Lulus Kajen</label>
-                                <input type="number" id="auth-reg-tahun" required placeholder="Contoh: 2016" min="1950" max="2035"
-                                    class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">PIN Keamanan (6 Digit)</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                                <i class="fa-solid fa-lock text-xs"></i>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-700 mb-1">Kecamatan di Demak</label>
-                                <select id="auth-reg-kecamatan" required
-                                    class="w-full px-2.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
-                                    <option value="Demak">Demak (Kota)</option>
-                                    <option value="Sayung">Sayung</option>
-                                    <option value="Mranggen">Mranggen</option>
-                                    <option value="Karangawen">Karangawen</option>
-                                    <option value="Guntur">Guntur</option>
-                                    <option value="Karangtengah">Karangtengah</option>
-                                    <option value="Bonang">Bonang</option>
-                                    <option value="Wedung">Wedung</option>
-                                    <option value="Wonosalam">Wonosalam</option>
-                                    <option value="Dempet">Dempet</option>
-                                    <option value="Gajah">Gajah</option>
-                                    <option value="Karanganyar">Karanganyar</option>
-                                    <option value="Mijen">Mijen</option>
-                                    <option value="Kebonagung">Kebonagung</option>
-                                </select>
-                            </div>
+                            <input type="password" id="auth-login-pin" required maxlength="6" placeholder="Masukkan 6 angka PIN"
+                                class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 tracking-widest focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
                         </div>
+                        <span class="text-[10px] text-slate-400 mt-1 block">PIN default akun baru: <strong>123456</strong></span>
+                    </div>
 
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Buat PIN Keamanan (6 Angka)</label>
-                            <input type="password" id="auth-reg-pin" required maxlength="6" placeholder="Contoh: 123456"
-                                class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 tracking-widest focus:bg-white focus:border-kmf-500 focus:ring-1 focus:ring-kmf-500 transition">
-                            <span class="text-[10px] text-slate-400 mt-1 block">Gunakan angka rahasia yang mudah diingat</span>
-                        </div>
+                    <button type="submit"
+                        class="w-full py-3 bg-gradient-to-r from-kmf-700 to-blue-800 hover:from-kmf-800 hover:to-blue-900 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow transition flex items-center justify-center gap-2 active:scale-98">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>Masuk ke Akun Santri</span>
+                    </button>
+                </form>
 
-                        <button type="submit"
-                            class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-700 hover:to-teal-800 text-white font-bold rounded-xl text-xs shadow-sm hover:shadow transition flex items-center justify-center gap-2 active:scale-98">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Daftarkan Akun & Gabung KMF Demak</span>
+                <!-- Box Ajakan Sensus Alumni bagi yang belum terdata -->
+                <div class="p-3.5 bg-gradient-to-br from-amber-50 to-orange-50/50 rounded-2xl border border-amber-200/80 space-y-2">
+                    <div class="flex items-center gap-2 text-amber-950 font-bold text-xs">
+                        <i class="fa-solid fa-address-card text-amber-600"></i>
+                        <span>Belum Terdata di Sensus Alumni?</span>
+                    </div>
+                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                        Data sensus alumni adalah pintu tunggal registrasi resmi santri KMF Demak untuk penerbitan e-KTA Digital.
+                    </p>
+                    <button type="button" onclick="App.closeAuthModal(); App.navigateTo('register')"
+                        class="w-full py-2 px-3 bg-white hover:bg-amber-100/50 text-amber-900 border border-amber-300 font-bold rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-2xs active:scale-98">
+                        <i class="fa-solid fa-pen-to-square text-amber-600"></i>
+                        <span>Isi Formulir Sensus Alumni</span>
+                    </button>
+                </div>
+
+                <div class="text-center pt-1 border-t border-slate-100">
+                    <p class="text-[11px] text-slate-400">
+                        Pengurus KMF?
+                        <button type="button" onclick="App.closeAuthModal(); App.navigateTo('admin')" class="text-purple-600 font-bold hover:underline">
+                            Masuk Panel Pengurus
                         </button>
-                    </form>
-
-                    <div class="pt-2 text-center text-xs border-t border-slate-100">
-                        <p class="text-slate-500 text-[11.5px]">
-                            Sudah punya akun?
-                            <button type="button" onclick="App.switchAuthTab('login')" class="text-kmf-700 font-bold hover:underline">
-                                Masuk di sini
-                            </button>
-                        </p>
-                    </div>
+                    </p>
                 </div>
             </div>
         </div>
@@ -2000,19 +1902,25 @@
 
     <!-- ==================== MODAL SUKSES SUBMIT ==================== -->
     <div id="modal-success" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-xl modal-animate-enter">
-            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-center space-y-4 shadow-xl modal-animate-enter border border-slate-100">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl shadow-inner">
                 <i class="fa-solid fa-check"></i>
             </div>
-            <div class="space-y-1">
-                <h3 class="font-bold text-lg text-slate-800">Alhamdulillah!</h3>
+            <div class="space-y-1.5">
+                <h3 class="font-bold text-base sm:text-lg text-slate-800">Alhamdulillah, Terdata!</h3>
                 <p id="modal-success-message" class="text-xs text-slate-600 leading-relaxed">
-                    Formulir sensus berhasil dikirimkan.
+                    Formulir sensus berhasil dikirimkan dan akun santri Anda telah otomatis aktif.
                 </p>
             </div>
-            <button onclick="App.closeSuccessModal()" class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">
-                Tutup & Kembali
-            </button>
+            <div class="space-y-2 pt-1">
+                <button type="button" onclick="App.closeSuccessModalAndOpenKta()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-1.5 shadow-sm active:scale-98">
+                    <i class="fa-solid fa-id-badge"></i>
+                    <span>Lihat e-KTA Digital Saya</span>
+                </button>
+                <button type="button" onclick="App.closeSuccessModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-2.5 rounded-xl text-xs transition">
+                    Lihat Direktori Alumni
+                </button>
+            </div>
         </div>
     </div>
 

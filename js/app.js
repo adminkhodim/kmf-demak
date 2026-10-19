@@ -1673,19 +1673,19 @@ const App = {
                                 <span class="text-[9.5px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full border border-emerald-400/30">PWA Ready</span>
                             </div>
                             <h2 class="text-sm sm:text-base font-bold text-white mt-1 leading-snug truncate">Ahlan wa Sahlan, Sahabat Santri!</h2>
-                            <p class="text-[11px] text-blue-100/80 truncate">Masuk atau daftar untuk akses penuh alumni</p>
+                            <p class="text-[11px] text-blue-100/80 truncate">Masuk akun atau isi sensus untuk akses penuh & e-KTA</p>
                         </div>
                     </div>
                     <div class="relative z-10 pt-1 flex items-center gap-2">
-                        <button type="button" onclick="App.openAuthModal('login')"
+                        <button type="button" onclick="App.openAuthModal()"
                             class="flex-1 py-2.5 px-3 bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold rounded-xl transition shadow-xs flex items-center justify-center gap-1.5 active:scale-98">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             <span>Masuk Akun</span>
                         </button>
-                        <button type="button" onclick="App.openAuthModal('register')"
+                        <button type="button" onclick="App.navigateTo('register')"
                             class="flex-1 py-2.5 px-3 bg-white/15 hover:bg-white/25 text-white border border-white/25 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 active:scale-98">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Daftar Baru</span>
+                            <i class="fa-solid fa-address-card text-amber-300"></i>
+                            <span>Isi Sensus Alumni</span>
                         </button>
                     </div>
                 </div>
@@ -1694,12 +1694,11 @@ const App = {
         }
     },
 
-    openAuthModal: function(tab) {
+    openAuthModal: function() {
         const modal = document.getElementById('modal-auth-user');
         if (modal) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            this.switchAuthTab(tab || 'login');
         }
     },
 
@@ -1708,29 +1707,6 @@ const App = {
         if (modal) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        }
-    },
-
-    switchAuthTab: function(tab) {
-        const btnLogin = document.getElementById('auth-tab-btn-login');
-        const btnRegister = document.getElementById('auth-tab-btn-register');
-        const viewLogin = document.getElementById('auth-view-login');
-        const viewRegister = document.getElementById('auth-view-register');
-
-        if (tab === 'register') {
-            viewLogin?.classList.add('hidden');
-            viewRegister?.classList.remove('hidden');
-            btnLogin?.classList.remove('border-kmf-600', 'text-kmf-700', 'bg-white');
-            btnLogin?.classList.add('border-transparent', 'text-slate-500');
-            btnRegister?.classList.add('border-kmf-600', 'text-kmf-700', 'bg-white');
-            btnRegister?.classList.remove('border-transparent', 'text-slate-500');
-        } else {
-            viewRegister?.classList.add('hidden');
-            viewLogin?.classList.remove('hidden');
-            btnRegister?.classList.remove('border-kmf-600', 'text-kmf-700', 'bg-white');
-            btnRegister?.classList.add('border-transparent', 'text-slate-500');
-            btnLogin?.classList.add('border-kmf-600', 'text-kmf-700', 'bg-white');
-            btnLogin?.classList.remove('border-transparent', 'text-slate-500');
         }
     },
 
@@ -1744,7 +1720,7 @@ const App = {
             return;
         }
 
-        // Cari di data alumni tersimpan jika ada, atau buat sesi
+        // Cari di data alumni tersimpan jika ada
         let matchedUser = null;
         try {
             const list = window.KMF_API ? window.KMF_API.getAlumniList() : [];
@@ -1752,15 +1728,17 @@ const App = {
         } catch (err) {}
 
         const userName = matchedUser ? matchedUser.nama : 'Santri KMF Demak';
-        const userTahun = matchedUser ? matchedUser.tahunLulus : '2018';
+        const userTahun = matchedUser ? (matchedUser.tahunLulus || matchedUser.angkatan || '2018') : '2018';
         const userKec = matchedUser ? matchedUser.kecamatan : 'Demak';
 
         this.currentUser = {
-            id: 'santri-' + Date.now(),
+            id: matchedUser ? (matchedUser.id || 'santri-' + Date.now()) : ('santri-' + Date.now()),
             nama: userName,
             whatsapp: wa,
             tahunLulus: userTahun,
             kecamatan: userKec,
+            desa: matchedUser ? (matchedUser.desa || '') : '',
+            foto: matchedUser ? (matchedUser.foto || '') : '',
             pin: pin,
             isLoggedIn: true
         };
@@ -1769,51 +1747,6 @@ const App = {
         this.closeAuthModal();
         this.renderUserProfileCard();
         alert(`Alhamdulillah, Ahlan wa Sahlan ${userName}! Anda berhasil masuk.`);
-    },
-
-    handleUserRegister: function(e) {
-        e.preventDefault();
-        const nama = document.getElementById('auth-reg-name').value.trim();
-        const wa = document.getElementById('auth-reg-wa').value.trim();
-        const tahun = document.getElementById('auth-reg-tahun').value.trim();
-        const kecamatan = document.getElementById('auth-reg-kecamatan').value;
-        const pin = document.getElementById('auth-reg-pin').value.trim();
-
-        if (!nama || !wa) {
-            alert('Mohon lengkapi Nama Lengkap dan Nomor WhatsApp Anda.');
-            return;
-        }
-
-        this.currentUser = {
-            id: 'santri-' + Date.now(),
-            nama: nama,
-            whatsapp: wa,
-            tahunLulus: tahun || '2020',
-            kecamatan: kecamatan || 'Demak',
-            pin: pin || '123456',
-            isLoggedIn: true
-        };
-
-        // Simpan ke sesi lokal
-        localStorage.setItem('kmf_user_session', JSON.stringify(this.currentUser));
-
-        // Daftarkan juga ke daftar sensus lokal / approval pending jika API tersedia
-        try {
-            if (window.KMF_API && window.KMF_API.submitAlumni) {
-                window.KMF_API.submitAlumni({
-                    nama: nama,
-                    whatsapp: wa,
-                    tahunLulus: tahun,
-                    kecamatan: kecamatan,
-                    profesi: 'Alumni Santri',
-                    alamat: `Kec. ${kecamatan}, Demak`
-                });
-            }
-        } catch (err) {}
-
-        this.closeAuthModal();
-        this.renderUserProfileCard();
-        alert(`Pendaftaran Berhasil! Selamat datang Sahabat ${nama} di Keluarga Mathali'ul Falah Cabang Demak.`);
     },
 
     handleUserLogout: function() {
@@ -2430,6 +2363,20 @@ const App = {
 
             await window.KMF_API.submitRegistration(payload);
 
+            // Otomatis aktifkan sesi login pengguna santri dari data sensus
+            this.currentUser = {
+                id: 'santri-' + Date.now(),
+                nama: payload.nama,
+                whatsapp: payload.noWa,
+                tahunLulus: payload.tahunLulus,
+                kecamatan: payload.kecamatan,
+                desa: payload.desa || '',
+                foto: payload.foto || '',
+                isLoggedIn: true
+            };
+            localStorage.setItem('kmf_user_session', JSON.stringify(this.currentUser));
+            this.renderUserProfileCard();
+
             form.reset();
             document.getElementById('foto-profil-base64').value = '';
             document.getElementById('foto-usaha-base64').value = '';
@@ -2452,13 +2399,25 @@ const App = {
     showSuccessModal: function(nama) {
         const msg = document.getElementById('modal-success-message');
         if (msg) {
-            msg.innerHTML = `Terima kasih, <strong>${nama}</strong>. Formulir sensus alumni KMF Demak telah diterima dan menunggu verifikasi pengurus.`;
+            msg.innerHTML = `Terima kasih, <strong>${nama}</strong>. Formulir sensus alumni telah tersimpan dan e-KTA Digital Anda telah aktif!`;
         }
         const modal = document.getElementById('modal-success');
         if (modal) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
+    },
+
+    closeSuccessModalAndOpenKta: function() {
+        const modal = document.getElementById('modal-success');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+        this.navigateTo('settings');
+        setTimeout(() => {
+            this.openKtaModal();
+        }, 300);
     },
 
     closeSuccessModal: function() {
