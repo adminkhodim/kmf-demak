@@ -33,23 +33,8 @@ const App = {
         this.renderUserProfileCard();
         await this.updatePendingBadge();
 
-        // 3. Listener PWA Install Prompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            this.deferredInstallPrompt = e;
-            
-            // Tampilkan tombol pasang di desktop dan mobile header
-            const btnDesk = document.getElementById('btn-install-pwa');
-            const btnMob = document.getElementById('mobile-btn-install-app');
-            if (btnDesk) {
-                btnDesk.classList.remove('hidden');
-                btnDesk.classList.add('flex');
-            }
-            if (btnMob) {
-                btnMob.classList.remove('hidden');
-                btnMob.classList.add('flex');
-            }
-        });
+        // 3. Listener PWA Install Prompt & Deteksi iOS
+        this.initPwaInstall();
     },
 
     /**
@@ -2743,10 +2728,57 @@ const App = {
     },
 
     /**
-     * Handler PWA Install Prompt
+     * Inisialisasi PWA Install Listener & Deteksi iOS
+     */
+    initPwaInstall: function() {
+        const isIOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+
+        const btnDesk = document.getElementById('btn-install-pwa');
+        const btnMob = document.getElementById('mobile-btn-install-app');
+
+        // Jika dibuka di perangkat iOS/iPhone dan belum dalam mode standalone (belum diinstal)
+        if (isIOS && !isStandalone) {
+            if (btnMob) {
+                btnMob.classList.remove('hidden');
+                btnMob.classList.add('flex');
+            }
+            if (btnDesk) {
+                btnDesk.classList.remove('hidden');
+                btnDesk.classList.add('flex');
+            }
+        }
+
+        // Listener Android / Chrome / Edge
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            this.deferredInstallPrompt = e;
+            
+            if (btnDesk) {
+                btnDesk.classList.remove('hidden');
+                btnDesk.classList.add('flex');
+            }
+            if (btnMob) {
+                btnMob.classList.remove('hidden');
+                btnMob.classList.add('flex');
+            }
+        });
+
+        // Sembunyikan tombol jika sudah berhasil diinstal
+        window.addEventListener('appinstalled', () => {
+            this.deferredInstallPrompt = null;
+            if (btnDesk) btnDesk.classList.add('hidden');
+            if (btnMob) btnMob.classList.add('hidden');
+            console.log('KMF PWA berhasil diinstal!');
+        });
+    },
+
+    /**
+     * Handler PWA Install Prompt (Multi-Platform: Android & iOS)
      */
     installPWA: function() {
         if (this.deferredInstallPrompt) {
+            // Android / Desktop Chromium native install prompt
             this.deferredInstallPrompt.prompt();
             this.deferredInstallPrompt.userChoice.then((choiceResult) => {
                 if (choiceResult.outcome === 'accepted') {
@@ -2757,7 +2789,24 @@ const App = {
                 document.getElementById('mobile-btn-install-app')?.classList.add('hidden');
             });
         } else {
-            alert('Untuk memasang PWA KMF Demak di ponsel Anda:\n\n1. Ketuk ikon titik tiga (di Chrome) atau tombol Bagikan (di Safari iOS)\n2. Pilih "Tambahkan ke Layar Utama" (Add to Home screen)');
+            // Untuk iOS iPhone atau browser tanpa native prompt
+            this.openIosInstallModal();
+        }
+    },
+
+    openIosInstallModal: function() {
+        const modal = document.getElementById('modal-install-ios');
+        if (modal) {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+    },
+
+    closeIosInstallModal: function() {
+        const modal = document.getElementById('modal-install-ios');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
     }
 };
