@@ -1692,6 +1692,29 @@ const App = {
                 </div>
             `;
             if (btnKta) btnKta.classList.remove('hidden');
+
+            // Harmonisasi menu list: Ubah jadi "Perbarui Data Alumni" saat sudah login
+            const sensusMenuItem = document.getElementById('setting-sensus-menu-item');
+            if (sensusMenuItem) {
+                sensusMenuItem.innerHTML = `
+                    <button type="button" onclick="App.openEditProfile()"
+                        class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center text-sm shadow-2xs group-hover:bg-amber-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-800">Perbarui Data Alumni</span>
+                                    <span class="text-[9.5px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200/80">Akun Aktif</span>
+                                </div>
+                                <div class="text-[11px] text-slate-500">Perbarui info kontak WhatsApp, alamat, atau rincian usaha</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
+                    </button>
+                `;
+            }
         } else {
             cardContainer.innerHTML = `
                 <div class="bg-gradient-to-r from-kmf-900 via-kmf-800 to-blue-950 text-white p-4 sm:p-5 rounded-3xl shadow-sm border border-kmf-600/60 relative overflow-hidden space-y-3.5">
@@ -1719,13 +1742,36 @@ const App = {
                         </button>
                         <button type="button" onclick="App.navigateTo('register')"
                             class="flex-1 py-2.5 px-3 bg-white/15 hover:bg-white/25 text-white border border-white/25 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 active:scale-98">
-                            <i class="fa-solid fa-address-card text-amber-300"></i>
-                            <span>Isi Sensus Alumni</span>
+                            <i class="fa-solid fa-user-plus text-amber-300"></i>
+                            <span>Registrasi Alumni</span>
                         </button>
                     </div>
                 </div>
             `;
             if (btnKta) btnKta.classList.add('hidden');
+
+            // Harmonisasi menu list: Tampilkan dengan badge "Wajib Terdata" saat belum login
+            const sensusMenuItem = document.getElementById('setting-sensus-menu-item');
+            if (sensusMenuItem) {
+                sensusMenuItem.innerHTML = `
+                    <button type="button" onclick="App.navigateTo('register')"
+                        class="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-slate-50 transition active:scale-[0.99] group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-xl bg-kmf-50 text-kmf-700 flex items-center justify-center text-sm shadow-2xs group-hover:bg-kmf-700 group-hover:text-white transition">
+                                <i class="fa-solid fa-address-card"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-800">Formulir Sensus Alumni</span>
+                                    <span class="text-[9.5px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-full border border-amber-200/80">Wajib Terdata</span>
+                                </div>
+                                <div class="text-[11px] text-slate-500">Pendataan resmi santri Mathali'ul Falah di Kab. Demak</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-kmf-600 group-hover:translate-x-0.5 transition"></i>
+                    </button>
+                `;
+            }
         }
     },
 
@@ -1734,6 +1780,43 @@ const App = {
         if (modal) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+        }
+    },
+
+    openEditProfile: function() {
+        this.navigateTo('register');
+        if (this.currentUser) {
+            const u = this.currentUser;
+            const form = document.getElementById('form-sensus-alumni');
+            if (form) {
+                if (form.elements['nama']) form.elements['nama'].value = u.nama || '';
+                if (form.elements['panggilan']) form.elements['panggilan'].value = u.panggilan || '';
+                if (form.elements['noWa']) form.elements['noWa'].value = u.whatsapp || '';
+                if (form.elements['tahunLulus']) form.elements['tahunLulus'].value = u.tahunLulus || '';
+                if (form.elements['marhalah'] && u.marhalah) form.elements['marhalah'].value = u.marhalah;
+                if (form.elements['pondokKajen']) form.elements['pondokKajen'].value = u.pondokKajen || '';
+                if (form.elements['guruKajen']) form.elements['guruKajen'].value = u.guruKajen || '';
+                if (form.elements['kecamatan']) form.elements['kecamatan'].value = u.kecamatan || '';
+                if (form.elements['desa']) form.elements['desa'].value = u.desa || '';
+                if (form.elements['alamat']) form.elements['alamat'].value = u.alamat || '';
+                if (form.elements['profesiKategori'] && u.profesiKategori) form.elements['profesiKategori'].value = u.profesiKategori;
+                if (form.elements['profesiDetail']) form.elements['profesiDetail'].value = u.profesiDetail || '';
+
+                if (u.foto) {
+                    const preview = document.getElementById('preview-foto-profil-container');
+                    const hiddenInput = document.getElementById('foto-profil-base64');
+                    const fileInput = document.getElementById('input-foto-profil');
+                    if (preview) {
+                        preview.innerHTML = `<img src="${u.foto}" class="w-full h-full object-cover">`;
+                    }
+                    if (hiddenInput) {
+                        hiddenInput.value = u.foto;
+                    }
+                    if (fileInput) {
+                        fileInput.required = false;
+                    }
+                }
+            }
         }
     },
 
@@ -1770,9 +1853,16 @@ const App = {
             id: matchedUser ? (matchedUser.id || 'santri-' + Date.now()) : ('santri-' + Date.now()),
             nama: userName,
             whatsapp: wa,
+            panggilan: matchedUser ? (matchedUser.panggilan || '') : '',
             tahunLulus: userTahun,
+            marhalah: matchedUser ? (matchedUser.marhalah || '') : '',
+            pondokKajen: matchedUser ? (matchedUser.pondokKajen || '') : '',
+            guruKajen: matchedUser ? (matchedUser.guruKajen || '') : '',
             kecamatan: userKec,
             desa: matchedUser ? (matchedUser.desa || '') : '',
+            alamat: matchedUser ? (matchedUser.alamat || '') : '',
+            profesiKategori: matchedUser ? (matchedUser.profesiKategori || '') : '',
+            profesiDetail: matchedUser ? (matchedUser.profesiDetail || '') : '',
             foto: matchedUser ? (matchedUser.foto || '') : '',
             pin: pin,
             isLoggedIn: true
@@ -2420,10 +2510,17 @@ const App = {
             this.currentUser = {
                 id: 'santri-' + Date.now(),
                 nama: payload.nama,
+                panggilan: payload.panggilan || '',
                 whatsapp: payload.noWa,
                 tahunLulus: payload.tahunLulus,
+                marhalah: payload.marhalah || '',
+                pondokKajen: payload.pondokKajen || '',
+                guruKajen: payload.guruKajen || '',
                 kecamatan: payload.kecamatan,
                 desa: payload.desa || '',
+                alamat: payload.alamat || '',
+                profesiKategori: payload.profesiKategori || '',
+                profesiDetail: payload.profesiDetail || '',
                 foto: payload.foto || '',
                 isLoggedIn: true
             };
