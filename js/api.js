@@ -23,7 +23,8 @@ const KMF_API = {
         if (!localStorage.getItem(this.STORAGE_KEYS.ALUMNI)) {
             localStorage.setItem(this.STORAGE_KEYS.ALUMNI, JSON.stringify(window.KMF_DATA.alumniList));
         }
-        if (!localStorage.getItem(this.STORAGE_KEYS.USAHA)) {
+        const storedUsaha = localStorage.getItem(this.STORAGE_KEYS.USAHA);
+        if (!storedUsaha || storedUsaha.includes('unsplash.com')) {
             localStorage.setItem(this.STORAGE_KEYS.USAHA, JSON.stringify(window.KMF_DATA.usahaList));
         }
         if (!localStorage.getItem(this.STORAGE_KEYS.PENDING)) {

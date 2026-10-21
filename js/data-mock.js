@@ -79,7 +79,7 @@ const KMF_DATA = {
             id: 1,
             nama: "Sensus Mandiri Alumni KMF Demak",
             subjudul: "Pererat Ukhuwah & Pemetaan Potensi Santri Mathole'",
-            gambar: "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=900&q=80",
+            gambar: "assets/img/banners/banner-sensus.jpg",
             tipeAksi: "tab",
             targetAksi: "register",
             tag: "Sensus Mandiri"
@@ -88,7 +88,7 @@ const KMF_DATA = {
             id: 2,
             nama: "Bursa Usaha Santri Kajen di Demak",
             subjudul: "Beli dan Gandeng Produk Sesama Alumni",
-            gambar: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=900&q=80",
+            gambar: "assets/img/banners/banner-usaha.jpg",
             tipeAksi: "tab",
             targetAksi: "usaha",
             tag: "Pemberdayaan"
@@ -97,7 +97,7 @@ const KMF_DATA = {
             id: 3,
             nama: "Khataman & Selapanan KMF Demak",
             subjudul: "Silaturrahim & Amalan Masyayikh Kajen",
-            gambar: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80",
+            gambar: "assets/img/banners/banner-khataman.jpg",
             tipeAksi: "tab",
             targetAksi: "berita",
             tag: "Agenda Selapanan"
@@ -115,7 +115,7 @@ const KMF_DATA = {
             views: 54,
             ringkasan: "Pengurus KMF Cabang Demak resmi mengintegrasikan aplikasi sensus berbasis PWA untuk memetakan ribuan santri Kajen di 14 kecamatan se-Kabupaten Demak.",
             konten: "Demak — Dalam rangka mempererat jalinan ukhuwah serta memberdayakan potensi alumni Perguruan Islam Mathali'ul Falah (Kajen, Pati), Pengurus Cabang KMF Demak menginisiasi gerakan sensus mandiri alumni berbasis digital.\n\nKetua KMF Cabang Demak menegaskan bahwa basis data yang sahih dan terintegrasi menjadi modal utama dalam mewujudkan program pemberdayaan umat berlandaskan nilai Fiqh Sosial yang diajarkan oleh Hadhratusy Syaikh KH. MA. Sahal Mahfudh.\n\nMelalui pendataan ini, sebaran alumni lintas marhalah dan angkatan mulai dari santri sepuh hingga lulusan baru dapat terhubung secara harmonis.",
-            foto: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80"
+            foto: "assets/img/berita/berita-sensus-digital.jpg"
         },
         {
             id: "BRT-002",
@@ -126,7 +126,7 @@ const KMF_DATA = {
             views: 49,
             ringkasan: "Rapat koordinasi pengurus membahas persiapan pelantikan serentak kordinator kecamatan dan penetapan jadwal khataman bergilir di 14 kecamatan.",
             konten: "Demak — Jajaran pengurus harian KMF Cabang Demak menyelenggarakan musyawarah koordinasi di kompleks kantor sekretariat. Rapat dipimpin langsung oleh jajaran syuriyah dan tanfidziyah untuk mengevaluasi program kerja semester berjalan serta menyusun langkah strategis penguatan ekonomi santri.\n\nSalah satu agenda krusial adalah penyeragaman data sensus alumni dan aktivasi kotak koin peduli santri Mathole'.",
-            foto: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80"
+            foto: "assets/img/berita/berita-rapat-koordinasi.jpg"
         },
         {
             id: "BRT-003",
@@ -137,7 +137,7 @@ const KMF_DATA = {
             views: 73,
             ringkasan: "Kegiatan rutin selapanan dan ziarah ke makam Syekh Ahmad al-Mutamakkin serta Masyayikh Kajen Pati akan dipusatkan dengan titik kumpul di Kompleks Masjid Agung Demak.",
             konten: "Demak — Tradisi tabarrukan dan silaturrahim alumni ke bumi Kajen terus dilestarikan oleh KMF Demak. Kegiatan ziarah bersama ini diharapkan dapat menghidupkan kembali spirit keilmuan dan keteladanan para masyayikh bagi generasi muda alumni.\n\nRombongan akan menziarahi makam Mbah Mutamakkin, KH. MA. Sahal Mahfudh, KH. Abdullah Salam, dan para auliya' Kajen.",
-            foto: "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=800&q=80"
+            foto: "assets/img/berita/berita-ziarah-kajen.jpg"
         },
         {
             id: "BRT-004",
@@ -148,7 +148,7 @@ const KMF_DATA = {
             views: 62,
             ringkasan: "Melalui etalase bursa usaha di aplikasi KMF, perputaran ekonomi santri dan jejaring kemitraan antaralumni di Kabupaten Demak mencatatkan pertumbuhan positif.",
             konten: "Demak — Kemandirian ekonomi merupakan salah satu pilar penting dalam nilai Shalih Akram. Sejumlah alumni Mathole' di Demak sukses mengembangkan berbagai bidang usaha, mulai dari konveksi sarung dan busana muslim, percetakan kitab, hingga budidaya tambak perikanan di wilayah pesisir Wedung dan Bonang.\n\nKMF Demak berkomitmen terus memfasilitasi promosi dan transaksi antarsantri untuk membangkitkan ekonomi umat.",
-            foto: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80"
+            foto: "assets/img/berita/berita-wirausaha-santri.jpg"
         }
     ],
 
@@ -250,7 +250,7 @@ const KMF_DATA = {
             waBisnis: "6285712348899",
             linkGmaps: "https://maps.google.com",
             deskripsi: "Sarung batik tulis halus khas Kajen motif ornamen klasik pesantren. Bahan katun primissima mori adem, tidak luntur, jahitan rapi ganda. Menerima seragam alumni & majlis.",
-            foto: "https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=600&q=80",
+            foto: "assets/img/usaha/usaha-sarung-batik.jpg",
             status: "APPROVED"
         },
         {
@@ -273,7 +273,7 @@ const KMF_DATA = {
             waBisnis: "6281234567890",
             linkGmaps: "https://maps.google.com",
             deskripsi: "Penyedia lengkap literatur karya Hadhratusy Syaikh KH. MA. Sahal Mahfudh (Nuansa Fiqh Sosial, Pesantren Mencari Makna, Thariqatul Hushul), kitab kuning turots, dan mushaf Al-Qur'an.",
-            foto: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
+            foto: "assets/img/usaha/usaha-buku-fiqhsosial.jpg",
             status: "APPROVED"
         },
         {
@@ -296,7 +296,7 @@ const KMF_DATA = {
             waBisnis: "6281398765432",
             linkGmaps: "https://maps.google.com",
             deskripsi: "Bandeng tambak segar pesisir Wedung diolah dengan bumbu rempah warisan tanpa pengawet. Duri lunak 100%, kemasan vakum higienis tahan kirim ke luar kota. Bonus sambal terasi khas Demak.",
-            foto: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+            foto: "assets/img/usaha/usaha-bandeng-presto.jpg",
             status: "APPROVED"
         },
         {
@@ -319,7 +319,7 @@ const KMF_DATA = {
             waBisnis: "6289512345678",
             linkGmaps: "https://maps.google.com",
             deskripsi: "Madu murni nektar bunga randu asli tanpa pasteurisasi dan tanpa pemanis buatan. Kaya enzim diastase alami, bagus untuk imunitas tubuh, batuk, lambung, dan stamina para santri.",
-            foto: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80",
+            foto: "assets/img/usaha/usaha-madu-randu.jpg",
             status: "APPROVED"
         },
         {
@@ -342,7 +342,7 @@ const KMF_DATA = {
             waBisnis: "6281298765431",
             linkGmaps: "https://maps.google.com",
             deskripsi: "Kopi robusta lereng Gunung Muria petik merah sempurna, diproses medium-dark roast aromatik cokelat dan nutty khas kopi jagongan santri. Cocok menemani muthola'ah malam hari.",
-            foto: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80",
+            foto: "assets/img/usaha/usaha-kopi-muria.jpg",
             status: "APPROVED"
         },
         {
@@ -365,7 +365,7 @@ const KMF_DATA = {
             waBisnis: "6285211223344",
             linkGmaps: "https://maps.google.com",
             deskripsi: "Baju kurta muslim pria lengan 3/4 berbahan katun toyobo fodu import. Nyaman dipakai sholat berjamaah, pengajian selapanan, dan aktivitas harian santri.",
-            foto: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=600&q=80",
+            foto: "assets/img/usaha/usaha-koko-kurta.jpg",
             status: "APPROVED"
         }
     ],
