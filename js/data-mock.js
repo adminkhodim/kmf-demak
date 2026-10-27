@@ -470,9 +470,90 @@ const KMF_DATA = {
             status: "Keluarga Besar Alumni KMF Demak",
             doaCounter: 98
         }
+    ],
+
+    // Data Foto Showcase Hero Desktop (Ala Mubarokah App Showcase)
+    heroDesktopSlides: [
+        {
+            id: 0,
+            judul: "Silaturrahim & Konsolidasi Akbar KMF Cabang Demak",
+            kategori: "Konsolidasi Cabang",
+            lokasi: "Kabupaten Demak, Jawa Tengah",
+            gambar: "assets/img/banners/banner-sensus.jpg",
+            ringkasan: "Mempererat ukhuwah alumni Perguruan Islam Mathali'ul Falah (Kajen, Pati) di 14 kecamatan se-Kabupaten Demak."
+        },
+        {
+            id: 1,
+            judul: "Khataman & Selapanan Tabarrukan Masyayikh Kajen",
+            kategori: "Majlis Amalan",
+            lokasi: "Kompleks Masjid Agung Demak",
+            gambar: "assets/img/banners/banner-khataman.jpg",
+            ringkasan: "Melestarikan tradisi fatihahan, tahlil dan wirid warisan masyayikh untuk ketenteraman umat dan bangsa."
+        },
+        {
+            id: 2,
+            judul: "Bursa Mandiri & Pemberdayaan Usaha Santri Kajen",
+            kategori: "Ekonomi Jama'ah",
+            lokasi: "14 Koordinator Kecamatan",
+            gambar: "assets/img/banners/banner-usaha.jpg",
+            ringkasan: "Menghubungkan jaringan niaga santri mulai dari busana, kuliner, pertanian, jasa, dan ritel di Kota Wali."
+        }
+    ],
+
+    // Daftar Tokoh Masyayikh & Dewan Penasihat untuk Marquee Slider Desktop
+    masyayikhTokohList: [
+        {
+            id: 1,
+            nama: "Hadhratusy Syaikh KH. MA. Sahal Mahfudh",
+            gelar: "Rais 'Am PBNU 1999-2014 & Pengasuh PIM",
+            peran: "Gagasan Fiqh Sosial & Shalih Akram",
+            tag: "Masyayikh Kajen",
+            avatarIcon: "fa-solid fa-mosque"
+        },
+        {
+            id: 2,
+            nama: "KH. Abdullah Zen Salam (Mbah Dullah)",
+            gelar: "Kiai Khos & Murabbi Ruhiyyin Kajen",
+            peran: "Keteladanan Zuhud, Wara' & Keikhlasan",
+            tag: "Masyayikh Kajen",
+            avatarIcon: "fa-solid fa-book-quran"
+        },
+        {
+            id: 3,
+            nama: "KH. Ahmad Nafi' Abdillah",
+            gelar: "Direktur Perguruan Islam Mathali'ul Falah",
+            peran: "Pengasuh PP. Mansajul Ulum Kajen",
+            tag: "Masyayikh Kajen",
+            avatarIcon: "fa-solid fa-graduation-cap"
+        },
+        {
+            id: 4,
+            nama: "K.H. Nurul Huda, M.Pd.I.",
+            gelar: "Ketua Pengurus Cabang KMF Demak",
+            peran: "Pemberdayaan Alumni & Sinergi Cabang",
+            tag: "Pimpinan Cabang",
+            avatarIcon: "fa-solid fa-users"
+        },
+        {
+            id: 5,
+            nama: "Drs. H. M. Asyiq",
+            gelar: "Ketua Dewan Penasihat KMF Demak",
+            peran: "Sesepuh & Pengarah Alumni Kajen Demak",
+            tag: "Dewan Penasihat",
+            avatarIcon: "fa-solid fa-landmark"
+        },
+        {
+            id: 6,
+            nama: "K.H. Zainal Arifin Ma'shum",
+            gelar: "Dewan Syuriyah KMF Demak",
+            peran: "Bimbingan Dakwah & Fatwa Keagamaan",
+            tag: "Dewan Syuriyah",
+            avatarIcon: "fa-solid fa-shield-halved"
+        }
     ]
 };
 
 if (typeof window !== 'undefined') {
     window.KMF_DATA = KMF_DATA;
 }
+

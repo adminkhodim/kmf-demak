@@ -31,7 +31,7 @@
     <meta name="twitter:image" content="https://www.kmf.my.id/assets/img/logo.png">
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#132644">
+    <meta name="theme-color" content="#1d4ed8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KMF Demak">
@@ -54,9 +54,9 @@
                             400: '#60a5fa',
                             500: '#2563eb',
                             600: '#1d4ed8',
-                            700: '#1e3a68',
-                            800: '#132644',
-                            900: '#0d1b32',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
                             gold: '#f59e0b',
                             'gold-light': '#fcd34d'
                         }
@@ -108,70 +108,93 @@
         </div>
     </header>
 
-    <!-- ==================== HEADER DESKTOP (Sembunyi di Layar Ponsel) ==================== -->
-    <header id="main-desktop-header" class="hidden md:block sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
-        <div class="max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between">
-            <!-- Brand Logo & Title -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="App.navigateTo('home')">
-                <img src="assets/img/logo.png" alt="Logo KMF Demak" class="w-10 h-10 rounded-xl shadow-sm object-contain">
-                <div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="font-bold text-lg leading-tight text-kmf-700 tracking-wide font-['Poppins']">KMF DEMAK</span>
-                        <span class="text-[10px] bg-blue-50 text-kmf-700 border border-kmf-600/20 px-1.5 py-0.5 rounded-full font-semibold">Cabang</span>
+    <!-- ==================== HEADER DESKTOP (FLOATING CAPSULE NAVBAR ALA AR-RAWDHAH / MUBAROKAH) ==================== -->
+    <header id="main-desktop-header" class="hidden md:block sticky top-3 sm:top-4 z-40 px-3 sm:px-6 lg:px-8 w-full transition-all duration-300 pointer-events-none">
+        <!-- CAPSULE NAVBAR WITH WHITE GLASSMORPHISM -->
+        <nav aria-label="Navigasi Utama Kapsul Melayang"
+            class="max-w-7xl mx-auto bg-white/95 backdrop-blur-md rounded-full shadow-[0_12px_40px_rgba(13,27,50,0.12)] border border-white/60 text-slate-800 px-4 sm:px-6 lg:px-8 py-2.5 sm:py-3 flex justify-between items-center transition-all duration-300 pointer-events-auto">
+            
+            <!-- Logo & Brand KMF Demak -->
+            <div class="flex items-center gap-2.5 sm:gap-3 group shrink-0 cursor-pointer" onclick="App.navigateTo('home');">
+                <div class="relative w-10 h-10 sm:w-11 sm:h-11 shrink-0 transition-transform duration-300 group-hover:scale-105">
+                    <img src="assets/img/logo.png" alt="KMF Demak" class="w-full h-full object-contain drop-shadow-sm">
+                </div>
+                <div class="flex flex-col justify-center">
+                    <div class="flex items-center gap-1.5 leading-none">
+                        <span class="font-black text-base sm:text-lg tracking-tight whitespace-nowrap text-kmf-800 font-['Poppins']">KMF DEMAK</span>
+                        <span class="text-[9px] bg-kmf-gold text-slate-950 font-extrabold px-1.5 py-0.5 rounded-full">Cabang</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 font-medium">Keluarga Mathali'ul Falah</p>
+                    <span class="font-bold text-[9px] sm:text-[10px] tracking-widest uppercase mt-0.5 text-kmf-600">Keluarga Mathali'ul Falah</span>
                 </div>
             </div>
 
-            <!-- Action Controls Desktop -->
-            <div class="flex items-center gap-2">
-                <!-- PWA Install Button Desktop -->
-                <button id="btn-install-pwa" onclick="App.installPWA()" class="hidden items-center gap-1.5 text-xs bg-kmf-gold text-slate-900 font-semibold px-3 py-1.5 rounded-full shadow hover:bg-amber-400 active:scale-95 transition">
-                    <i class="fa-solid fa-download"></i>
-                    <span>Pasang App</span>
+            <!-- Menu Navigasi Berjenjang Kapsul -->
+            <div id="desk-nav-menu" class="hidden lg:flex items-center space-x-1 xl:space-x-1.5 text-[13px] xl:text-[13.5px] text-slate-700">
+                <!-- 1. Beranda -->
+                <button onclick="App.navigateTo('home')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-bold text-xs hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5 bg-kmf-50 text-kmf-700 border border-kmf-200/60" data-target="home">
+                    <i class="fa-solid fa-house text-xs"></i>
+                    <span>Beranda</span>
                 </button>
 
-                <!-- Shortcut Panel Pengurus -->
-                <button onclick="App.navigateTo('admin')" title="Panel Pengurus KMF" class="relative p-2 text-slate-600 hover:text-kmf-600 hover:bg-slate-100 rounded-full transition active:scale-95">
-                    <i class="fa-solid fa-user-shield text-lg"></i>
-                    <span id="badge-pending-count" class="hidden absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center badge-pulse">0</span>
+                <!-- 2. Alumni -->
+                <button onclick="App.navigateTo('alumni')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="alumni">
+                    <i class="fa-solid fa-address-book text-xs text-slate-400"></i>
+                    <span>Direktori Alumni</span>
+                </button>
+
+                <!-- 3. Bursa Usaha -->
+                <button onclick="App.navigateTo('usaha')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="usaha">
+                    <i class="fa-solid fa-store text-xs text-slate-400"></i>
+                    <span>Bursa Usaha</span>
+                </button>
+
+                <!-- 4. Warta & Berita -->
+                <button onclick="App.navigateTo('berita')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="berita">
+                    <i class="fa-solid fa-newspaper text-xs text-slate-400"></i>
+                    <span>Warta Cabang</span>
+                </button>
+
+                <!-- 5. Portal Ibadah -->
+                <button onclick="App.navigateTo('amalan')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="amalan">
+                    <i class="fa-solid fa-kaaba text-xs text-slate-400"></i>
+                    <span>Portal Ibadah</span>
+                </button>
+
+                <!-- 6. Pengaturan Profil -->
+                <button onclick="App.navigateTo('pengaturan')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="pengaturan">
+                    <i class="fa-solid fa-gear text-xs text-slate-400"></i>
+                    <span>Profil Santri</span>
                 </button>
             </div>
-        </div>
 
-        <!-- Desktop Navigation Bar -->
-        <nav class="bg-kmf-600 text-white shadow-inner">
-            <div class="max-w-5xl mx-auto px-4 flex items-center gap-1">
-                <button onclick="App.navigateTo('home')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2 bg-kmf-700 border-b-2 border-kmf-gold" data-target="home">
-                    <i class="fa-solid fa-house"></i> Beranda
+            <!-- Tombol Aksi Kanan Kapsul -->
+            <div class="flex items-center gap-2 lg:gap-3 shrink-0">
+                <!-- Tombol Shortcut Panel Admin -->
+                <button onclick="App.navigateTo('admin')" title="Panel Pengurus KMF"
+                    class="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-kmf-700 flex items-center justify-center text-xs border border-slate-200/80 shadow-xs transition active:scale-95">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                    <span id="badge-pending-count" class="hidden absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 bg-red-500 text-white text-[9px] font-extrabold rounded-full flex items-center justify-center shadow border-2 border-white leading-none badge-pulse">0</span>
                 </button>
-                <button onclick="App.navigateTo('berita')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="berita">
-                    <i class="fa-solid fa-newspaper"></i> Berita
-                </button>
-                <button onclick="App.navigateTo('usaha')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="usaha">
-                    <i class="fa-solid fa-store"></i> Katalog Usaha
-                </button>
-                <button onclick="App.navigateTo('amalan')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="amalan">
-                    <i class="fa-solid fa-kaaba"></i> Portal Ibadah
-                </button>
-                <button onclick="App.navigateTo('pengaturan')" class="nav-desktop-btn px-4 py-2.5 text-sm font-medium hover:bg-kmf-700 transition flex items-center gap-2" data-target="pengaturan">
-                    <i class="fa-solid fa-gear"></i> Pengaturan
-                </button>
-                <button onclick="App.navigateTo('admin')" class="nav-desktop-btn ml-auto px-4 py-2.5 text-sm font-medium bg-kmf-700 hover:bg-kmf-800 transition flex items-center gap-2" data-target="admin">
-                    <i class="fa-solid fa-shield-halved"></i> Panel Admin
+
+                <!-- Tombol Sensus Alumni Kapsul Menonjol (Gold Button) -->
+                <button onclick="App.navigateTo('register')"
+                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-kmf-gold hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-[13px] shadow-[0_4px_14px_rgba(245,158,11,0.35)] hover:shadow-lg transition-all duration-200 cursor-pointer hover:-translate-y-0.5 active:translate-y-0">
+                    <i class="fa-solid fa-id-card-clip text-xs"></i>
+                    <span>Sensus Alumni</span>
+                    <i class="fa-solid fa-arrow-right text-[10px] ml-0.5"></i>
                 </button>
             </div>
         </nav>
     </header>
 
     <!-- ==================== MAIN CONTENT AREA ==================== -->
-    <main class="flex-1 overflow-y-auto max-w-5xl w-full mx-auto p-3 sm:p-4 pb-24 md:pb-8">
+    <main class="flex-1 overflow-y-auto w-full mx-auto pb-24 md:pb-0">
 
         <!-- ==================== TAB 1: BERANDA ==================== -->
-        <section id="view-home" class="tab-content space-y-4 md:space-y-6">
+        <section id="view-home" class="tab-content w-full">
 
             <!-- 1. KHUSUS TAMPILAN MOBILE (Persis Gaya Proyek Asnawiyyah) -->
-            <div id="beranda-mobile-section" class="block md:hidden max-w-xl mx-auto space-y-3.5">
+            <div id="beranda-mobile-section" class="block md:hidden max-w-xl mx-auto space-y-3.5 p-3 sm:p-4">
                 
                 <!-- Banner Slider 3:1 (Mobile Ala Asnawiyyah - Hero Top Banner) -->
                 <section class="space-y-1.5">
@@ -288,149 +311,1032 @@
             </div>
 
             <!-- 2. TAMPILAN DESKTOP (Hanya tampil di Layar Komputer / md: >= 768px) -->
-            <div id="beranda-desktop-section" class="hidden md:block space-y-6">
-                <!-- Hero Banner Desktop -->
-                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-kmf-600 via-kmf-700 to-kmf-800 text-white p-6 md:p-8 shadow-md">
-                    <div class="relative z-10 max-w-2xl space-y-3">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-xs font-medium text-kmf-gold-light">
-                            <i class="fa-solid fa-mosque"></i>
-                            <span>Wadah Silaturrahim Alumni Mathali'ul Falah</span>
-                        </div>
-                        <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight font-['Poppins']">
-                            Keluarga Mathali'ul Falah (KMF) Cabang Demak
-                        </h1>
-                        <p class="text-slate-200 text-xs md:text-sm leading-relaxed">
-                            Mempererat ukhuwah alumni Kajen di Kabupaten Demak dalam dimensi keagamaan, sosial kemasyarakatan, dan pemberdayaan ekonomi umat berlandaskan nilai <em>Shalih Akram</em>.
-                        </p>
-                        <div class="pt-2 flex flex-wrap gap-2.5">
-                            <button onclick="App.navigateTo('register')" class="bg-kmf-gold hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-xl text-xs md:text-sm shadow-md transition active:scale-95 flex items-center gap-2">
-                                <i class="fa-solid fa-address-card"></i> Sensus Mandiri Alumni
-                            </button>
-                            <button onclick="App.navigateTo('usaha')" class="bg-white/10 hover:bg-white/20 text-white font-medium px-4 py-2 rounded-xl text-xs md:text-sm backdrop-blur-sm border border-white/20 transition active:scale-95 flex items-center gap-2">
-                                <i class="fa-solid fa-briefcase"></i> Jelajah Usaha Santri
-                            </button>
-                        </div>
-                    </div>
-                    <!-- Background Geometric Decoration -->
-                    <div class="absolute -right-8 -bottom-8 w-48 h-48 md:w-64 md:h-64 opacity-15 pointer-events-none">
-                        <img src="assets/img/logo.png" alt="Decoration" class="w-full h-full object-contain">
-                    </div>
-                </div>
+            <div id="beranda-desktop-section" class="hidden md:block w-full">
 
-                <!-- Statistik Kilas Desktop -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-kmf-50 text-kmf-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-user-graduate"></i>
-                        </div>
-                        <div>
-                            <div id="stat-alumni" class="text-xl font-bold text-slate-800">0</div>
-                            <div class="text-[11px] text-slate-500 font-medium">Alumni Terdata</div>
-                        </div>
+                <!-- ==================== FOLD 1: HERO SECTION (ANAVERSE CLEAN INSTITUTIONAL STYLE) ==================== -->
+                <section class="relative bg-gradient-to-b from-[#eaf2fc] via-[#f4f8fe] to-[#f8fafc] text-slate-800 pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 overflow-hidden border-b border-blue-100/60">
+                    <!-- Subtle Ambient Light Glows -->
+                    <div class="absolute -left-20 top-10 w-96 h-96 bg-blue-300/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -right-20 top-20 w-96 h-96 bg-amber-300/15 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <!-- Background Watermark Logo (Soft Subdued) -->
+                    <div class="absolute right-8 top-1/2 -translate-y-1/2 w-96 h-96 opacity-[0.035] pointer-events-none">
+                        <img src="assets/img/logo.png" alt="KMF Watermark" class="w-full h-full object-contain">
                     </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-shop"></i>
-                        </div>
-                        <div>
-                            <div id="stat-usaha" class="text-xl font-bold text-slate-800">0</div>
-                            <div class="text-[11px] text-slate-500 font-medium">Usaha Santri</div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-map-location-dot"></i>
-                        </div>
-                        <div>
-                            <div id="stat-kecamatan" class="text-xl font-bold text-slate-800">14</div>
-                            <div class="text-[11px] text-slate-500 font-medium">Kecamatan Demak</div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-calendar-check"></i>
-                        </div>
-                        <div>
-                            <div class="text-xl font-bold text-slate-800">2</div>
-                            <div class="text-[11px] text-slate-500 font-medium">Agenda Terdekat</div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Menu Cepat Desktop -->
-                <div>
-                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i class="fa-solid fa-compass text-kmf-600"></i> Layanan Cepat KMF Demak
-                    </h3>
-                    <div class="grid grid-cols-4 gap-2.5 text-center">
-                        <div onclick="App.navigateTo('alumni')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
-                            <div class="w-11 h-11 mx-auto rounded-full bg-kmf-50 text-kmf-600 flex items-center justify-center text-lg group-hover:bg-kmf-600 group-hover:text-white transition">
-                                <i class="fa-solid fa-address-book"></i>
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 xl:gap-16 items-center">
+                            
+                            <!-- KOLOM KIRI: Visi, Tipografi Bold Anaverse, Dual CTA -->
+                            <div class="lg:col-span-7 space-y-5 sm:space-y-6 text-left">
+                                <!-- Floating Pill Badge Anaverse Style -->
+                                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-100/80 text-kmf-800 text-xs font-bold border border-blue-200/70 shadow-xs hero-badge-float">
+                                    <i class="fa-solid fa-mosque text-kmf-600 text-xs"></i>
+                                    <span class="tracking-wide">WADAH RESMI SANTRI &amp; ALUMNI KAJEN · CABANG DEMAK</span>
+                                </div>
+
+                                <!-- Dynamic Bold Headline (Anaverse Style High-Contrast) -->
+                                <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-black tracking-tight leading-[1.2] font-['Poppins'] text-slate-900">
+                                    Pelayanan Terbaik untuk 
+                                    <span class="text-kmf-700 font-black">Umat &amp; Alumni</span>
+                                    <span class="block text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-slate-700 mt-1 sm:mt-1.5">di Kota Wali Kabupaten Demak</span>
+                                </h1>
+
+                                <!-- Deskripsi Ringkas, Jelas & Berbobot -->
+                                <p class="text-slate-600 text-sm sm:text-[15.5px] leading-relaxed sm:leading-loose max-w-2xl font-normal">
+                                    Portal resmi Pengurus Cabang KMF Kabupaten Demak. Menghubungkan ribuan santri dan alumni Perguruan Islam Mathali'ul Falah (Kajen, Pati) di 14 kecamatan dalam bingkai ukhuwah, tradisi salaf, dan kemaslahatan Fiqh Sosial.
+                                </p>
+
+                                <!-- Tombol CTA Ganda Khas Anaverse (Primary Solid + Secondary White Pill) -->
+                                <div class="pt-2 sm:pt-3 flex flex-wrap items-center gap-3.5 sm:gap-4">
+                                    <button onclick="App.navigateTo('register')" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-kmf-gold hover:bg-amber-400 text-slate-950 font-black text-xs sm:text-sm shadow-[0_6px_20px_rgba(245,158,11,0.35)] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition cursor-pointer">
+                                        <i class="fa-solid fa-id-card text-slate-950 text-sm"></i>
+                                        <span>Sensus Mandiri Alumni</span>
+                                        <i class="fa-solid fa-arrow-right text-[11px] ml-0.5"></i>
+                                    </button>
+                                    <button onclick="App.navigateTo('usaha')" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white hover:bg-blue-50/60 text-slate-800 font-bold text-xs sm:text-sm border border-slate-200/90 shadow-xs hover:border-kmf-300 transition active:scale-95 cursor-pointer">
+                                        <i class="fa-solid fa-store text-kmf-600 text-sm"></i>
+                                        <span>Jelajah Usaha Santri</span>
+                                    </button>
+                                </div>
+
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 block mt-2">Database Alumni</span>
-                        </div>
-                        <div onclick="App.navigateTo('usaha')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
-                            <div class="w-11 h-11 mx-auto rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-lg group-hover:bg-amber-500 group-hover:text-white transition">
-                                <i class="fa-solid fa-basket-shopping"></i>
+
+                            <!-- KOLOM KANAN: Card Utama Showcase Kegiatan + Thumbnail Interaktif -->
+                            <div class="lg:col-span-5 flex flex-col items-center lg:items-end justify-center space-y-4 sm:space-y-5">
+                                <!-- Card Utama Banner Showcase Berbingkai Putih Bersih (Anaverse Style) -->
+                                <div class="relative w-full max-w-[540px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(19,38,68,0.12)] border-4 border-white bg-white group">
+                                    <div class="relative aspect-[16/10] w-full overflow-hidden cursor-pointer rounded-2xl" id="hero-desktop-card-main-container">
+                                        <img id="hero-desktop-main-photo"
+                                            src="assets/img/banners/banner-sensus.jpg"
+                                            alt="Konsolidasi KMF Demak"
+                                            style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.35s ease, transform 0.5s ease;"
+                                            class="group-hover:scale-105 transition-transform duration-500">
+                                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(9,21,39,0.7) 0%, transparent 55%); pointer-events: none;"></div>
+                                        <div id="hero-desktop-photo-badge"
+                                            style="position: absolute; bottom: 0.85rem; left: 0.85rem; background: rgba(30,58,138,0.92); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.25); border-radius: 0.75rem; padding: 0.3rem 0.75rem; color: white; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                                            Konsolidasi Cabang
+                                        </div>
+                                        <div id="hero-desktop-photo-subbadge"
+                                            style="position: absolute; bottom: 0.85rem; right: 0.85rem; background: rgba(245,158,11,0.95); backdrop-filter: blur(8px); border-radius: 0.75rem; padding: 0.3rem 0.75rem; color: #0f172a; font-weight: 800; font-size: 0.72rem;">
+                                            Kab. Demak, Jawa Tengah
+                                        </div>
+                                    </div>
+                                    <!-- Chevron Hover Navigation Buttons -->
+                                    <button type="button" aria-label="Slide sebelumnya" onclick="event.stopPropagation(); App.prevHeroDesktopPhoto();"
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border border-slate-200 shadow-md">
+                                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                                    </button>
+                                    <button type="button" aria-label="Slide berikutnya" onclick="event.stopPropagation(); App.nextHeroDesktopPhoto();"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-slate-800 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer border border-slate-200 shadow-md">
+                                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                                    </button>
+                                </div>
+
+                                <!-- Thumbnail Slide Buttons -->
+                                <div id="hero-desktop-thumbnails-container" class="flex items-center justify-center lg:justify-end gap-2 sm:gap-2.5 pt-1 w-full max-w-[540px]">
+                                    <!-- Dirender Dinamis via App.initDesktopHeroSlider() -->
+                                </div>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 block mt-2">Bursa Usaha</span>
+
                         </div>
-                        <div onclick="App.navigateTo('amalan')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
-                            <div class="w-11 h-11 mx-auto rounded-full bg-sky-50 text-sky-600 flex items-center justify-center text-lg group-hover:bg-sky-600 group-hover:text-white transition">
-                                <i class="fa-solid fa-hands-praying"></i>
+                    </div>
+                </section>
+
+                <!-- ==================== SIGNATURE ANAVERSE: FLOATING 4 STATS BAR ==================== -->
+                <!-- Kartu putih melayang overlapping di perbatasan Hero dan Section berikutnya -->
+                <div class="relative z-30 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 mb-0">
+                    <div class="bg-white rounded-2xl sm:rounded-3xl shadow-[0_16px_45px_rgba(13,27,50,0.08)] border border-slate-200/80 p-5 sm:p-7 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+                        
+                        <!-- Stat 1: Korwil Kecamatan -->
+                        <div class="flex items-center gap-3.5 sm:gap-4 px-2 sm:px-4 py-2 sm:py-0">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-kmf-700 flex items-center justify-center text-xl shrink-0 border border-blue-200/60 shadow-xs">
+                                <i class="fa-solid fa-map-location-dot text-kmf-600"></i>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 block mt-2">Amalan Doa</span>
-                        </div>
-                        <div onclick="App.navigateTo('register')" class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-kmf-500 cursor-pointer transition active:scale-95 group">
-                            <div class="w-11 h-11 mx-auto rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg group-hover:bg-indigo-600 group-hover:text-white transition">
-                                <i class="fa-solid fa-id-card-clip"></i>
+                            <div>
+                                <span class="text-xl sm:text-2xl font-black text-slate-900 block leading-tight">14 Kec</span>
+                                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mt-0.5">Korwil se-Demak</span>
                             </div>
-                            <span class="text-xs font-semibold text-slate-700 block mt-2">Sensus Mandiri</span>
                         </div>
+
+                        <!-- Stat 2: Sanad PIM Kajen -->
+                        <div class="flex items-center gap-3.5 sm:gap-4 px-2 sm:px-4 py-2 sm:py-0">
+                            <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl shrink-0 border border-amber-200/60 shadow-xs">
+                                <i class="fa-solid fa-landmark text-amber-600"></i>
+                            </div>
+                            <div>
+                                <span class="text-xl sm:text-2xl font-black text-slate-900 block leading-tight">1912 M</span>
+                                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mt-0.5">Sanad Almamater</span>
+                            </div>
+                        </div>
+
+                        <!-- Stat 3: Kemandirian Santri -->
+                        <div class="flex items-center gap-3.5 sm:gap-4 px-2 sm:px-4 py-2 sm:py-0">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl shrink-0 border border-emerald-200/60 shadow-xs">
+                                <i class="fa-solid fa-handshake-angle text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <span class="text-xl sm:text-2xl font-black text-slate-900 block leading-tight">100% Mandiri</span>
+                                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mt-0.5">Ekonomi Jama'ah</span>
+                            </div>
+                        </div>
+
+                        <!-- Stat 4: Potensi Alumni -->
+                        <div class="flex items-center gap-3.5 sm:gap-4 px-2 sm:px-4 py-2 sm:py-0">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center text-xl shrink-0 border border-sky-200/60 shadow-xs">
+                                <i class="fa-solid fa-users-rays text-sky-600"></i>
+                            </div>
+                            <div>
+                                <span class="text-xl sm:text-2xl font-black text-slate-900 block leading-tight">Ribuan</span>
+                                <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block mt-0.5">Potensi Santri</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
-                <!-- Agenda Terdekat Desktop -->
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
-                            <i class="fa-regular fa-calendar-days text-kmf-600"></i> Agenda & Kegiatan KMF Demak
-                        </h3>
-                        <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">Terkini</span>
-                    </div>
-                    <div id="home-agenda-container" class="space-y-3">
-                        <!-- Dinamis via JS -->
-                    </div>
-                </div>
+                <!-- ==================== TAHAP 2 SECTION 1: TENTANG KMF CABANG DEMAK (ASYMMETRIC ANAVERSE STYLE) ==================== -->
+                <section id="tentang-kmf" class="bg-gradient-to-b from-[#F8FAFC] to-white pt-20 sm:pt-24 lg:pt-28 pb-16 sm:pb-20 relative z-20 border-b border-slate-100">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 xl:gap-16 items-center">
+                            
+                            <!-- KOLOM KIRI: Showcase Visual Asimetris + Floating Quote Card -->
+                            <div class="lg:col-span-5 relative">
+                                <!-- Card Foto Utama Berbingkai Putih Bersih & Bayangan Dalam -->
+                                <div class="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(13,27,50,0.12)] border-4 border-white bg-slate-900 group">
+                                    <img src="assets/img/berita/berita-rapat-koordinasi.jpg" 
+                                         alt="Konsolidasi Pengurus KMF Demak" 
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none"></div>
+                                    
+                                    <!-- Badge Lokasi & Identitas di Atas Foto -->
+                                    <div class="absolute top-3.5 left-3.5 z-10 flex items-center gap-2">
+                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md text-amber-300 text-[11px] font-bold border border-white/20 shadow-xs">
+                                            <i class="fa-solid fa-mosque text-amber-400"></i> Bintoro · Demak
+                                        </span>
+                                    </div>
 
-                <!-- Spotlight Usaha Desktop -->
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm md:text-base flex items-center gap-2">
-                                <i class="fa-solid fa-store text-amber-500"></i> Etalase Usaha Santri Kajen di Demak
-                            </h3>
-                            <p class="text-xs text-slate-500">Beli dan gunakan produk sesama alumni untuk menguatkan ekonomi jama'ah.</p>
+                                    <!-- Keterangan Singkat di Bawah Foto -->
+                                    <div class="absolute bottom-4 left-4 right-4 text-left z-10">
+                                        <h4 class="text-white font-extrabold text-sm sm:text-base leading-tight drop-shadow-sm">
+                                            Konsolidasi Pengurus Cabang KMF Demak
+                                        </h4>
+                                        <p class="text-slate-300 text-xs mt-1 drop-shadow-xs">
+                                            Masa Khidmah 2024–2029 · Mempererat Ukhuwah se-Kabupaten
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Floating Quote Pimpinan (Signature Overlapping Card) -->
+                                <div class="relative sm:absolute -mt-6 sm:mt-0 sm:-bottom-7 sm:-right-6 mx-2 sm:mx-0 max-w-full sm:max-w-[310px] bg-white/95 backdrop-blur-md p-4 sm:p-4.5 rounded-2xl shadow-[0_12px_36px_rgba(13,27,50,0.14)] border border-slate-200/90 z-20 space-y-2">
+                                    <div class="flex items-center justify-between text-xs font-bold text-kmf-700">
+                                        <div class="flex items-center gap-1.5">
+                                            <i class="fa-solid fa-quote-left text-kmf-gold text-sm"></i>
+                                            <span class="text-[11px] uppercase tracking-wider text-slate-500">Pesan Khidmah</span>
+                                        </div>
+                                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                            <i class="fa-solid fa-circle-check text-[9px]"></i> Sah &amp; Resmi
+                                        </span>
+                                    </div>
+                                    <blockquote class="text-[12px] sm:text-[12.5px] text-slate-700 italic leading-relaxed">
+                                        "Alumni Mathali'ul Falah di bumi Demak hadir menyatukan potensi keilmuan santri demi kemaslahatan umat berlandaskan Fiqh Sosial."
+                                    </blockquote>
+                                    <div class="pt-1.5 border-t border-slate-100 flex items-center justify-between">
+                                        <div>
+                                            <h5 class="text-xs font-extrabold text-slate-900 leading-tight">K.H. Nurul Huda, M.Pd.I.</h5>
+                                            <p class="text-[10.5px] text-slate-500">Ketua Pengurus Cabang KMF Demak</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Decorative Floating Pill Kiri Atas -->
+                                <div class="hidden sm:inline-flex absolute -top-4 -left-4 z-20 items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-700 text-white text-xs font-bold shadow-lg shadow-emerald-700/25 border-2 border-white">
+                                    <i class="fa-solid fa-award text-amber-300"></i>
+                                    <span>Khidmah Santri Salaf</span>
+                                </div>
+                            </div>
+
+                            <!-- KOLOM KANAN: Narasi Visi, Identitas & 2x2 Grid Pilar KMF -->
+                            <div class="lg:col-span-7 space-y-5 sm:space-y-6 text-left">
+                                <!-- Category Pill Badge -->
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 text-kmf-800 text-xs font-extrabold border border-blue-200/80 tracking-wide uppercase">
+                                    <i class="fa-solid fa-users-viewfinder text-kmf-600"></i>
+                                    <span>TENTANG KMF CABANG DEMAK</span>
+                                </div>
+
+                                <!-- Headline Elegan Anaverse Style -->
+                                <h2 class="text-2xl sm:text-3xl lg:text-[36px] font-black text-slate-900 tracking-tight leading-[1.25] font-['Poppins']">
+                                    Merajut Ukhuwah Santri Kajen, Mengabdi untuk Kemaslahatan Demak
+                                </h2>
+
+                                <!-- Narasi Utama -->
+                                <p class="text-slate-600 text-sm sm:text-[15px] leading-relaxed">
+                                    Keluarga Mathali'ul Falah (KMF) Cabang Demak adalah organisasi resmi yang mewadahi para alumni Perguruan Islam Mathali'ul Falah (PIM) Kajen, Margoyoso, Pati di wilayah Kabupaten Demak. Berbekal spirit nilai santri <em>Shalih Akram</em> dan warisan paradigma <em>Fiqh Sosial</em> gagasan KH. MA. Sahal Mahfudh, kami hadir sebagai jembatan persaudaraan dan motor penggerak kebaikan bagi jama'ah serta masyarakat luas.
+                                </p>
+
+                                <!-- 2x2 Grid Pilar Kekuatan KMF Demak -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-1">
+                                    <!-- Pilar 1: Sanad & Tradisi Salaf -->
+                                    <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-kmf-300 transition duration-200 group">
+                                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-kmf-700 border border-blue-200/60 flex items-center justify-center text-lg shrink-0 mb-3 group-hover:scale-105 transition-transform">
+                                            <i class="fa-solid fa-landmark text-kmf-600"></i>
+                                        </div>
+                                        <h4 class="text-sm font-extrabold text-slate-900 group-hover:text-kmf-700 transition">Akar PIM Kajen (1912)</h4>
+                                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Mewarisi keteladanan KH. Mahfudh Salam dan Masyayikh dalam membentuk kepribadian saleh nan alim.</p>
+                                    </div>
+
+                                    <!-- Pilar 2: Jejaring 14 Kecamatan -->
+                                    <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-amber-300 transition duration-200 group">
+                                        <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center justify-center text-lg shrink-0 mb-3 group-hover:scale-105 transition-transform">
+                                            <i class="fa-solid fa-map-location-dot text-amber-600"></i>
+                                        </div>
+                                        <h4 class="text-sm font-extrabold text-slate-900 group-hover:text-amber-700 transition">Jejaring 14 Korwil</h4>
+                                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Mengonsolidasikan alumni di Demak Kota, Bonang, Mranggen, Karanganyar, hingga Wedung secara terpadu.</p>
+                                    </div>
+
+                                    <!-- Pilar 3: Kemandirian Berjamaah -->
+                                    <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-emerald-300 transition duration-200 group">
+                                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200/60 flex items-center justify-center text-lg shrink-0 mb-3 group-hover:scale-105 transition-transform">
+                                            <i class="fa-solid fa-handshake-angle text-emerald-600"></i>
+                                        </div>
+                                        <h4 class="text-sm font-extrabold text-slate-900 group-hover:text-emerald-700 transition">Ekonomi &amp; Filantropi</h4>
+                                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Menggerakkan bursa niaga bersama, iuran gotong royong, infaq mandiri, serta beasiswa santri Demak.</p>
+                                    </div>
+
+                                    <!-- Pilar 4: Fiqh Sosial Aplikatif -->
+                                    <div class="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:shadow-md hover:border-sky-300 transition duration-200 group">
+                                        <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-700 border border-sky-200/60 flex items-center justify-center text-lg shrink-0 mb-3 group-hover:scale-105 transition-transform">
+                                            <i class="fa-solid fa-scale-balanced text-sky-600"></i>
+                                        </div>
+                                        <h4 class="text-sm font-extrabold text-slate-900 group-hover:text-sky-700 transition">Fiqh Sosial Aplikatif</h4>
+                                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">Respon konkret tanggap banjir Demak, advokasi santri, bimbingan keluarga sakinah, dan kajian kitab kuning.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Tombol Aksi Warta & Agenda -->
+                                <div class="pt-2 flex flex-wrap items-center gap-3">
+                                    <button onclick="App.navigateTo('berita')" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-kmf-800 hover:bg-kmf-900 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg transition cursor-pointer">
+                                        <i class="fa-solid fa-newspaper text-xs"></i>
+                                        <span>Baca Warta &amp; Program Cabang</span>
+                                        <i class="fa-solid fa-arrow-right text-[10px] ml-0.5"></i>
+                                    </button>
+                                    <button onclick="App.openAgendaModal()" class="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-xs sm:text-sm transition cursor-pointer">
+                                        <i class="fa-solid fa-calendar-check text-slate-500 text-xs"></i>
+                                        <span>Agenda Selapanan</span>
+                                    </button>
+                                </div>
+
+                            </div>
+
                         </div>
-                        <button onclick="App.navigateTo('usaha')" class="text-xs text-kmf-600 font-semibold hover:underline flex items-center gap-1">
-                            Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
-                        </button>
                     </div>
-                    <div id="home-spotlight-usaha" class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <!-- Dinamis via JS -->
-                    </div>
-                </div>
+                </section>
 
-                <!-- Mutiara Kalam Desktop -->
-                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-4 text-center space-y-2">
-                    <i class="fa-solid fa-quote-left text-kmf-600 text-xl opacity-60"></i>
-                    <p class="text-xs md:text-sm text-slate-700 italic font-serif leading-relaxed">
-                        "Fiqh tidak boleh berhenti pada teks hukum yang beku, melainkan harus hadir sebagai solusi sosial dan pemberdaya martabat umat manusia."
-                    </p>
-                    <div class="text-[11px] font-bold text-kmf-700 uppercase tracking-wide">
-                        — Hadhratusy Syaikh KH. MA. Sahal Mahfudh
+                <!-- ==================== TAHAP 2 SECTION 2: 6 PILAR LAYANAN KHIDMAH (ANAVERSE 6-CARD GRID) ==================== -->
+                <section id="layanan-utama" class="py-16 sm:py-24 bg-[#F8FAFC] relative border-b border-slate-200/80">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        
+                        <!-- Section Header Terpusat (Clean & Spacious) -->
+                        <div class="text-center max-w-3xl mx-auto mb-12 sm:mb-16 space-y-3">
+                            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-800 text-xs font-extrabold border border-emerald-200 uppercase tracking-widest">
+                                <i class="fa-solid fa-shapes text-emerald-600"></i>
+                                <span>6 PILAR PROGRAM KHIDMAH</span>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight font-['Poppins']">
+                                Pelayanan Terpadu &amp; Berkelanjutan untuk Jama'ah
+                            </h2>
+                            <p class="text-slate-600 text-xs sm:text-[15px] leading-relaxed max-w-2xl mx-auto">
+                                Enam pilar program kerja strategis KMF Cabang Demak yang dirancang untuk mempererat ukhuwah, mendampingi kebutuhan ummat, dan menggerakkan potensi alumni Kajen di seluruh Kota Wali.
+                            </p>
+                            <div class="w-16 h-1 bg-kmf-gold mx-auto mt-2 rounded-full"></div>
+                        </div>
+
+                        <!-- 6 Cards Grid (Pola Anaverse: Foto Atas + Overlapping Circular Icon Badge) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                            
+                            <!-- Card 1: Sensus Digital & KTA Alumni -->
+                            <div onclick="App.navigateTo('register')" class="group relative rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-300 bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(13,27,50,0.04)] hover:shadow-[0_20px_40px_rgba(13,27,50,0.12)] hover:-translate-y-1.5">
+                                <!-- Foto Cover Layanan -->
+                                <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
+                                    <img src="assets/img/banners/banner-sensus.jpg" alt="Sensus Alumni KMF"
+                                        class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+                                    <div class="absolute top-3.5 left-3.5 z-10">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-amber-300 border border-white/20 shadow-xs">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                            Database Resmi
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Overlapping Circular Icon Badge Khas Anaverse -->
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-xl shrink-0 -mt-7 ml-6 relative z-10 text-kmf-700 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-address-card"></i>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="p-6 pt-3 flex flex-col justify-between flex-1 space-y-4">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-black text-slate-900 group-hover:text-kmf-700 transition tracking-tight">
+                                            Sensus Mandiri &amp; KTA Digital Santri
+                                        </h3>
+                                        <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                                            Pemutakhiran basis data resmi santri dan alumni PIM Kajen di 14 kecamatan Demak dengan kartu tanda anggota digital ber-QR Code terverifikasi.
+                                        </p>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">QR Code Resmi</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Pemetaan Potensi</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">14 Kecamatan</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-kmf-700 group-hover:text-kmf-900">
+                                            <span>Mulai Sensus Mandiri</span>
+                                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Bursa Usaha & Kemitraan Santri -->
+                            <div onclick="App.navigateTo('usaha')" class="group relative rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-300 bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(13,27,50,0.04)] hover:shadow-[0_20px_40px_rgba(13,27,50,0.12)] hover:-translate-y-1.5">
+                                <!-- Foto Cover Layanan -->
+                                <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
+                                    <img src="assets/img/banners/banner-usaha.jpg" alt="Bursa Usaha Santri"
+                                        class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+                                    <div class="absolute top-3.5 left-3.5 z-10">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-emerald-300 border border-white/20 shadow-xs">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                            Ekonomi Umat
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Overlapping Circular Icon Badge Khas Anaverse -->
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-xl shrink-0 -mt-7 ml-6 relative z-10 text-amber-600 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-store"></i>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="p-6 pt-3 flex flex-col justify-between flex-1 space-y-4">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-black text-slate-900 group-hover:text-amber-700 transition tracking-tight">
+                                            Bursa Usaha &amp; Kemitraan Niaga
+                                        </h3>
+                                        <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                                            Etalase digital promosi usaha, toko, kuliner, dan jasa alumni Kajen untuk memperluas pasar dan mengokohkan kemandirian ekonomi jama'ah.
+                                        </p>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Katalog Niaga</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Jaringan Pembeli</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">100% Mandiri</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-700 group-hover:text-amber-900">
+                                            <span>Buka Katalog Niaga</span>
+                                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Kajian Fiqh Sosial & Portal Ibadah -->
+                            <div onclick="App.navigateTo('amalan')" class="group relative rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-300 bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(13,27,50,0.04)] hover:shadow-[0_20px_40px_rgba(13,27,50,0.12)] hover:-translate-y-1.5">
+                                <!-- Foto Cover Layanan -->
+                                <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
+                                    <img src="assets/img/usaha/usaha-buku-fiqhsosial.jpg" alt="Fiqh Sosial & Ibadah"
+                                        class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+                                    <div class="absolute top-3.5 left-3.5 z-10">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-emerald-300 border border-white/20 shadow-xs">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                            Sanad Keilmuan
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Overlapping Circular Icon Badge Khas Anaverse -->
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-xl shrink-0 -mt-7 ml-6 relative z-10 text-emerald-600 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-book-quran"></i>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="p-6 pt-3 flex flex-col justify-between flex-1 space-y-4">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-black text-slate-900 group-hover:text-emerald-700 transition tracking-tight">
+                                            Portal Ibadah &amp; Fiqh Sosial
+                                        </h3>
+                                        <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                                            Akses hisab waktu sholat presisi koordinat Demak, wirid Masyayikh Kajen, teks Tahlil, Yasin, Maulid Diba', dan kajian Fiqh Sosial KH. Sahal.
+                                        </p>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Hisab Demak Presisi</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Wirid Masyayikh</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Kitab Kuning</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-700 group-hover:text-emerald-900">
+                                            <span>Buka Portal Ibadah</span>
+                                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Filantropi, Wakaf & Tanggap Bencana -->
+                            <div onclick="App.openDonasiModal('wakaf')" class="group relative rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-300 bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(13,27,50,0.04)] hover:shadow-[0_20px_40px_rgba(13,27,50,0.12)] hover:-translate-y-1.5">
+                                <!-- Foto Cover Layanan -->
+                                <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
+                                    <img src="assets/img/banners/banner-khataman.jpg" alt="Filantropi KMF Demak"
+                                        class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+                                    <div class="absolute top-3.5 left-3.5 z-10">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-sky-300 border border-white/20 shadow-xs">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                                            Filantropi Cabang
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Overlapping Circular Icon Badge Khas Anaverse -->
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-xl shrink-0 -mt-7 ml-6 relative z-10 text-sky-600 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-hand-holding-heart"></i>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="p-6 pt-3 flex flex-col justify-between flex-1 space-y-4">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-black text-slate-900 group-hover:text-sky-700 transition tracking-tight">
+                                            Wakaf, Sedekah &amp; Tanggap Bencana
+                                        </h3>
+                                        <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                                            Penyaluran wakaf tanah/gedung sekretariat cabang, infaq selapanan gotong royong, zakat, peduli beasiswa santri, serta tanggap bencana Demak.
+                                        </p>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Wakaf Produktif</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Beasiswa Santri</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Tanggap Banjir</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-sky-700 group-hover:text-sky-900">
+                                            <span>Salurkan Infaq / Wakaf</span>
+                                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 5: Majelis Selapanan & Ziarah Masyayikh -->
+                            <div onclick="App.openAgendaModal()" class="group relative rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-300 bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(13,27,50,0.04)] hover:shadow-[0_20px_40px_rgba(13,27,50,0.12)] hover:-translate-y-1.5">
+                                <!-- Foto Cover Layanan -->
+                                <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
+                                    <img src="assets/img/berita/berita-ziarah-kajen.jpg" alt="Ziarah Masyayikh Kajen"
+                                        class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+                                    <div class="absolute top-3.5 left-3.5 z-10">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-purple-300 border border-white/20 shadow-xs">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
+                                            Ukhuwah Jama'ah
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Overlapping Circular Icon Badge Khas Anaverse -->
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-xl shrink-0 -mt-7 ml-6 relative z-10 text-purple-600 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-mosque"></i>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="p-6 pt-3 flex flex-col justify-between flex-1 space-y-4">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-black text-slate-900 group-hover:text-purple-700 transition tracking-tight">
+                                            Majelis Selapanan &amp; Ziarah Masyayikh
+                                        </h3>
+                                        <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                                            Pertemuan rutin selapanan keliling 14 koordinator kecamatan, ziarah maqbaroh Masyayikh Kajen, bahtsul masail, dan sarasehan ukhuwah alumni.
+                                        </p>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Selapanan Rutin</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Rihlah Ziarah</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Bahtsul Masail</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-purple-700 group-hover:text-purple-900">
+                                            <span>Lihat Kalender Agenda</span>
+                                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 6: Konsolidasi Cabang & Layanan Sekretariat -->
+                            <div onclick="App.navigateTo('berita')" class="group relative rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer transition-all duration-300 bg-white border border-slate-200/80 shadow-[0_4px_24px_rgba(13,27,50,0.04)] hover:shadow-[0_20px_40px_rgba(13,27,50,0.12)] hover:-translate-y-1.5">
+                                <!-- Foto Cover Layanan -->
+                                <div class="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
+                                    <img src="assets/img/berita/berita-sensus-digital.jpg" alt="Layanan Sekretariat KMF"
+                                        class="w-full h-full object-cover group-hover:scale-106 transition-transform duration-500">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 pointer-events-none"></div>
+                                    <div class="absolute top-3.5 left-3.5 z-10">
+                                        <span class="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-blue-300 border border-white/20 shadow-xs">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                                            Layanan Organisasi
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- Overlapping Circular Icon Badge Khas Anaverse -->
+                                <div class="w-14 h-14 rounded-2xl bg-white shadow-lg border border-slate-100 flex items-center justify-center text-xl shrink-0 -mt-7 ml-6 relative z-10 text-rose-600 group-hover:scale-110 transition-transform duration-300">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="p-6 pt-3 flex flex-col justify-between flex-1 space-y-4">
+                                    <div class="space-y-2">
+                                        <h3 class="text-lg font-black text-slate-900 group-hover:text-rose-700 transition tracking-tight">
+                                            Sekretariat &amp; Surat Rekomendasi
+                                        </h3>
+                                        <p class="text-xs sm:text-[13px] text-slate-600 leading-relaxed">
+                                            Layanan administrasi legalitas alumni, penerbitan surat rekomendasi studi/pesantren, pengesahan kepengurusan korwil, dan rilis warta cabang.
+                                        </p>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Surat Rekomendasi</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Warta Cabang</span>
+                                            <span class="text-[10.5px] font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-lg">Pengesahan Korwil</span>
+                                        </div>
+                                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-rose-700 group-hover:text-rose-900">
+                                            <span>Baca Warta &amp; Layanan</span>
+                                            <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
-                </div>
+                </section>
+
+                <!-- ==================== TAHAP 3 SECTION 1: TOKOH MASYAYIKH & DEWAN PENASIHAT (ANAVERSE TEAM SLIDER) ==================== -->
+                <section id="masyayikh-marquee" class="py-14 sm:py-18 bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 text-white relative overflow-hidden border-y border-blue-400/30">
+                    <div class="absolute -left-20 top-1/2 -translate-y-1/2 w-96 h-96 bg-blue-300/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -right-20 top-1/2 -translate-y-1/2 w-96 h-96 bg-amber-400/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <!-- Section Header with Anaverse Slider Controls -->
+                        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                            <div class="space-y-2">
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 text-kmf-gold-light text-xs font-bold uppercase tracking-wider border border-white/20">
+                                    <i class="fa-solid fa-scroll text-kmf-gold"></i>
+                                    <span>SANAD &amp; KETELADANAN MASYAYIKH</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight font-['Poppins']">
+                                    Tokoh Masyayikh &amp; Dewan Penasihat KMF Demak
+                                </h2>
+                                <p class="text-xs sm:text-sm text-blue-100/90 font-medium max-w-2xl">
+                                    Meneladani uswah hasanah para Masyayikh Kajen dan sesepuh alumni di Demak dalam membimbing ukhuwah serta keilmuan umat.
+                                </p>
+                            </div>
+                            <!-- Controls: Status Badge + Chevrons -->
+                            <div class="flex items-center gap-2.5 shrink-0">
+                                <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 text-white text-xs font-bold border border-white/20">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span>Tabarruk Sanad</span>
+                                </span>
+                                <button type="button" onclick="App.prevTokohSlide()" aria-label="Slide Masyayikh Sebelumnya"
+                                    class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition border border-white/25 active:scale-95 cursor-pointer shadow-sm">
+                                    <i class="fa-solid fa-chevron-left text-xs"></i>
+                                </button>
+                                <button type="button" onclick="App.nextTokohSlide()" aria-label="Slide Masyayikh Berikutnya"
+                                    class="w-10 h-10 rounded-full bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition border border-white/25 active:scale-95 cursor-pointer shadow-sm">
+                                    <i class="fa-solid fa-chevron-right text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Marquee / Slider Track Container -->
+                        <div id="kmfMarqueeWrapper" class="kmf-marquee-container [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)] scroll-smooth">
+                            <div id="kmf-marquee-track" class="kmf-marquee-track py-2">
+                                <!-- Dinamis via App.renderDesktopMarquee() -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== TAHAP 3 SECTION 2: DARK NAVY CONTRAST RIBBON (5 GALLERY THUMBNAILS) ==================== -->
+                <section id="galeri-ribbon" class="py-12 sm:py-16 bg-gradient-to-r from-blue-800 via-blue-700 to-blue-600 text-white relative overflow-hidden border-b border-blue-400/30">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
+                        
+                        <!-- Top Bar: Tagline & Mini Counter Badges -->
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/15">
+                            <div>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-400/20 text-blue-200 text-[11px] font-bold uppercase tracking-wider border border-blue-300/30 mb-2">
+                                    <i class="fa-solid fa-images text-blue-300"></i>
+                                    <span>JEJARING &amp; DOKUMENTASI CABANG</span>
+                                </div>
+                                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                                    Jejaring Khidmah Terbesar Santri Kajen di Bumi Kota Wali
+                                </h3>
+                                <p class="text-xs sm:text-sm text-blue-100/80 mt-1">
+                                    Merekam jejak langkah ukhuwah, kajian keilmuan, dan gotong royong alumni di 14 kecamatan se-Kabupaten Demak.
+                                </p>
+                            </div>
+
+                            <!-- 3 Mini Metric Badges -->
+                            <div class="flex flex-wrap items-center gap-2.5 shrink-0">
+                                <div class="px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 flex items-center gap-2 text-xs">
+                                    <i class="fa-solid fa-map-pin text-amber-300"></i>
+                                    <span class="font-bold text-white">14 Korwil</span>
+                                    <span class="text-blue-200">Aktif</span>
+                                </div>
+                                <div class="px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 flex items-center gap-2 text-xs">
+                                    <i class="fa-solid fa-users text-emerald-300"></i>
+                                    <span class="font-bold text-white">Ribuan Santri</span>
+                                    <span class="text-blue-200">Kajen</span>
+                                </div>
+                                <div class="px-3.5 py-1.5 rounded-xl bg-white/10 border border-white/20 flex items-center gap-2 text-xs">
+                                    <i class="fa-solid fa-certificate text-sky-300"></i>
+                                    <span class="font-bold text-white">100% Mandiri</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5 Curated Gallery Thumbnails Grid (Anaverse Ribbon Strip) -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4">
+                            
+                            <!-- Thumbnail 1: Almamater PIM Kajen -->
+                            <div class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-blue-900/60 border border-white/20 shadow-md hover:border-amber-400/60 transition duration-300 cursor-pointer">
+                                <img src="assets/img/banners/banner-khataman.jpg" alt="Almamater PIM Kajen"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+                                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                                    <span class="text-[9px] font-extrabold uppercase text-amber-300 block tracking-wider">Akar Tradisi</span>
+                                    <h4 class="text-xs font-bold text-white leading-tight mt-0.5 group-hover:text-amber-200 transition">PIM Kajen Margoyoso</h4>
+                                </div>
+                            </div>
+
+                            <!-- Thumbnail 2: Konsolidasi Cabang Demak -->
+                            <div class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-blue-900/60 border border-white/20 shadow-md hover:border-blue-400/60 transition duration-300 cursor-pointer">
+                                <img src="assets/img/berita/berita-rapat-koordinasi.jpg" alt="Konsolidasi KMF Demak"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+                                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                                    <span class="text-[9px] font-extrabold uppercase text-blue-300 block tracking-wider">Muscab Cabang</span>
+                                    <h4 class="text-xs font-bold text-white leading-tight mt-0.5 group-hover:text-blue-200 transition">Bintoro Demak Kota</h4>
+                                </div>
+                            </div>
+
+                            <!-- Thumbnail 3: Sensus & Validasi Digital -->
+                            <div class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-blue-900/60 border border-white/20 shadow-md hover:border-emerald-400/60 transition duration-300 cursor-pointer">
+                                <img src="assets/img/berita/berita-sensus-digital.jpg" alt="Sensus Santri Digital"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+                                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                                    <span class="text-[9px] font-extrabold uppercase text-emerald-300 block tracking-wider">KTA Digital</span>
+                                    <h4 class="text-xs font-bold text-white leading-tight mt-0.5 group-hover:text-emerald-200 transition">Sensus Mandiri</h4>
+                                </div>
+                            </div>
+
+                            <!-- Thumbnail 4: Pemberdayaan Usaha Santri -->
+                            <div class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-blue-900/60 border border-white/20 shadow-md hover:border-amber-400/60 transition duration-300 cursor-pointer">
+                                <img src="assets/img/berita/berita-wirausaha-santri.jpg" alt="Wirausaha Santri"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+                                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                                    <span class="text-[9px] font-extrabold uppercase text-amber-300 block tracking-wider">Ekonomi Santri</span>
+                                    <h4 class="text-xs font-bold text-white leading-tight mt-0.5 group-hover:text-amber-200 transition">Bursa Niaga Alumni</h4>
+                                </div>
+                            </div>
+
+                            <!-- Thumbnail 5: Rihlah & Ziarah Masyayikh -->
+                            <div class="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-blue-900/60 border border-white/20 shadow-md hover:border-purple-400/60 transition duration-300 cursor-pointer col-span-2 sm:col-span-1">
+                                <img src="assets/img/berita/berita-ziarah-kajen.jpg" alt="Ziarah Masyayikh"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none"></div>
+                                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                                    <span class="text-[9px] font-extrabold uppercase text-purple-300 block tracking-wider">Rihlah Sanad</span>
+                                    <h4 class="text-xs font-bold text-white leading-tight mt-0.5 group-hover:text-purple-200 transition">Ziarah Maqbaroh</h4>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ==================== FOLD 6: DIGITAL ECOSYSTEM & SMARTPHONE MOCKUP ==================== -->
+                <section id="digital-kmf" class="py-14 sm:py-20 bg-slate-50 relative border-b border-slate-200">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                            
+                            <!-- KOLOM KIRI: Penjelasan Ekosistem Digital KMF App -->
+                            <div class="lg:col-span-7 space-y-5 text-left">
+                                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-100/70 text-kmf-800 text-xs font-bold">
+                                    <i class="fa-solid fa-mobile-screen-button text-kmf-600"></i>
+                                    <span>INOVASI DIGITAL ALUMNI KAJEN</span>
+                                </div>
+                                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                                    Aplikasi Resmi KMF Demak di Genggaman Tangan
+                                </h2>
+                                <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                                    Dirancang dengan teknologi Progressive Web App (PWA) modern tanpa perlu unduh dari PlayStore yang berat. Akses cepat kartu tanda anggota santri digital, direktori usaha, serta jadwal sholat hisab Demak secara instan dan hemat kuota.
+                                </p>
+
+                                <div class="grid grid-cols-2 gap-3 pt-2">
+                                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+                                        <i class="fa-solid fa-id-badge text-kmf-600 text-lg"></i>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">KTA Santri Digital</h4>
+                                        <p class="text-[11px] text-slate-500">Bukti keanggotaan sah alumni Kajen dengan QR Code verifikasi.</p>
+                                    </div>
+                                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+                                        <i class="fa-solid fa-compass text-amber-500 text-lg"></i>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Hisab Waktu Sholat</h4>
+                                        <p class="text-[11px] text-slate-500">Hisab presisi titik koordinat 14 kecamatan di Kabupaten Demak.</p>
+                                    </div>
+                                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+                                        <i class="fa-solid fa-bag-shopping text-emerald-600 text-lg"></i>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Pencarian Usaha</h4>
+                                        <p class="text-[11px] text-slate-500">Temukan warung, toko, &amp; jasa terdekat milik sesama santri Kajen.</p>
+                                    </div>
+                                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200/80 shadow-xs space-y-1">
+                                        <i class="fa-solid fa-bell text-rose-500 text-lg"></i>
+                                        <h4 class="font-bold text-slate-900 text-xs sm:text-sm">Lelayu &amp; Duka</h4>
+                                        <p class="text-[11px] text-slate-500">Solidaritas kirim doa dan takziah untuk keluarga besar santri.</p>
+                                    </div>
+                                </div>
+
+                                <div class="pt-3">
+                                    <button onclick="App.installPWA()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-kmf-700 hover:bg-kmf-800 text-white font-bold text-xs sm:text-sm shadow-md transition active:scale-95">
+                                        <i class="fa-solid fa-cloud-arrow-down text-kmf-gold"></i>
+                                        <span>Pasang Aplikasi di Layar Utama (PWA)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- KOLOM KANAN: Mockup Smartphone UI KMF App (Pure CSS) -->
+                            <div class="lg:col-span-5 flex justify-center">
+                                <div class="max-w-[310px] w-full bg-slate-900 rounded-[2.5rem] p-3 border-4 border-slate-700 shadow-2xl ring-1 ring-slate-800">
+                                    <!-- Dynamic Island -->
+                                    <div class="w-24 h-4 bg-slate-950 rounded-full mx-auto mb-2 flex items-center justify-center">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-slate-800 mr-2"></div>
+                                        <div class="w-2 h-2 rounded-full bg-slate-800"></div>
+                                    </div>
+
+                                    <!-- Screen Body -->
+                                    <div class="bg-slate-950 text-white rounded-[2rem] p-3.5 space-y-3 font-sans text-xs border border-slate-800">
+                                        <!-- App Header Mini -->
+                                        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                            <div class="flex items-center gap-2">
+                                                <img src="assets/img/logo.png" alt="KMF" class="w-5 h-5 object-contain">
+                                                <span class="font-bold text-[11px] text-white">KMF Demak App</span>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[9px] font-semibold">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span> PWA Aktif
+                                            </span>
+                                        </div>
+
+                                        <!-- KTA Digital Mini Card -->
+                                        <div class="p-3 rounded-xl bg-gradient-to-r from-kmf-800 to-kmf-900 border border-blue-500/30 text-white space-y-2">
+                                            <div class="flex justify-between items-start">
+                                                <div>
+                                                    <span class="text-[9px] text-amber-300 font-bold uppercase tracking-wider block">Kartu Santri Digital</span>
+                                                    <h5 class="text-xs font-bold leading-tight mt-0.5">Ahmad Fauzi, S.Pd.</h5>
+                                                    <span class="text-[9px] text-blue-200">Alumni Mathole' 2008</span>
+                                                </div>
+                                                <div class="w-7 h-7 bg-white/10 rounded-lg flex items-center justify-center text-xs text-amber-300 border border-white/20">
+                                                    <i class="fa-solid fa-qrcode"></i>
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-between items-center text-[9px] pt-1 border-t border-white/15 text-slate-300">
+                                                <span>Kec. Wedung</span>
+                                                <span class="px-1.5 py-0.2 bg-emerald-500/20 text-emerald-300 rounded font-bold">Terverifikasi</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Jadwal Shalat Widget Mini -->
+                                        <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex justify-between items-center">
+                                            <div>
+                                                <span class="text-[9px] text-slate-400 block">Jadwal Sholat Demak</span>
+                                                <span class="text-[11px] font-bold text-amber-300">Dzuhur 11:38 WIB</span>
+                                            </div>
+                                            <span class="text-[9px] font-mono px-2 py-0.5 rounded bg-black/60 text-emerald-400 border border-slate-700">
+                                                Kab. Demak
+                                            </span>
+                                        </div>
+
+                                        <!-- Layanan Cepat Grid Mini -->
+                                        <div class="grid grid-cols-4 gap-1.5 text-center text-[9px]">
+                                            <div class="p-1.5 rounded-lg bg-slate-900 border border-slate-800">
+                                                <i class="fa-solid fa-hand-holding-heart text-amber-400 block text-xs mb-0.5"></i>
+                                                <span>Wakaf</span>
+                                            </div>
+                                            <div class="p-1.5 rounded-lg bg-slate-900 border border-slate-800">
+                                                <i class="fa-solid fa-store text-blue-400 block text-xs mb-0.5"></i>
+                                                <span>Usaha</span>
+                                            </div>
+                                            <div class="p-1.5 rounded-lg bg-slate-900 border border-slate-800">
+                                                <i class="fa-solid fa-calendar-check text-rose-400 block text-xs mb-0.5"></i>
+                                                <span>Agenda</span>
+                                            </div>
+                                            <div class="p-1.5 rounded-lg bg-slate-900 border border-slate-800">
+                                                <i class="fa-brands fa-whatsapp text-green-400 block text-xs mb-0.5"></i>
+                                                <span>Bantuan</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== TAHAP 3 SECTION 3: HOTLINE & BANTUAN SEKRETARIAT BANNER (ANAVERSE EMERGENCY PATTERN) ==================== -->
+                <section id="hotline-sekretariat" class="py-12 sm:py-16 bg-white relative">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="bg-gradient-to-br from-[#1e3a8a] via-[#1d4ed8] to-[#2563eb] rounded-3xl p-7 sm:p-10 lg:p-12 text-white shadow-[0_20px_50px_rgba(30,58,138,0.25)] border border-blue-300/30 relative overflow-hidden">
+                            <!-- Decorative Glowing Orbs -->
+                            <div class="absolute -right-20 -top-20 w-80 h-80 bg-amber-400/15 rounded-full blur-3xl pointer-events-none"></div>
+                            <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-300/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+                                
+                                <!-- KOLOM KIRI: Informasi Bantuan & Layanan Cepat -->
+                                <div class="lg:col-span-7 space-y-4 text-left">
+                                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/15 text-amber-300 text-xs font-extrabold uppercase tracking-wider border border-amber-400/25">
+                                        <i class="fa-solid fa-headset text-amber-400"></i>
+                                        <span>HOTLINE &amp; PUSAT BANTUAN SEKRETARIAT</span>
+                                    </div>
+
+                                    <h2 class="text-2xl sm:text-3xl lg:text-[34px] font-black text-white tracking-tight leading-snug font-['Poppins']">
+                                        Butuh Surat Rekomendasi, Legalisasi Santri, atau Bantuan Darurat?
+                                    </h2>
+
+                                    <p class="text-xs sm:text-sm text-blue-100/90 leading-relaxed max-w-2xl">
+                                        Sekretariat Pengurus Cabang KMF Kabupaten Demak siap mendampingi kebutuhan administrasi santri, verifikasi keanggotaan, surat rekomendasi studi/pesantren, serta respon cepat tanggap kebencanaan di wilayah Demak.
+                                    </p>
+
+                                    <!-- 3 Poin Keunggulan Layanan -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                                        <div class="flex items-center gap-2.5 text-xs text-slate-200">
+                                            <i class="fa-solid fa-clock text-amber-400 text-sm"></i>
+                                            <span>08.00 - 21.00 WIB</span>
+                                        </div>
+                                        <div class="flex items-center gap-2.5 text-xs text-slate-200">
+                                            <i class="fa-solid fa-location-dot text-emerald-400 text-sm"></i>
+                                            <span>Bintoro, Demak Kota</span>
+                                        </div>
+                                        <div class="flex items-center gap-2.5 text-xs text-slate-200">
+                                            <i class="fa-solid fa-shield-check text-sky-400 text-sm"></i>
+                                            <span>100% Bebas Biaya</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- KOLOM KANAN: Card Kontak Langsung WhatsApp & Form -->
+                                <div class="lg:col-span-5">
+                                    <div class="bg-white text-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-7 shadow-2xl space-y-4 border border-white/20">
+                                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                                            <div>
+                                                <h4 class="font-black text-slate-900 text-sm sm:text-base">Layanan Terpadu Cabang</h4>
+                                                <p class="text-[11px] text-slate-500">Respon cepat Sekretariat KMF Demak</p>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Online
+                                            </span>
+                                        </div>
+
+                                        <!-- Tombol WA Center Menonjol -->
+                                        <button onclick="App.openKmfWaCenter()" class="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl sm:rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs sm:text-sm shadow-md hover:shadow-lg transition cursor-pointer active:scale-98">
+                                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                                            <span>Hubungi WA Center Sekretariat</span>
+                                        </button>
+
+                                        <!-- Tombol Alternatif Form / Agenda -->
+                                        <div class="grid grid-cols-2 gap-2 pt-1">
+                                            <button onclick="App.navigateTo('berita')" class="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-[11px] transition cursor-pointer">
+                                                <i class="fa-solid fa-file-signature text-kmf-600"></i>
+                                                <span>Surat Rekomendasi</span>
+                                            </button>
+                                            <button onclick="App.openAgendaModal()" class="flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-[11px] transition cursor-pointer">
+                                                <i class="fa-solid fa-calendar-check text-amber-600"></i>
+                                                <span>Jadwal Cabang</span>
+                                            </button>
+                                        </div>
+
+                                        <p class="text-[10.5px] text-slate-400 text-center pt-1 flex items-center justify-center gap-1.5">
+                                            <i class="fa-solid fa-lock text-slate-400"></i>
+                                            <span>Data alumni terlindungi &amp; dirawat jam'iyyah</span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==================== FOLD 7: AGENDA SELAPANAN & SPOTLIGHT USAHA SANTRI ==================== -->
+                <section class="py-14 sm:py-20 bg-white relative">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            <!-- Sisi Kiri: Agenda & Kegiatan Terdekat (lg:col-span-5) -->
+                            <div class="lg:col-span-5 bg-slate-50 p-6 rounded-3xl border border-slate-200/90 shadow-xs space-y-4">
+                                <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                                    <div>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-kmf-600 block">Jadwal Jam'iyyah</span>
+                                        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+                                            <i class="fa-regular fa-calendar-days text-kmf-600"></i> Agenda &amp; Khataman
+                                        </h3>
+                                    </div>
+                                    <span class="text-[10.5px] bg-blue-100 text-kmf-800 px-2 py-0.5 rounded-full font-bold">Terkini</span>
+                                </div>
+                                <div id="home-agenda-container" class="space-y-3">
+                                    <!-- Dinamis via App.renderHome() -->
+                                </div>
+                            </div>
+
+                            <!-- Sisi Kanan: Spotlight Usaha Santri Kajen Demak (lg:col-span-7) -->
+                            <div class="lg:col-span-7 space-y-4">
+                                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                                    <div>
+                                        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-600 block">Pemberdayaan Santri</span>
+                                        <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                                            <i class="fa-solid fa-store text-amber-500"></i> Etalase Usaha Santri Kajen di Demak
+                                        </h3>
+                                    </div>
+                                    <button onclick="App.navigateTo('usaha')" class="text-xs text-kmf-600 font-bold hover:underline flex items-center gap-1">
+                                        Lihat Semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                    </button>
+                                </div>
+                                <div id="home-spotlight-usaha" class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                                    <!-- Dinamis via App.renderHome() -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mutiara Kalam KH. MA. Sahal Mahfudh -->
+                        <div class="bg-gradient-to-r from-blue-50 via-indigo-50 to-blue-50 border border-blue-200/80 rounded-3xl p-6 sm:p-8 text-center space-y-3 shadow-xs">
+                            <i class="fa-solid fa-quote-left text-kmf-600 text-2xl opacity-60"></i>
+                            <p class="text-sm sm:text-base text-slate-800 italic font-serif leading-relaxed max-w-3xl mx-auto">
+                                "Fiqh tidak boleh berhenti pada teks hukum yang beku, melainkan harus hadir sebagai solusi sosial dan pemberdaya martabat umat manusia."
+                            </p>
+                            <div class="text-xs font-bold text-kmf-700 uppercase tracking-widest">
+                                — Hadhratusy Syaikh KH. MA. Sahal Mahfudh (Pengasuh PIM Kajen &amp; Rais 'Am PBNU 1999–2014)
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ==================== FOLD 8: FOOTER RESMI KMF CABANG DEMAK ==================== -->
+                <footer class="bg-gradient-to-b from-blue-800 to-blue-900 text-white pt-12 pb-8 border-t border-blue-600/50">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                            <!-- Identitas Cabang (md:col-span-5) -->
+                            <div class="md:col-span-5 space-y-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="assets/img/logo.png" alt="Logo KMF Demak" class="w-10 h-10 object-contain">
+                                    <div>
+                                        <h4 class="font-extrabold text-base text-white tracking-wide">KMF CABANG DEMAK</h4>
+                                        <p class="text-xs text-blue-200">Keluarga Mathali'ul Falah (Kajen, Pati)</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-blue-100/80 leading-relaxed pr-4">
+                                    Wadah silaturrahim resmi alumni Perguruan Islam Mathali'ul Falah di Kabupaten Demak. Mengokohkan ukhuwah ma'hadiyyah, literasi Fiqh Sosial, dan kemandirian umat.
+                                </p>
+                            </div>
+
+                            <!-- Tautan Cepat (md:col-span-4) -->
+                            <div class="md:col-span-4 space-y-2 text-xs">
+                                <h5 class="font-bold text-sm text-kmf-gold uppercase tracking-wider mb-2">Layanan Alumni</h5>
+                                <ul class="space-y-1.5 text-blue-100/90">
+                                    <li><a href="javascript:void(0)" onclick="App.navigateTo('register')" class="hover:text-white transition">Sensus Mandiri Alumni</a></li>
+                                    <li><a href="javascript:void(0)" onclick="App.navigateTo('alumni')" class="hover:text-white transition">Direktori Database Santri</a></li>
+                                    <li><a href="javascript:void(0)" onclick="App.navigateTo('usaha')" class="hover:text-white transition">Katalog Usaha Santri Demak</a></li>
+                                    <li><a href="javascript:void(0)" onclick="App.navigateTo('amalan')" class="hover:text-white transition">Portal Ibadah &amp; Hisab Sholat</a></li>
+                                </ul>
+                            </div>
+
+                            <!-- Sekretariat & Bantuan (md:col-span-3) -->
+                            <div class="md:col-span-3 space-y-2 text-xs">
+                                <h5 class="font-bold text-sm text-kmf-gold uppercase tracking-wider mb-2">Sekretariat Cabang</h5>
+                                <p class="text-blue-100/80 leading-relaxed">
+                                    Kabupaten Demak, Jawa Tengah, Indonesia.
+                                </p>
+                                <div class="pt-1">
+                                    <button onclick="App.openKmfWaCenter()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold transition text-xs shadow-sm">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                        <span>Layanan WA Center</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Copyright Bottom -->
+                        <div class="pt-6 border-t border-blue-700/60 flex flex-col sm:flex-row items-center justify-between text-xs text-blue-200/80 gap-2 text-center sm:text-left">
+                            <p>© 2026 KMF Cabang Kabupaten Demak. Mengabdi dengan Nilai Shalih Akram.</p>
+                            <p class="text-[11px] text-blue-200/70">Portal Digital Alumni Mathali'ul Falah (Kajen, Pati)</p>
+                        </div>
+                    </div>
+                </footer>
+
             </div>
 
         </section>

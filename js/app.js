@@ -14,6 +14,8 @@ const App = {
     isAdminLoggedIn: false,
     arabicFontSize: 24, // Ukuran font default untuk teks Arab (px)
     deferredInstallPrompt: null,
+    currentHeroDesktopIndex: 0,
+    heroDesktopInterval: null,
 
     init: async function() {
         console.log('Inisialisasi Aplikasi KMF Demak...');
@@ -26,6 +28,8 @@ const App = {
         this.initUserAuth();
         await this.renderHome();
         this.initBannerSlider();
+        this.initDesktopHeroSlider();
+        this.renderDesktopMarquee();
         await this.renderAlumniList();
         await this.renderUsahaList();
         this.renderBeritaList();
@@ -157,6 +161,149 @@ const App = {
     },
 
     /**
+     * Inisialisasi Hero Slider Desktop Showcase (Ala Mubarokah App Showcase)
+     */
+    initDesktopHeroSlider: function() {
+        const slides = (window.KMF_DATA && window.KMF_DATA.heroDesktopSlides) || [];
+        if (slides.length === 0) return;
+
+        // Render Thumbnail Buttons jika ada kontainer
+        const thumbContainer = document.getElementById('hero-desktop-thumbnails-container');
+        if (thumbContainer) {
+            thumbContainer.innerHTML = slides.map((s, idx) => `
+                <button type="button" onclick="App.setHeroDesktopPhoto(${idx})"
+                    id="hero-desktop-thumb-${idx}"
+                    class="relative w-20 sm:w-24 aspect-[16/10] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ${idx === 0 ? 'ring-2 ring-kmf-gold ring-offset-2 ring-offset-white scale-105 shadow-xl opacity-100' : 'opacity-60 hover:opacity-90 border border-white/30'}">
+                    <img src="${s.gambar}" class="w-full h-full object-cover" alt="${s.judul}">
+                </button>
+            `).join('');
+        }
+
+        // Pasang foto awal
+        this.setHeroDesktopPhoto(0);
+
+        // Mulai auto slide interval 6.5 detik
+        this.startDesktopHeroInterval();
+
+        // Pause on hover
+        const cardContainer = document.getElementById('hero-desktop-card-main-container');
+        if (cardContainer) {
+            cardContainer.addEventListener('mouseenter', () => this.stopDesktopHeroInterval());
+            cardContainer.addEventListener('mouseleave', () => this.startDesktopHeroInterval());
+        }
+    },
+
+    startDesktopHeroInterval: function() {
+        if (this.heroDesktopInterval) clearInterval(this.heroDesktopInterval);
+        this.heroDesktopInterval = setInterval(() => {
+            this.nextHeroDesktopPhoto();
+        }, 6500);
+    },
+
+    stopDesktopHeroInterval: function() {
+        if (this.heroDesktopInterval) {
+            clearInterval(this.heroDesktopInterval);
+            this.heroDesktopInterval = null;
+        }
+    },
+
+    setHeroDesktopPhoto: function(idx) {
+        const slides = (window.KMF_DATA && window.KMF_DATA.heroDesktopSlides) || [];
+        if (slides.length === 0) return;
+
+        this.currentHeroDesktopIndex = (idx + slides.length) % slides.length;
+        const current = slides[this.currentHeroDesktopIndex];
+
+        const imgEl = document.getElementById('hero-desktop-main-photo');
+        const badgeEl = document.getElementById('hero-desktop-photo-badge');
+        const subbadgeEl = document.getElementById('hero-desktop-photo-subbadge');
+
+        if (imgEl) {
+            imgEl.style.opacity = '0.35';
+            setTimeout(() => {
+                imgEl.src = current.gambar;
+                imgEl.alt = current.judul;
+                imgEl.style.opacity = '1';
+            }, 180);
+        }
+
+        if (badgeEl) badgeEl.textContent = current.kategori;
+        if (subbadgeEl) subbadgeEl.textContent = current.lokasi;
+
+        // Update active class thumbnail
+        slides.forEach((_, i) => {
+            const thumb = document.getElementById(`hero-desktop-thumb-${i}`);
+            if (thumb) {
+                if (i === this.currentHeroDesktopIndex) {
+                    thumb.className = 'relative w-20 sm:w-24 aspect-[16/10] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 ring-2 ring-kmf-gold ring-offset-2 ring-offset-white scale-105 shadow-xl opacity-100';
+                } else {
+                    thumb.className = 'relative w-20 sm:w-24 aspect-[16/10] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 opacity-60 hover:opacity-90 border border-white/30';
+                }
+            }
+        });
+    },
+
+    prevHeroDesktopPhoto: function() {
+        this.setHeroDesktopPhoto(this.currentHeroDesktopIndex - 1);
+    },
+
+    nextHeroDesktopPhoto: function() {
+        this.setHeroDesktopPhoto(this.currentHeroDesktopIndex + 1);
+    },
+
+    /**
+     * Render Marquee Slider Tokoh & Masyayikh (Continuous Loop)
+     */
+    renderDesktopMarquee: function() {
+        const track = document.getElementById('kmf-marquee-track');
+        if (!track) return;
+
+        const tokoh = (window.KMF_DATA && window.KMF_DATA.masyayikhTokohList) || [];
+        if (tokoh.length === 0) return;
+
+        // Gandakan elemen dua kali untuk continuous seamless scroll
+        const fullList = [...tokoh, ...tokoh];
+
+        track.innerHTML = fullList.map((t, idx) => `
+            <div class="w-56 sm:w-64 shrink-0 bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-lg text-slate-800 group hover:-translate-y-2 transition-all duration-300 mx-2.5 border border-slate-100" ${idx >= tokoh.length ? 'aria-hidden="true"' : ''}>
+                <div class="aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-kmf-700 to-kmf-900 mb-3 relative flex items-center justify-center text-white">
+                    <div class="w-14 h-14 rounded-full bg-white/15 flex items-center justify-center text-2xl border border-white/25 shadow-inner">
+                        <i class="${t.avatarIcon} text-amber-300"></i>
+                    </div>
+                    <span class="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-black/60 text-white text-[9px] font-bold backdrop-blur-xs">
+                        ${t.tag}
+                    </span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-xs sm:text-[13.5px] leading-tight line-clamp-1" title="${t.nama}">
+                    ${t.nama}
+                </h3>
+                <p class="text-[10.5px] sm:text-xs font-semibold text-kmf-600 mt-0.5 line-clamp-1" title="${t.gelar}">
+                    ${t.gelar}
+                </p>
+                <p class="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                    ${t.peran}
+                </p>
+            </div>
+        `).join('');
+    },
+
+    /**
+     * Navigasi Manual Slider Tokoh & Masyayikh
+     */
+    prevTokohSlide: function() {
+        const wrapper = document.getElementById('kmfMarqueeWrapper');
+        if (wrapper) {
+            wrapper.scrollBy({ left: -280, behavior: 'smooth' });
+        }
+    },
+    nextTokohSlide: function() {
+        const wrapper = document.getElementById('kmfMarqueeWrapper');
+        if (wrapper) {
+            wrapper.scrollBy({ left: 280, behavior: 'smooth' });
+        }
+    },
+
+    /**
      * Navigasi Antar Tab (SPA Router)
      */
     navigateTo: function(targetTab) {
@@ -184,13 +331,18 @@ const App = {
             }
         });
 
-        // Update status navbar desktop
+        // Update status navbar desktop (Floating Capsule Navbar)
         document.querySelectorAll('.nav-desktop-btn').forEach(btn => {
             const target = btn.getAttribute('data-target');
+            const icon = btn.querySelector('i');
             if (target === targetTab) {
-                btn.classList.add('bg-kmf-700', 'border-b-2', 'border-kmf-gold');
+                btn.classList.add('bg-kmf-50', 'text-kmf-700', 'border', 'border-kmf-200/80', 'font-bold');
+                btn.classList.remove('text-slate-700', 'font-semibold');
+                if (icon) icon.className = icon.className.replace('text-slate-400', 'text-kmf-600');
             } else {
-                btn.classList.remove('bg-kmf-700', 'border-b-2', 'border-kmf-gold');
+                btn.classList.remove('bg-kmf-50', 'text-kmf-700', 'border', 'border-kmf-200/80', 'font-bold');
+                btn.classList.add('text-slate-700', 'font-semibold');
+                if (icon) icon.className = icon.className.replace('text-kmf-600', 'text-slate-400');
             }
         });
 
