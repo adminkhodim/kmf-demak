@@ -592,3 +592,4 @@ const UndanganSelapanan = {
 };
 
 window.UndanganSelapanan = UndanganSelapanan;
+
