@@ -210,6 +210,48 @@ const KMF_API = {
     },
 
     /**
+     * Mengambil daftar Buku Tamu / RSVP Selapanan dari Spreadsheet
+     */
+    getRSVPList: async function() {
+        const gasUrl = this.getGasUrl();
+        if (gasUrl) {
+            try {
+                const res = await fetch(`${gasUrl}?action=getRSVP`);
+                const data = await res.json();
+                if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
+                    return data.data;
+                }
+            } catch (err) {
+                console.warn('Gagal memuat RSVP dari Google Apps Script, beralih ke cache lokal:', err);
+            }
+        }
+        const local = localStorage.getItem('kmf_selapanan_rsvp_list');
+        return local ? JSON.parse(local) : null;
+    },
+
+    /**
+     * Mengirim konfirmasi kehadiran & doa restu Selapanan ke Spreadsheet
+     */
+    submitRSVP: async function(payload) {
+        const gasUrl = this.getGasUrl();
+        if (gasUrl) {
+            try {
+                await fetch(gasUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'submitRSVP',
+                        data: payload
+                    })
+                });
+            } catch (err) {
+                console.warn('Sync RSVP ke Google Apps Script gagal:', err);
+            }
+        }
+    },
+
+    /**
      * Verifikasi PIN Pengurus KMF
      */
     verifyAdminPin: function(pin) {

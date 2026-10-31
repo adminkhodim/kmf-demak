@@ -411,8 +411,19 @@ const UndanganSelapanan = {
     /**
      * 7. Buku Tamu & Doa Restu (RSVP)
      */
-    initRSVP: function() {
+    initRSVP: async function() {
         this.renderRSVPList();
+
+        // Ambil data terbaru dari cloud spreadsheet jika terhubung
+        if (window.KMF_API && typeof window.KMF_API.getRSVPList === 'function') {
+            try {
+                const cloudList = await window.KMF_API.getRSVPList();
+                if (cloudList && Array.isArray(cloudList) && cloudList.length > 0) {
+                    localStorage.setItem('kmf_selapanan_rsvp_list', JSON.stringify(cloudList));
+                    this.renderRSVPList();
+                }
+            } catch (e) {}
+        }
 
         const form = document.getElementById('undangan-rsvp-form');
         if (form) {
@@ -451,6 +462,11 @@ const UndanganSelapanan = {
         const existingList = this.getStoredRSVPList();
         existingList.unshift(newEntry);
         localStorage.setItem('kmf_selapanan_rsvp_list', JSON.stringify(existingList));
+
+        // Sync ke Google Spreadsheet jika GAS terhubung
+        if (window.KMF_API && typeof window.KMF_API.submitRSVP === 'function') {
+            window.KMF_API.submitRSVP(newEntry);
+        }
 
         // Render ulang daftar ucapan
         this.renderRSVPList();
