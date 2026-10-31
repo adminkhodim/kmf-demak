@@ -2368,24 +2368,32 @@
     <!-- ==================== MODAL DETAIL AGENDA LENGKAP (ALA HALAMAN BERITA) ==================== -->
     <div id="modal-detail-agenda" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col max-h-[92vh]">
-            <!-- Foto / Poster Header -->
-            <div class="relative h-48 sm:h-56 bg-slate-950 overflow-hidden shrink-0">
-                <img id="modal-agenda-foto" src="" alt="Agenda" class="w-full h-full object-cover object-top">
-                <span id="modal-agenda-kategori-badge" class="absolute top-3 left-3 text-[10px] bg-rose-600/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-md font-bold shadow-sm">
-                    Kategori
-                </span>
-                <button type="button" onclick="App.closeAgendaDetailModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white flex items-center justify-center transition active:scale-95 cursor-pointer">
+            <!-- Modal Header Sticky Toolbar -->
+            <div class="px-4 py-3 bg-white border-b border-slate-100 flex items-center justify-between shrink-0 sticky top-0 z-10">
+                <div class="flex items-center gap-2">
+                    <span id="modal-agenda-kategori-badge" class="text-[10.5px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-rose-600 text-white shadow-2xs">
+                        Kategori
+                    </span>
+                    <span id="modal-agenda-tanggal-badge" class="font-bold text-xs text-kmf-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+                        Tanggal
+                    </span>
+                </div>
+                <button type="button" onclick="App.closeAgendaDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition active:scale-95 cursor-pointer shadow-2xs" title="Tutup">
                     <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
 
             <!-- Body Detail Agenda (Scrollable) -->
             <div class="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
-                <div class="space-y-1.5">
+                <!-- Poster Banner Utuh Proporsional (Sesuai Ukuran Asli Gambar Tanpa Terpotong) -->
+                <div class="w-full rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/80 shadow-xs flex justify-center items-center p-1 sm:p-1.5">
+                    <img id="modal-agenda-foto" src="" alt="Poster Agenda" class="w-full h-auto max-w-full object-contain rounded-xl block">
+                </div>
+
+                <div class="space-y-1 pt-1">
                     <div class="flex items-center gap-2 text-[11px] text-slate-400">
-                        <span id="modal-agenda-tanggal-badge" class="font-bold text-kmf-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">Tanggal</span>
-                        <span>&bull;</span>
-                        <span id="modal-agenda-waktu-badge" class="text-slate-600 font-medium">Waktu</span>
+                        <i class="fa-regular fa-clock text-rose-500"></i>
+                        <span id="modal-agenda-waktu-badge" class="text-slate-600 font-semibold">Waktu</span>
                     </div>
                     <h3 id="modal-agenda-judul" class="text-base sm:text-lg font-black text-slate-900 leading-snug">Judul Agenda</h3>
                 </div>

@@ -608,6 +608,6 @@ const KMF_DATA = {
 };
 
 if (typeof window !== 'undefined') {
-    window.KMF_DATA = KMF_DATA;
+    window['KMF_DATA'] = KMF_DATA;
 }
 
