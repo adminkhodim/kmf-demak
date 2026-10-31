@@ -637,22 +637,25 @@ const UndanganSelapanan = {
     },
 
     shareToWhatsApp: function(targetRecipientName) {
-        const baseUrl = window.location.origin + window.location.pathname;
+        // Gunakan domain publik produksi agar bot WhatsApp selalu berhasil men-crawl poster thumbnail
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const baseUrl = isLocal ? 'https://www.kmf.my.id/' : (window.location.origin + window.location.pathname);
         const invitationUrl = `${baseUrl}?p=selapanan&to=${encodeURIComponent(targetRecipientName)}`;
 
+        // Catatan: Tautan undangan diletakkan sebagai satu-satunya link agar WhatsApp WAJIB menampilkan thumbnail Poster Selapanan (bukan foto Maps)
         const textMessage = `*UNDANGAN RESMI SELAPANAN KMF DEMAK* 🕌\n\n` +
             `Assalamu'alaikum Warahmatullahi Wabarakatuh\n\n` +
             `Kepada Yth. Sahabat/Alumni:\n` +
             `*${targetRecipientName}*\n` +
             `di Tempat\n\n` +
+            `🔗 *Buka Lembar Undangan & Konfirmasi Kehadiran:*\n` +
+            `${invitationUrl}\n\n` +
             `Mengharap dengan hormat kehadiran panjenengan dalam agenda *Selapanan KMF Cabang Demak* yang insya Allah diselenggarakan pada:\n\n` +
             `🗓️ *Hari/Tgl* : Ahad, 01 November 2026\n` +
             `⏱️ *Waktu*    : 09.00 WIB s/d selesai\n` +
             `📢 *Mau'idhoh*: KH. Abdul Aziz Musyaffa'\n` +
             `🏡 *Tempat*   : Rumah KH. Abdul Aziz Musyaffa' (PP Nurul Hikmah Demak Kota)\n` +
-            `📍 *Maps*     : https://maps.app.goo.gl/EvjHdS5waFtwAnzv8\n\n` +
-            `Buka lembar warta dan konfirmasi kehadiran panjenengan melalui tautan undangan digital khusus berikut:\n` +
-            `🔗 ${invitationUrl}\n\n` +
+            `📍 *Navigasi* : Panduan rute Google Maps & donasi infaq dapat diakses lengkap di dalam tautan undangan di atas.\n\n` +
             `Merupakan suatu kehormatan dan kebahagiaan bagi kami atas kehadiran panjenengan. Maturnuwun.\n\n` +
             `Wassalamu'alaikum Warahmatullahi Wabarakatuh\n` +
             `*Pengurus Cabang KMF Demak*`;

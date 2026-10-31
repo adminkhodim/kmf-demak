@@ -903,28 +903,28 @@ const App = {
         const waShareBtn = document.getElementById('modal-agenda-wa-share');
         if (waShareBtn) {
             const isSelapanan = item.kategori === 'Selapanan';
-            const waShareText = isSelapanan ? `*INFO SELAPANAN KMF DEMAK*
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const baseWebUrl = isLocal ? 'https://www.kmf.my.id/' : (window.location.origin + window.location.pathname);
+            const selapananUrl = `${baseWebUrl}?p=selapanan`;
 
-Assalamualaikum warahmatullahi wabarakatuh
+            const waShareText = isSelapanan ? `*UNDANGAN RESMI SELAPANAN KMF DEMAK* 🕌
 
-Diberitahukan kepada segenap seluruh Anggota KMF Demak, bahwa akan dilaksanakan Selapanan KMF DEMAK pada:
+Assalamu'alaikum Warahmatullahi Wabarakatuh
 
-📌 *Hari* : ${item.hari || 'Ahad'}
-🗓️ *Tanggal* : ${item.tanggal}
-⏱️ *Pukul* : ${item.waktu}
-📢 *Pemateri* : ${item.pemateri || "KH. Abdul Aziz Musyaffa'"} 
-🏡 *Tempat* : ${item.tempat}
-${item.alamat ? '📍 *Alamat* : ' + item.alamat + '\n' : ''}🚔 *Maps* : 
-${item.maps || 'https://maps.app.goo.gl/EvjHdS5waFtwAnzv8'}
+🔗 *Buka Lembar Undangan & Konfirmasi Kehadiran:*
+${selapananUrl}
 
-Demikian pemberitahuan dan undangan ini kami sampaikan.
-Kurang lebihnya mohon maaf dan terima kasih.
+Mengharap kehadiran Sahabat/Alumni KMF Demak dalam agenda *Selapanan KMF Cabang Demak*:
+🗓️ *Hari/Tgl* : ${item.hari || 'Ahad'}, ${item.tanggal}
+⏱️ *Pukul*    : ${item.waktu}
+📢 *Mau'idhoh*: ${item.pemateri || "KH. Abdul Aziz Musyaffa'"}
+🏡 *Tempat*   : ${item.tempat}
+📍 *Navigasi* : Panduan rute Google Maps & donasi infaq dapat diakses lengkap di lembar undangan digital di atas.
 
-Wassalamu'alaikum warahmatullahi wabarakatuh
-
-NB : 
-- Donasi acara bisa lewat Kotak Infaq saat Acara atau lewat Transfer No Rek 1208305397 (BNI An. Ahmad Muntohar).`
-            : `Undangan Kegiatan KMF Demak: *${item.title}*\nTanggal: ${item.tanggal}\nWaktu: ${item.waktu}\nTempat: ${item.tempat}\n${item.maps ? 'Maps: ' + item.maps : ''}`;
+Demikian undangan ini kami sampaikan. Maturnuwun.
+Wassalamu'alaikum Warahmatullahi Wabarakatuh
+*Pengurus Cabang KMF Demak*`
+            : `Undangan Kegiatan KMF Demak: *${item.title}*\nTanggal: ${item.tanggal}\nWaktu: ${item.waktu}\nTempat: ${item.tempat}`;
 
             waShareBtn.href = `https://wa.me/?text=${encodeURIComponent(waShareText)}`;
         }
@@ -2402,27 +2402,27 @@ NB :
         if (container && window.KMF_DATA && window.KMF_DATA.agendaList) {
             container.innerHTML = window.KMF_DATA.agendaList.map(item => {
                 const isSelapanan = item.kategori === 'Selapanan';
-                const waShareText = isSelapanan ? `*INFO SELAPANAN KMF DEMAK*
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const baseWebUrl = isLocal ? 'https://www.kmf.my.id/' : (window.location.origin + window.location.pathname);
+                const selapananUrl = `${baseWebUrl}?p=selapanan`;
 
-Assalamualaikum warahmatullahi wabarakatuh
+                const waShareText = isSelapanan ? `*UNDANGAN RESMI SELAPANAN KMF DEMAK* 🕌
 
-Diberitahukan kepada segenap seluruh Anggota KMF Demak, bahwa akan dilaksanakan Selapanan KMF DEMAK pada:
+Assalamu'alaikum Warahmatullahi Wabarakatuh
 
-📌 *Hari* : ${item.hari || 'Ahad'}
-🗓️ *Tanggal* : ${item.tanggal}
-⏱️ *Pukul* : ${item.waktu}
-📢 *Pemateri* : ${item.pemateri || "KH. Abdul Aziz Musyaffa'"} 
-🏡 *Tempat* : ${item.tempat}
-🚔 *Maps* : 
-${item.maps || 'https://maps.app.goo.gl/EvjHdS5waFtwAnzv8'}
+🔗 *Buka Lembar Undangan & Konfirmasi Kehadiran:*
+${selapananUrl}
 
-Demikian pemberitahuan dan undangan ini kami sampaikan.
-Kurang lebihnya mohon maaf dan terima kasih.
+Mengharap kehadiran Sahabat/Alumni KMF Demak dalam agenda *Selapanan KMF Cabang Demak*:
+🗓️ *Hari/Tgl* : ${item.hari || 'Ahad'}, ${item.tanggal}
+⏱️ *Pukul*    : ${item.waktu}
+📢 *Mau'idhoh*: ${item.pemateri || "KH. Abdul Aziz Musyaffa'"}
+🏡 *Tempat*   : ${item.tempat}
+📍 *Navigasi* : Panduan rute Google Maps & donasi infaq dapat diakses lengkap di lembar undangan digital di atas.
 
-Wassalamu'alaikum warahmatullahi wabarakatuh
-
-NB : 
-- Donasi acara bisa lewat Kotak Infaq saat Acara atau lewat Transfer No Rek 1208305397 (BNI An. Ahmad Muntohar).`
+Demikian undangan ini kami sampaikan. Maturnuwun.
+Wassalamu'alaikum Warahmatullahi Wabarakatuh
+*Pengurus Cabang KMF Demak*`
                 : `Undangan Kegiatan KMF Demak: *${item.title}* pada ${item.tanggal} di ${item.tempat}`;
 
                 return `

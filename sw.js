@@ -4,7 +4,7 @@
  * hisab jadwal sholat, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.5.5';
+const CACHE_NAME = 'kmf-demak-v2.5.6';
 const STATIC_ASSETS = [
     './',
     './index.html',
