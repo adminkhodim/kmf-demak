@@ -1,10 +1,15 @@
+// @ts-nocheck
+/// <reference lib="webworker" />
+/* eslint-env serviceworker, browser */
+/* eslint-disable no-undef */
+
 /**
- * Service Worker KMF Demak PWA (v2.6.0)
+ * Service Worker KMF Demak PWA (v2.6.2)
  * Menyediakan cache offline penuh untuk teks amalan (Tahlil, Yasin, Wirid, Istighotsah),
  * hisab jadwal sholat, direktori alumni, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.6.1';
+const CACHE_NAME = 'kmf-demak-v2.6.2';
 const STATIC_ASSETS = [
     './',
     './manifest.json',
@@ -44,7 +49,11 @@ self.addEventListener('install', (event) => {
                     }
                 })
             );
-        }).then(() => self.skipWaiting())
+        }).then(() => {
+            if (typeof self.skipWaiting === 'function') {
+                return self.skipWaiting();
+            }
+        })
     );
 });
 
@@ -58,7 +67,11 @@ self.addEventListener('activate', (event) => {
                     }
                 })
             );
-        }).then(() => self.clients.claim())
+        }).then(() => {
+            if (self.clients && typeof self.clients.claim === 'function') {
+                return self.clients.claim();
+            }
+        })
     );
 });
 
@@ -104,7 +117,7 @@ self.addEventListener('fetch', (event) => {
             }).catch(() => {
                 // Fallback offline saat user navigasi halaman utama
                 if (event.request.mode === 'navigate') {
-                    return caches.match('./') || caches.match('/');
+                    return caches.match('./').then((cached) => cached || caches.match('/'));
                 }
             });
         })
