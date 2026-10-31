@@ -16,5 +16,8 @@
     "alumni"
   ],
   "author": "KMF Demak",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jimp": "^1.6.1"
+  }
 }

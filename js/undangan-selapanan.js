@@ -73,6 +73,7 @@ const UndanganSelapanan = {
     initAudio: function() {
         if (!this.audio) {
             this.audio = new Audio('assets/audio/backsong-selapanan.mp3');
+            this.audio.preload = 'none'; // Hemat bandwidth: jangan unduh audio sebelum tombol buka undangan diklik
             this.audio.loop = true;
             this.audio.volume = 0.7;
 

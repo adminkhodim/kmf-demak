@@ -24,7 +24,7 @@ const App = {
         // 1. Populasi Master Data ke Formulir dan Filter
         this.populateDropdowns();
 
-        // 2. Render Komponen Utama
+        // 2. Render Komponen Utama (Instan dari Cache Lokal / Memori 0ms)
         this.initArabicFontSize();
         this.initUserAuth();
         await this.renderHome();
@@ -39,10 +39,17 @@ const App = {
         this.renderUserProfileCard();
         await this.updatePendingBadge();
 
-        // 3. Listener PWA Install Prompt & Deteksi iOS
+        // 3. Listener PWA Install Prompt & Deteksi Multi-Platform
         this.initPwaInstall();
 
-        // 4. Deteksi Tautan Langsung Undangan Digital (?p=selapanan&to=Nama)
+        // 4. Sinkronisasi Data Google Apps Script di Latar Belakang (Non-Blocking)
+        if (window.KMF_API && window.KMF_API.syncInBackground) {
+            window.KMF_API.syncInBackground(() => {
+                this.refreshLiveViews();
+            });
+        }
+
+        // 5. Deteksi Tautan Langsung Undangan Digital (?p=selapanan&to=Nama)
         const urlParams = new URLSearchParams(window.location.search);
         const pParam = urlParams.get('p') || urlParams.get('tab') || urlParams.get('invitasi') || urlParams.get('undangan');
         if (pParam === 'selapanan' || pParam === 'undangan-selapanan' || urlParams.has('invitasi') || urlParams.has('to')) {
@@ -53,10 +60,20 @@ const App = {
             return;
         }
 
-        // 5. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
+        // 6. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
         setTimeout(() => {
             this.checkHomePosterPopup();
         }, 700);
+    },
+
+    /**
+     * Memperbarui antarmuka ketika sinkronisasi latar belakang selesai
+     */
+    refreshLiveViews: async function() {
+        await this.renderHome();
+        await this.renderAlumniList();
+        await this.renderUsahaList();
+        await this.updatePendingBadge();
     },
 
     /**
@@ -472,7 +489,7 @@ const App = {
         const spotlightHtml = usaha.slice(0, 3).map(u => `
             <div onclick="App.openUsahaDetail('${u.id}')" class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition cursor-pointer flex flex-col justify-between active:scale-[0.99]">
                 <div class="h-32 bg-slate-100 overflow-hidden relative">
-                    <img src="${u.foto}" alt="${u.namaUsaha}" class="w-full h-full object-cover">
+                    <img src="${u.foto}" alt="${u.namaUsaha}" loading="lazy" decoding="async" class="w-full h-full object-cover">
                     <span class="absolute top-2 left-2 text-[9.5px] bg-slate-900/80 backdrop-blur-sm text-white px-2 py-0.5 rounded-md font-semibold">
                         ${u.kategori}
                     </span>
@@ -525,7 +542,7 @@ const App = {
             <div onclick="App.openUsahaDetail('${u.id}')" 
                 class="w-20 sm:w-22 shrink-0 cursor-pointer group flex flex-col items-center active:scale-95 transition">
                 <div class="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-2xs group-hover:border-kmf-500 transition duration-200 relative">
-                    <img src="${u.foto}" alt="${u.namaUsaha}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <img src="${u.foto}" alt="${u.namaUsaha}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                 </div>
                 <span class="text-[10px] font-bold text-slate-700 text-center line-clamp-1 leading-tight mt-1.5 group-hover:text-kmf-600 transition w-full px-0.5" title="${u.namaUsaha}">
                     ${u.namaUsaha}
@@ -625,7 +642,7 @@ const App = {
                 <div>
                     <!-- Foto Berita -->
                     <div class="h-44 sm:h-48 bg-slate-100 overflow-hidden relative">
-                        <img src="${item.foto}" alt="${item.judul}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <img src="${item.foto}" alt="${item.judul}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <span class="absolute top-2.5 left-2.5 text-[9.5px] bg-kmf-800/90 backdrop-blur-sm text-emerald-200 px-2.5 py-1 rounded-md font-bold">
                             ${item.kategori}
                         </span>
@@ -986,7 +1003,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
             <div onclick="App.openAlumniDetail('${item.id}')" class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs hover:border-kmf-500 hover:shadow-sm transition cursor-pointer flex gap-3 active:scale-[0.99] group">
                 <!-- Foto Profil -->
                 <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-inner group-hover:scale-105 transition duration-300">
-                    <img src="${item.foto}" alt="${item.nama}" class="w-full h-full object-cover">
+                    <img src="${item.foto}" alt="${item.nama}" loading="lazy" decoding="async" class="w-full h-full object-cover">
                 </div>
 
                 <!-- Informasi Alumni -->
@@ -1131,7 +1148,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                 <div>
                     <!-- Foto Produk Square 1:1 Ala Tokopedia -->
                     <div class="aspect-square bg-slate-100 overflow-hidden relative">
-                        <img src="${u.foto}" alt="${u.namaUsaha}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <img src="${u.foto}" alt="${u.namaUsaha}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         
                         ${u.diskon ? `
                             <span class="absolute top-2 right-2 text-[9.5px] bg-red-600 text-white font-black px-1.5 py-0.5 rounded shadow-xs">
