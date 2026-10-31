@@ -42,7 +42,18 @@ const App = {
         // 3. Listener PWA Install Prompt & Deteksi iOS
         this.initPwaInstall();
 
-        // 4. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
+        // 4. Deteksi Tautan Langsung Undangan Digital (?p=selapanan&to=Nama)
+        const urlParams = new URLSearchParams(window.location.search);
+        const pParam = urlParams.get('p') || urlParams.get('tab') || urlParams.get('invitasi') || urlParams.get('undangan');
+        if (pParam === 'selapanan' || pParam === 'undangan-selapanan' || urlParams.has('invitasi') || urlParams.has('to')) {
+            const guestName = urlParams.get('to') || urlParams.get('nama') || urlParams.get('guest');
+            setTimeout(() => {
+                this.openUndanganSelapanan(guestName);
+            }, 300);
+            return;
+        }
+
+        // 5. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
         setTimeout(() => {
             this.checkHomePosterPopup();
         }, 700);
@@ -314,6 +325,15 @@ const App = {
      * Navigasi Antar Tab (SPA Router)
      */
     navigateTo: function(targetTab) {
+        if (this.currentTab === 'undangan-selapanan' && targetTab !== 'undangan-selapanan') {
+            if (window.UndanganSelapanan) {
+                window.UndanganSelapanan.stopAutoScroll();
+                if (window.UndanganSelapanan.audio) {
+                    window.UndanganSelapanan.audio.pause();
+                }
+            }
+        }
+
         if (targetTab === 'ibadah') targetTab = 'amalan';
         this.currentTab = targetTab;
 
@@ -798,6 +818,12 @@ const App = {
         const list = (window.KMF_DATA && window.KMF_DATA.agendaList) || [];
         const item = list.find(a => String(a.id) === String(id));
         if (!item) return;
+
+        // Jika agenda adalah Selapanan atau ID 1, alihkan langsung ke halaman Undangan Digital Interaktif
+        if (String(id) === '1' || (item.kategori && item.kategori.toLowerCase().includes('selapanan'))) {
+            this.openUndanganSelapanan();
+            return;
+        }
 
         const modal = document.getElementById('modal-detail-agenda');
         if (!modal) return;
@@ -3398,7 +3424,22 @@ NB :
      */
     openSelapananFromPoster: function() {
         this.closeHomePoster(false);
-        this.openAgendaDetail(1);
+        this.openUndanganSelapanan();
+    },
+
+    /**
+     * Buka Halaman Undangan Digital Interaktif Selapanan KMF Demak
+     */
+    openUndanganSelapanan: function(guestName) {
+        this.closeHomePoster(false);
+        this.navigateTo('undangan-selapanan');
+        if (window.UndanganSelapanan) {
+            if (guestName) {
+                window.UndanganSelapanan.guestName = guestName;
+            }
+            window.UndanganSelapanan.init();
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 };
 

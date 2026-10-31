@@ -4,13 +4,14 @@
  * hisab jadwal sholat, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.4.0';
+const CACHE_NAME = 'kmf-demak-v2.5.0';
 const STATIC_ASSETS = [
     './',
     './index.html',
     './manifest.json',
     './css/styles.css',
     './js/app.js',
+    './js/undangan-selapanan.js',
     './js/jadwal-sholat.js',
     './js/data-amalan.js',
     './js/data-mock.js',
@@ -19,6 +20,7 @@ const STATIC_ASSETS = [
     './assets/img/logo.png',
     './assets/icons/icon-192.png',
     './assets/icons/icon-512.png',
+    './assets/audio/backsong-selapanan.mp3',
     './assets/img/banners/poster-selapanan.jpg',
     './assets/img/usaha/usaha-sarung-batik.jpg',
     './assets/img/usaha/usaha-buku-fiqhsosial.jpg',

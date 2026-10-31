@@ -309,3 +309,81 @@ body {
   transform: translateY(-4px);
 }
 
+/* ====================================================================
+   FITUR UNDANGAN DIGITAL INTERAKTIF SELAPANAN KMF DEMAK
+   ==================================================================== */
+.undangan-cover-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 20%, #064e3b 0%, #022c22 65%, #01140e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.7s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.undangan-cover-overlay.opened {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Floating Controls (Musik & Auto Scroll) */
+.undangan-floating-dock {
+  position: fixed;
+  top: calc(72px + env(safe-area-inset-top, 0px));
+  right: calc(14px + env(safe-area-inset-right, 0px));
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.undangan-fab {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.undangan-fab:active {
+  transform: scale(0.92);
+}
+
+.undangan-fab.playing {
+  border-color: #10b981;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spin-slow {
+  animation: spinSlow 6s linear infinite;
+}
+
+/* Card Glow Accent */
+.gold-emerald-gradient {
+  background: linear-gradient(135deg, rgba(6, 95, 70, 0.95) 0%, rgba(4, 47, 46, 0.98) 100%);
+}
+
+.gold-border-glow {
+  border: 1px solid rgba(217, 119, 6, 0.35);
+  box-shadow: 0 4px 20px -2px rgba(217, 119, 6, 0.15);
+}
+
+
