@@ -5,6 +5,55 @@
  */
 
 const KMF_DATA = {
+    // Daftar Provinsi Utama
+    provinsiList: [
+        "Jawa Tengah",
+        "Jawa Timur",
+        "Jawa Barat",
+        "D.I. Yogyakarta",
+        "DKI Jakarta",
+        "Banten",
+        "Luar Jawa / Lainnya"
+    ],
+
+    // Daftar Kabupaten / Kota (Fokus Jawa Tengah & Sekitarnya)
+    kabupatenMap: {
+        "Jawa Tengah": [
+            "Kabupaten Demak",
+            "Kabupaten Pati",
+            "Kabupaten Kudus",
+            "Kabupaten Jepara",
+            "Kota Semarang",
+            "Kabupaten Semarang",
+            "Kabupaten Grobogan",
+            "Kabupaten Kendal",
+            "Kabupaten Rembang",
+            "Kabupaten Blora",
+            "Kota Salatiga",
+            "Kabupaten Batang",
+            "Kabupaten Pekalongan",
+            "Lainnya di Jawa Tengah"
+        ],
+        "Jawa Timur": [
+            "Kota Surabaya", "Kabupaten Tuban", "Kabupaten Bojonegoro", "Kabupaten Lamongan", "Kabupaten Gresik", "Kabupaten Sidoarjo", "Kabupaten Pasuruan", "Kabupaten Malang", "Kabupaten Jombang", "Lainnya di Jawa Timur"
+        ],
+        "Jawa Barat": [
+            "Kota Bandung", "Kabupaten Bekasi", "Kota Bekasi", "Kabupaten Bogor", "Kota Bogor", "Kabupaten Cirebon", "Lainnya di Jawa Barat"
+        ],
+        "D.I. Yogyakarta": [
+            "Kota Yogyakarta", "Kabupaten Sleman", "Kabupaten Bantul", "Kabupaten Kulon Progo", "Kabupaten Gunungkidul"
+        ],
+        "DKI Jakarta": [
+            "Jakarta Pusat", "Jakarta Selatan", "Jakarta Timur", "Jakarta Barat", "Jakarta Utara"
+        ],
+        "Banten": [
+            "Kota Tangerang", "Kota Tangerang Selatan", "Kabupaten Tangerang", "Kota Serang", "Kota Cilegon"
+        ],
+        "Luar Jawa / Lainnya": [
+            "Luar Jawa / Luar Negeri"
+        ]
+    },
+
     // 14 Kecamatan di Kabupaten Demak
     kecamatanList: [
         "Demak Kota",
@@ -22,6 +71,89 @@ const KMF_DATA = {
         "Karangawen",
         "Kebonagung"
     ],
+
+    // Master Data Seluruh Desa & Kelurahan per Kecamatan di Kabupaten Demak
+    demakDesaMap: {
+        "Demak Kota": [
+            "Bintoro", "Betokan", "Bango", "Cabean", "Donorojo", "Kalicilik", 
+            "Karangmlati", "Katonsari", "Kedondong", "Mangunjiwan", "Mulyorejo", 
+            "Raji", "Sedo", "Singorejo", "Tempel", "Turirejo", "Bogorejo", "Bolo", "Kalikondang"
+        ],
+        "Karangawen": [
+            "Brambang", "Bumirejo", "Jragung", "Karangawen", "Kuripan", 
+            "Margohayu", "Pundenarum", "Rejosari", "Sidorejo", "Teluk", 
+            "Tlogorejo", "Wonosekar"
+        ],
+        "Mranggen": [
+            "Banyumeneng", "Batursari", "Brumbung", "Candisari", "Jamus", 
+            "Kalitengah", "Kangkung", "Karangsono", "Kebonbatur", "Kembangarum", 
+            "Menur", "Mranggen", "Ngemplak", "Sambiroto", "Sumberejo", 
+            "Tamansari", "Tegalarum", "Waru", "Wringinjajar"
+        ],
+        "Sayung": [
+            "Banjarsari", "Bedono", "Bulusari", "Dombo", "Gemulak", 
+            "Kalisari", "Karangasem", "Loireng", "Morosari", "Pilangsari", 
+            "Prampelan", "Purwosari", "Sayung", "Sidogemah", "Sidorejo", 
+            "Sriwulan", "Surodadi", "Tambakroto", "Timbulsloko", "Tugu"
+        ],
+        "Guntur": [
+            "Bakalrejo", "Banjarejo", "Blerong", "Bogosari", "Bumiharjo", 
+            "Gaji", "Guntur", "Krandon", "Pamongan", "Ploso", 
+            "Sarirejo", "Sidoharjo", "Sidokumpul", "Sukorejo", "Tangkis", 
+            "Temuroso", "Tlogorejo", "Tlogoweru", "Trimulyo", "Turitempel"
+        ],
+        "Karangtengah": [
+            "Batu", "Donorejo", "Dukun", "Grogol", "Karangsari", 
+            "Karangtengah", "Kedunguter", "Kertomulyo", "Klitih", "Pidodo", 
+            "Ploso", "Pulosari", "Rejosari", "Sampang", "Tambakbulusan", 
+            "Wonoagung", "Wonokerto"
+        ],
+        "Bonang": [
+            "Betahwalang", "Bonangrejo", "Gebang", "Gebangarum", "Jali", 
+            "Jatimulyo", "Jatoroto", "Karangrejo", "Kembangan", "Krajanbogo", 
+            "Margolinduk", "Morodemak", "Poncorejo", "Purworejo", "Rohoboyo", 
+            "Serangan", "Sukodono", "Sumberejo", "Tlogoboyo", "Tridonorejo", "Weding"
+        ],
+        "Wedung": [
+            "Babalan", "Berahan Kulon", "Berahan Wetan", "Buko", "Bungo", 
+            "Jamus", "Jetak", "Jungpasir", "Jungsemi", "Kedungkarang", 
+            "Kenduren", "Mandung", "Mutih Kulon", "Mutih Wetan", "Ngawen", 
+            "Ruwit", "Ruwit Kulon", "Tedunan", "Tempel", "Wedung"
+        ],
+        "Mijen": [
+            "Bakung", "Banteng Mati", "Bermi", "Geneng", "Jleper", 
+            "Mijen", "Mlaten", "Mulyorejo", "Ngegot", "Ngelukulon", 
+            "Ngeluwetan", "Pasir", "Pecuk", "Rejosari", "Tanggul"
+        ],
+        "Karanganyar": [
+            "Bandungrejo", "Cangkring", "Cangkring Pos", "Cangkring Rembang", "Karanganyar", 
+            "Kedungwaru Kidul", "Kedungwaru Lor", "Ketanjung", "Kotakan", "Ngaluran", 
+            "Ngemplik Wetan", "Tugu Lor", "Tuwang", "Undaan Kidul", "Undaan Lor", 
+            "Wonoketingal", "Wonorejo"
+        ],
+        "Gajah": [
+            "Banjarsari", "Boyolali", "Gajah", "Gedangalas", "Jatisono", 
+            "Kedondong", "Medini", "Mlatiharjo", "Mlekang", "Mojosimo", 
+            "Sambiroto", "Sambung", "Sari", "Surodadi", "Tambirejo", 
+            "Tanjunganyar", "Tlogopandogan", "Wilalung"
+        ],
+        "Dempet": [
+            "Balerejo", "Baleromo", "Botosengon", "Brakas", "Buntalit", 
+            "Dempet", "Gempoldenok", "Harjowinangun", "Jerukgulung", "Karangrejo", 
+            "Kebonsari", "Kedungori", "Kramat", "Kuwu", "Merak", "Sidomulyo"
+        ],
+        "Wonosalam": [
+            "Botorejo", "Bunderan", "Doreng", "Getas", "Jogoloyo", 
+            "Kalianyar", "Karangrejo", "Karangrowo", "Kendaldoyong", "Keranjangan", 
+            "Kuncir", "Lempuyang", "Mojodemak", "Pilangrejo", "Sido Mulyo", 
+            "Tlogodowo", "Tlogorejo", "Trengguli", "Tuntang", "Wonorejo", "Wonosalam"
+        ],
+        "Kebonagung": [
+            "Babadan", "Karangsono", "Kebonagung", "Klampok Lor", "Mangunrejo", 
+            "Megonten", "Mijen", "Pilangwetan", "Prigi", "Sarimulyo", 
+            "Sokokidul", "Solowire", "Tlogosih", "Werdoyo"
+        ]
+    },
 
     // Kategori Profesi
     profesiCategories: [

@@ -80,6 +80,19 @@ function doGet(e) {
       });
     }
 
+    // 6. Sinkronisasi & Pembaruan Header Kolom Spreadsheet (Sesuai Frontend Terbaru)
+    if (action === 'syncHeaders') {
+      var pSheet = getOrCreateSheet(ss, 'Pending');
+      var aSheet = getOrCreateSheet(ss, 'Alumni');
+      setupSheetHeaders(pSheet, ALUMNI_COLUMNS);
+      setupSheetHeaders(aSheet, ALUMNI_COLUMNS);
+      return jsonResponse({
+        status: 'success',
+        message: 'Header kolom tab Pending dan Alumni berhasil disinkronkan sesuai data formulir!',
+        columns: ALUMNI_COLUMNS
+      });
+    }
+
     return jsonResponse({ status: 'error', message: 'Aksi GET tidak valid: ' + action });
 
   } catch (err) {
@@ -133,6 +146,38 @@ function doPost(e) {
   }
 }
 
+// Definisi 28 Kolom Standar Lengkap Alumni KMF (Sinkron 100% Antara Frontend & Database)
+var ALUMNI_COLUMNS = [
+  'ID Pendaftar',               // 0
+  'Waktu Daftar',               // 1
+  'Nama Lengkap & Gelar',       // 2
+  'Nama Panggilan',             // 3
+  'Nomor WhatsApp',             // 4
+  'Tampilkan Nomor WA',         // 5
+  'Tahun Lulus / Angkatan',     // 6
+  'Marhalah Terakhir',          // 7
+  'Pondok di Kajen',            // 8
+  'Guru / Masyayikh Diangsu',   // 9
+  'Provinsi',                   // 10
+  'Kabupaten / Kota',           // 11
+  'Kecamatan',                  // 12
+  'Desa / Kelurahan',           // 13
+  'RT / RW',                    // 14
+  'Alamat Lengkap',             // 15
+  'Titik Lokasi Google Maps',   // 16
+  'Kategori Profesi',           // 17
+  'Uraian Pekerjaan / Instansi',// 18
+  'URL Foto Profil',            // 19
+  'Status Verifikasi',          // 20
+  'Nama Usaha',                 // 21
+  'Kategori Usaha',             // 22
+  'Deskripsi Usaha',            // 23
+  'URL Foto Usaha',             // 24
+  'WhatsApp Bisnis',            // 25
+  'Link Google Maps Usaha',     // 26
+  'Catatan Pengurus'            // 27
+];
+
 /**
  * ====================================================================
  * HANDLER BUSINESS LOGIC
@@ -158,22 +203,32 @@ function handleSubmitRegistration(ss, item) {
   var row = [
     item.id || ('KMF-DMK-' + Date.now()),
     new Date(),
-    item.nama || '',
-    item.angkatan || '',
+    item.nama || item.namaLengkap || '',
+    item.panggilan || item.namaPanggilan || '',
+    item.noWa || item.whatsapp || '',
+    (item.tampilkanWa === true || item.tampilkanWa === 'Ya' || item.tampilkanNomorWa === 'Ya') ? 'Ya' : 'Tidak',
+    item.tahunLulus || item.angkatan || item.tahunAngkatan || '',
+    item.marhalah || item.pendidikan || item.pendidikanTerakhir || '',
+    item.pondokKajen || item.asramaPondok || '',
+    item.guruKajen || item.guruMasyayikh || '',
+    item.provinsi || 'Jawa Tengah',
+    item.kabupaten || item.kabupatenKota || 'Kabupaten Demak',
     item.kecamatan || '',
-    item.desa || '',
-    item.alamat || '',
-    item.noWa || '',
-    item.pekerjaan || '',
-    item.pendidikan || '',
+    item.desa || item.desaKelurahan || '',
+    item.rtRw || '',
+    item.alamat || item.alamatLengkap || '',
+    item.titikLokasiMaps || item.titikLokasiGoogleMaps || item.linkGmaps || '',
+    item.profesiKategori || item.pekerjaan || item.profesiPekerjaan || '',
+    item.profesiDetail || item.pekerjaanDetail || item.uraianPekerjaan || '',
     fotoUrl,
-    item.status || 'PENDING',
+    'PENDING',
     item.usaha ? (item.usaha.namaUsaha || '') : '',
-    item.usaha ? (item.usaha.kategori || '') : '',
-    item.usaha ? (item.usaha.deskripsi || '') : '',
+    item.usaha ? (item.usaha.kategori || item.usaha.kategoriUsaha || '') : '',
+    item.usaha ? (item.usaha.deskripsi || item.usaha.deskripsiUsaha || '') : '',
     fotoUsahaUrl,
-    item.usaha ? (item.usaha.waBisnis || '') : '',
-    item.usaha ? (item.usaha.linkGmaps || '') : ''
+    item.usaha ? (item.usaha.waBisnis || item.usaha.whatsAppBisnis || '') : '',
+    item.usaha ? (item.usaha.linkGmaps || item.usaha.linkGoogleMaps || '') : '',
+    ''
   ];
 
   sheet.appendRow(row);
@@ -206,39 +261,29 @@ function handleApproveAlumni(ss, pendingId, adminNote) {
     return jsonResponse({ status: 'error', message: 'Data ID pendaftar ' + pendingId + ' tidak ditemukan di antrean pending.' });
   }
 
-  // Masukkan ke Tab Alumni
-  alumniSheet.appendRow([
-    targetItem[0], // id
-    targetItem[1], // timestamp
-    targetItem[2], // nama
-    targetItem[3], // angkatan
-    targetItem[4], // kecamatan
-    targetItem[5], // desa
-    targetItem[6], // alamat
-    targetItem[7], // noWa
-    targetItem[8], // pekerjaan
-    targetItem[9], // pendidikan
-    targetItem[10], // foto
-    'APPROVED',
-    adminNote || ''
-  ]);
+  // Masukkan ke Tab Alumni (Persis sama dengan format 28 kolom)
+  var approvedRow = targetItem.slice();
+  approvedRow[1] = new Date(); // Update waktu verifikasi
+  approvedRow[20] = 'APPROVED'; // Status
+  approvedRow[27] = adminNote || ''; // Catatan verifikasi
+  alumniSheet.appendRow(approvedRow);
 
   // Jika pendaftar menyertakan data usaha, tambahkan ke Tab Usaha
-  var namaUsaha = targetItem[12];
+  var namaUsaha = targetItem[21];
   if (namaUsaha && String(namaUsaha).trim() !== '') {
     usahaSheet.appendRow([
       'USH-DMK-' + Date.now(),
       targetItem[0], // alumniId
-      targetItem[2], // pemilik (nama)
+      targetItem[2], // nama pemilik
       namaUsaha,
-      targetItem[13], // kategori usaha
-      targetItem[4], // kecamatan
-      targetItem[5], // desa
-      targetItem[6], // alamat
-      targetItem[16] || targetItem[7], // waBisnis
-      targetItem[17] || '', // linkGmaps
-      targetItem[14], // deskripsi
-      targetItem[15], // foto produk
+      targetItem[22], // kategori usaha
+      targetItem[12], // kecamatan
+      targetItem[13], // desa
+      (targetItem[15] || '') + (targetItem[14] ? ' ' + targetItem[14] : ''), // alamat lengkap
+      targetItem[25] || targetItem[4], // waBisnis
+      targetItem[26] || targetItem[16] || '', // linkGmaps
+      targetItem[23], // deskripsi usaha
+      targetItem[24], // foto produk usaha
       'APPROVED'
     ]);
   }
@@ -248,7 +293,7 @@ function handleApproveAlumni(ss, pendingId, adminNote) {
 
   return jsonResponse({
     status: 'success',
-    message: 'Alumni berhasil disetujui & dimasukkan ke direktori publik KMF Demak.'
+    message: 'Alumni ' + targetItem[2] + ' berhasil disetujui & dimasukkan ke direktori publik KMF Demak.'
   });
 }
 
@@ -341,26 +386,13 @@ function getUploadFolder() {
 function setupDatabase() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  // 1. Setup Tab Alumni
+  // 1. Setup Tab Alumni (28 Kolom Standar Lengkap)
   var alumniSheet = getOrCreateSheet(ss, 'Alumni');
-  var alumniHeaders = [
-    'ID Alumni', 'Waktu Diterima', 'Nama Lengkap', 'Tahun Angkatan',
-    'Kecamatan', 'Desa / Kelurahan', 'Alamat Lengkap', 'Nomor WhatsApp',
-    'Profesi / Pekerjaan', 'Pendidikan Terakhir', 'URL Foto Profil',
-    'Status Verifikasi', 'Catatan Pengurus'
-  ];
-  setupSheetHeaders(alumniSheet, alumniHeaders);
+  setupSheetHeaders(alumniSheet, ALUMNI_COLUMNS);
 
-  // 2. Setup Tab Pending (Antrean Verifikasi)
+  // 2. Setup Tab Pending (28 Kolom Standar Lengkap)
   var pendingSheet = getOrCreateSheet(ss, 'Pending');
-  var pendingHeaders = [
-    'ID Pendaftar', 'Waktu Daftar', 'Nama Lengkap', 'Tahun Angkatan',
-    'Kecamatan', 'Desa / Kelurahan', 'Alamat Lengkap', 'Nomor WhatsApp',
-    'Profesi / Pekerjaan', 'Pendidikan Terakhir', 'URL Foto Profil',
-    'Status', 'Nama Usaha', 'Kategori Usaha', 'Deskripsi Usaha',
-    'URL Foto Usaha', 'WhatsApp Bisnis', 'Link Google Maps'
-  ];
-  setupSheetHeaders(pendingSheet, pendingHeaders);
+  setupSheetHeaders(pendingSheet, ALUMNI_COLUMNS);
 
   // 3. Setup Tab Usaha (Bursa Produk Santri)
   var usahaSheet = getOrCreateSheet(ss, 'Usaha');

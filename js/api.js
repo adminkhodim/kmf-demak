@@ -81,16 +81,27 @@ const KMF_API = {
             clearTimeout(timeoutId);
             const data = await res.json();
             if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
-                const mapped = data.data.map(item => ({
-                    id: item.id || item.idAlumni || '',
-                    nama: item.nama || item.namaLengkap || '',
-                    angkatan: item.angkatan || item.tahunAngkatan || '',
+                const mapped = data.data.map((item, idx) => ({
+                    id: item.id || item.idAlumni || item.idPendaftar || ('ALUMNI-' + idx),
+                    nama: item.nama || item.namaLengkapGelar || item.namaLengkap || '',
+                    panggilan: item.panggilan || item.namaPanggilan || '',
+                    angkatan: item.angkatan || item.tahunLulusAngkatan || item.tahunLulus || item.tahunAngkatan || '',
+                    tahunLulus: item.tahunLulus || item.tahunLulusAngkatan || item.angkatan || item.tahunAngkatan || '',
+                    marhalah: item.marhalah || item.marhalahTerakhir || item.pendidikan || item.pendidikanTerakhir || "Mathali'ul Falah",
+                    pondokKajen: item.pondokKajen || item.pondokDiKajen || item.asramaPondok || '',
+                    guruKajen: item.guruKajen || item.guruMasyayikhDiangsu || item.guruMasyayikh || '',
+                    provinsi: item.provinsi || 'Jawa Tengah',
+                    kabupaten: item.kabupaten || item.kabupatenKota || 'Kabupaten Demak',
                     kecamatan: item.kecamatan || '',
                     desa: item.desa || item.desaKelurahan || '',
+                    rtRw: item.rtRw || '',
                     alamat: item.alamat || item.alamatLengkap || '',
+                    titikLokasiMaps: item.titikLokasiMaps || item.titikLokasiGoogleMaps || item.linkGmaps || '',
                     noWa: String(item.noWa || item.nomorWhatsapp || ''),
-                    pekerjaan: item.pekerjaan || item.profesiPekerjaan || '',
-                    pendidikan: item.pendidikan || item.pendidikanTerakhir || '',
+                    tampilkanWa: (item.tampilkanWa !== undefined) ? item.tampilkanWa : (item.tampilkanNomorWa ? item.tampilkanNomorWa === 'Ya' : true),
+                    pekerjaan: item.pekerjaan || item.kategoriProfesi || item.profesiPekerjaan || '',
+                    profesiKategori: item.profesiKategori || item.kategoriProfesi || item.pekerjaan || '',
+                    profesiDetail: item.profesiDetail || item.uraianPekerjaanInstansi || item.uraianPekerjaan || '',
                     foto: item.foto || item.urlFotoProfil || 'assets/img/logo.png',
                     status: item.status || item.statusVerifikasi || 'APPROVED'
                 }));
@@ -215,28 +226,33 @@ const KMF_API = {
                     const hasUsaha = item.namaUsaha || (item.usaha && item.usaha.namaUsaha);
                     return {
                         id: item.id || item.idPendaftar || ('PENDING-' + idx),
-                        nama: item.nama || item.namaLengkap || 'Pendaftar KMF',
-                        panggilan: item.panggilan || '',
-                        tahunLulus: item.tahunLulus || item.tahunAngkatan || '',
-                        marhalah: item.marhalah || item.pendidikanTerakhir || "Mathali'ul Falah",
-                        pondokKajen: item.pondokKajen || item.asramaPondok || 'Kajen, Pati',
-                        guruKajen: item.guruKajen || '',
+                        nama: item.nama || item.namaLengkapGelar || item.namaLengkap || 'Pendaftar KMF',
+                        panggilan: item.panggilan || item.namaPanggilan || '',
+                        tahunLulus: item.tahunLulus || item.tahunLulusAngkatan || item.tahunAngkatan || '',
+                        marhalah: item.marhalah || item.marhalahTerakhir || item.pendidikanTerakhir || "Mathali'ul Falah",
+                        pondokKajen: item.pondokKajen || item.pondokDiKajen || item.asramaPondok || 'Kajen, Pati',
+                        guruKajen: item.guruKajen || item.guruMasyayikhDiangsu || item.guruMasyayikh || '',
+                        provinsi: item.provinsi || 'Jawa Tengah',
+                        kabupaten: item.kabupaten || item.kabupatenKota || 'Kabupaten Demak',
                         kecamatan: item.kecamatan || 'Demak',
                         desa: item.desa || item.desaKelurahan || '',
+                        rtRw: item.rtRw || '',
                         alamat: item.alamat || item.alamatLengkap || '',
+                        titikLokasiMaps: item.titikLokasiMaps || item.titikLokasiGoogleMaps || item.linkGmaps || '',
                         noWa: String(item.noWa || item.nomorWhatsapp || ''),
-                        profesiKategori: item.profesiKategori || item.profesiPekerjaan || '',
-                        profesiDetail: item.profesiDetail || '',
+                        tampilkanWa: (item.tampilkanWa !== undefined) ? item.tampilkanWa : (item.tampilkanNomorWa ? item.tampilkanNomorWa === 'Ya' : true),
+                        profesiKategori: item.profesiKategori || item.kategoriProfesi || item.profesiPekerjaan || '',
+                        profesiDetail: item.profesiDetail || item.uraianPekerjaanInstansi || item.uraianPekerjaan || '',
                         foto: item.foto || item.urlFotoProfil || item.urlFoto || 'assets/img/logo.png',
-                        status: item.status || 'PENDING',
+                        status: item.status || item.statusVerifikasi || 'PENDING',
                         waktuDaftar: item.waktuDaftar || item.waktu || new Date().toISOString(),
                         usaha: hasUsaha ? {
                             namaUsaha: item.namaUsaha || (item.usaha ? item.usaha.namaUsaha : ''),
                             kategori: item.kategoriUsaha || (item.usaha ? item.usaha.kategori : 'Lainnya'),
                             deskripsi: item.deskripsiUsaha || (item.usaha ? item.usaha.deskripsi : ''),
                             foto: item.urlFotoUsaha || (item.usaha ? item.usaha.foto : ''),
-                            waBisnis: String(item.whatsAppBisnis || (item.usaha ? item.usaha.waBisnis : '') || item.noWa || item.nomorWhatsapp || ''),
-                            linkGmaps: item.linkGoogleMaps || (item.usaha ? item.usaha.linkGmaps : '')
+                            waBisnis: String(item.whatsAppBisnis || item.whatsappBisnis || (item.usaha ? item.usaha.waBisnis : '') || item.noWa || item.nomorWhatsapp || ''),
+                            linkGmaps: item.linkGoogleMapsUsaha || item.linkGoogleMaps || (item.usaha ? item.usaha.linkGmaps : '')
                         } : null
                     };
                 });
@@ -482,6 +498,13 @@ const KMF_API = {
 
     setGasUrl: function(url) {
         localStorage.setItem(this.STORAGE_KEYS.GAS_URL, url.trim());
+    },
+
+    syncDatabaseHeaders: async function() {
+        const gasUrl = this.getGasUrl();
+        if (!gasUrl) throw new Error('URL Google Apps Script belum disetel.');
+        const res = await fetch(`${gasUrl}?action=syncHeaders`);
+        return await res.json();
     }
 };
 

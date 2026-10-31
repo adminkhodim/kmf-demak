@@ -82,14 +82,21 @@ const App = {
     populateDropdowns: function() {
         const filterAlumniKec = document.getElementById('filter-alumni-kecamatan');
         const filterUsahaKec = document.getElementById('filter-usaha-kecamatan');
-        const regKecamatan = document.getElementById('register-kecamatan');
 
         if (window.KMF_DATA && window.KMF_DATA.kecamatanList) {
             window.KMF_DATA.kecamatanList.forEach(kec => {
                 if (filterAlumniKec) filterAlumniKec.innerHTML += `<option value="${kec}">Kec. ${kec}</option>`;
                 if (filterUsahaKec) filterUsahaKec.innerHTML += `<option value="${kec}">Kec. ${kec}</option>`;
-                if (regKecamatan) regKecamatan.innerHTML += `<option value="${kec}">Kecamatan ${kec}</option>`;
             });
+        }
+
+        // 1. Dropdown Bertingkat Sensus: Inisialisasi Provinsi & Kabupaten/Kecamatan/Desa
+        const regProvinsi = document.getElementById('register-provinsi');
+        if (regProvinsi && window.KMF_DATA && window.KMF_DATA.provinsiList) {
+            regProvinsi.innerHTML = window.KMF_DATA.provinsiList.map(prov => 
+                `<option value="${prov}" ${prov === 'Jawa Tengah' ? 'selected' : ''}>${prov}</option>`
+            ).join('');
+            this.handleProvinsiChange('Jawa Tengah');
         }
 
         const filterAlumniProf = document.getElementById('filter-alumni-profesi');
@@ -117,6 +124,107 @@ const App = {
                 }
             });
         }
+    },
+
+    /**
+     * Handler Dropdown Bertingkat Domisili (Provinsi > Kabupaten > Kecamatan > Desa)
+     */
+    handleProvinsiChange: function(provinsi) {
+        const kabSelect = document.getElementById('register-kabupaten');
+        if (!kabSelect) return;
+
+        const kabList = (window.KMF_DATA && window.KMF_DATA.kabupatenMap && window.KMF_DATA.kabupatenMap[provinsi]) || [
+            "Kabupaten Demak", "Lainnya"
+        ];
+
+        kabSelect.innerHTML = kabList.map(kab => 
+            `<option value="${kab}" ${kab === 'Kabupaten Demak' ? 'selected' : ''}>${kab}</option>`
+        ).join('');
+
+        const selectedKab = kabSelect.value || 'Kabupaten Demak';
+        this.handleKabupatenChange(selectedKab);
+    },
+
+    handleKabupatenChange: function(kabupaten) {
+        const kecSelect = document.getElementById('register-kecamatan');
+        if (!kecSelect) return;
+
+        if (kabupaten === 'Kabupaten Demak') {
+            const list = (window.KMF_DATA && window.KMF_DATA.kecamatanList) || [];
+            kecSelect.innerHTML = `<option value="">Pilih Kecamatan di Kab. Demak</option>` +
+                list.map(kec => `<option value="${kec}">Kecamatan ${kec}</option>`).join('');
+            kecSelect.value = "Karangawen";
+            this.handleKecamatanChange("Karangawen");
+        } else {
+            kecSelect.innerHTML = `
+                <option value="${kabupaten} - Lainnya">Kecamatan di ${kabupaten}</option>
+            `;
+            this.handleKecamatanChange("");
+        }
+    },
+
+    handleKecamatanChange: function(kecamatan) {
+        const desaSelect = document.getElementById('register-desa');
+        const customBox = document.getElementById('register-desa-custom-box');
+        if (!desaSelect) return;
+
+        if (customBox) customBox.classList.add('hidden');
+
+        const desaList = (window.KMF_DATA && window.KMF_DATA.demakDesaMap && window.KMF_DATA.demakDesaMap[kecamatan]) || [];
+        if (desaList.length > 0) {
+            desaSelect.innerHTML = `<option value="">Pilih Desa / Kelurahan</option>` +
+                desaList.map(d => `<option value="${d}">${d}</option>`).join('') +
+                `<option value="__custom__">-- Masukkan Desa Lainnya (Manual) --</option>`;
+            if (kecamatan === 'Karangawen' && desaList.includes('Rejosari')) {
+                desaSelect.value = 'Rejosari';
+            }
+        } else {
+            desaSelect.innerHTML = `
+                <option value="__custom__">-- Masukkan Desa / Kelurahan Manual --</option>
+            `;
+            if (customBox) customBox.classList.remove('hidden');
+        }
+    },
+
+    handleDesaChange: function(desa) {
+        const customBox = document.getElementById('register-desa-custom-box');
+        const customInput = document.getElementById('register-desa-custom');
+        if (desa === '__custom__') {
+            if (customBox) customBox.classList.remove('hidden');
+            if (customInput) customInput.focus();
+        } else {
+            if (customBox) customBox.classList.add('hidden');
+            if (customInput) customInput.value = '';
+        }
+    },
+
+    /**
+     * Ambil Titik Lokasi GPS untuk Formulir Registrasi
+     */
+    getCurrentLocationForRegister: function() {
+        const input = document.getElementById('register-maps');
+        if (!navigator.geolocation) {
+            alert('Perangkat Anda tidak mendukung fitur geolokasi GPS.');
+            return;
+        }
+        if (input) input.placeholder = 'Mengambil koordinat GPS dari perangkat Anda...';
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude.toFixed(6);
+                const lng = pos.coords.longitude.toFixed(6);
+                const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                if (input) {
+                    input.value = mapsUrl;
+                    input.placeholder = 'https://maps.google.com/?q=...';
+                }
+                alert(`Alhamdulillah! Titik koordinat berhasil didapatkan:\nLatitude: ${lat}\nLongitude: ${lng}\n\nTautan Google Maps telah disematkan.`);
+            },
+            (err) => {
+                alert('Gagal mengambil titik GPS: ' + err.message + '.\nSilakan pastikan izin akses lokasi telah diizinkan pada browser/ponsel Anda.');
+                if (input) input.placeholder = 'https://maps.google.com/?q=... atau gunakan tombol GPS di atas';
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
     },
 
     /**
@@ -3091,16 +3199,25 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
 
         try {
             const formData = new FormData(form);
+            let selectedDesa = formData.get('desa') || '';
+            if (selectedDesa === '__custom__') {
+                selectedDesa = (formData.get('desaCustom') || document.getElementById('register-desa-custom')?.value || '').trim();
+            }
+
             const payload = {
                 nama: formData.get('nama'),
-                panggilan: formData.get('panggilan'),
+                panggilan: formData.get('panggilan') || '',
                 tahunLulus: formData.get('tahunLulus'),
                 marhalah: formData.get('marhalah'),
                 pondokKajen: formData.get('pondokKajen'),
-                guruKajen: formData.get('guruKajen'),
+                guruKajen: formData.get('guruKajen') || '',
+                provinsi: formData.get('provinsi') || 'Jawa Tengah',
+                kabupaten: formData.get('kabupaten') || 'Kabupaten Demak',
                 kecamatan: formData.get('kecamatan'),
-                desa: formData.get('desa'),
+                desa: selectedDesa,
+                rtRw: formData.get('rtRw') || '',
                 alamat: formData.get('alamat') || '',
+                titikLokasiMaps: formData.get('titikLokasiMaps') || '',
                 noWa: formData.get('noWa'),
                 tampilkanWa: formData.get('tampilkanWa') !== null,
                 profesiKategori: formData.get('profesiKategori'),
@@ -3133,9 +3250,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                 marhalah: payload.marhalah || '',
                 pondokKajen: payload.pondokKajen || '',
                 guruKajen: payload.guruKajen || '',
+                provinsi: payload.provinsi,
+                kabupaten: payload.kabupaten,
                 kecamatan: payload.kecamatan,
                 desa: payload.desa || '',
+                rtRw: payload.rtRw || '',
                 alamat: payload.alamat || '',
+                titikLokasiMaps: payload.titikLokasiMaps || '',
                 profesiKategori: payload.profesiKategori || '',
                 profesiDetail: payload.profesiDetail || '',
                 foto: payload.foto || '',
@@ -3290,7 +3411,9 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                         <div class="text-xs text-slate-600 mt-1 space-y-0.5">
                             <div>Lulus: <strong>${item.tahunLulus || '-'}</strong> • ${item.marhalah || "Mathali'ul Falah"}</div>
                             <div>Pondok Kajen: <strong>${item.pondokKajen || '-'}</strong> (Guru: ${item.guruKajen || '-'})</div>
-                            <div>Domisili: Kec. ${item.kecamatan}, Desa ${item.desa || '-'}</div>
+                            <div>Domisili: ${item.desa ? `Desa ${item.desa}, ` : ''}${item.kecamatan ? `Kec. ${item.kecamatan}, ` : ''}${item.kabupaten || 'Kab. Demak'}, ${item.provinsi || 'Jawa Tengah'}${item.rtRw ? ` (${item.rtRw})` : ''}</div>
+                            ${item.alamat ? `<div class="text-[11px] text-slate-500 italic">Alamat: ${item.alamat}</div>` : ''}
+                            ${item.titikLokasiMaps ? `<div>Titik Lokasi: <a href="${item.titikLokasiMaps}" target="_blank" class="text-blue-600 font-medium underline inline-flex items-center gap-1"><i class="fa-solid fa-map-location-dot"></i> Buka Google Maps</a></div>` : ''}
                             <div>Profesi: ${item.profesiKategori || '-'} (${item.profesiDetail || '-'})</div>
                             <div>No WA: <a href="https://wa.me/${item.noWa}" target="_blank" class="text-emerald-700 font-semibold underline">${item.noWa}</a></div>
                         </div>
@@ -3366,6 +3489,27 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
         const url = document.getElementById('admin-gas-url-input').value;
         window.KMF_API.setGasUrl(url);
         alert('URL Google Apps Script berhasil disimpan!');
+    },
+
+    syncSpreadsheetHeaders: async function() {
+        const btn = document.getElementById('btn-sync-headers');
+        const origText = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyelaraskan 28 Kolom...`;
+        }
+        try {
+            const res = await window.KMF_API.syncDatabaseHeaders();
+            alert('Alhamdulillah! Sinkronisasi kolom berhasil:\n\n' + (res.message || 'Header Pending dan Alumni telah diselaraskan menjadi 28 kolom standar.'));
+            await this.renderAdminPending();
+        } catch (err) {
+            alert('Gagal menyinkronkan kolom spreadsheet: ' + err.message + '\n\nPastikan Anda telah menyalin Code.gs terbaru ke Google Apps Script dan membuat deployment baru.');
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        }
     },
 
     updatePendingBadge: async function() {

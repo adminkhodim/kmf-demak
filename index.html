@@ -2559,31 +2559,83 @@
                         </div>
                     </div>
 
-                    <!-- Bagian 3: Domisili Demak & Profesi -->
+                    <!-- Bagian 3: Domisili & Profesi (Dropdown Bertingkat: Provinsi > Kabupaten > Kecamatan > Desa) -->
                     <div class="bg-slate-50 p-3.5 sm:p-4 rounded-xl border border-slate-200/80 space-y-3">
-                        <h3 class="text-xs font-bold text-kmf-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-location-dot"></i> 3. Domisili di Demak & Profesi
-                        </h3>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-xs font-bold text-kmf-700 uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot"></i> 3. Domisili & Profesi Alumni
+                            </h3>
+                            <span class="text-[10px] text-slate-400 bg-white px-2 py-0.5 rounded-full border border-slate-200 hidden sm:inline-block">
+                                Dropdown Bertingkat
+                            </span>
+                        </div>
                         
+                        <!-- Tingkat 1 & 2: Provinsi & Kabupaten/Kota -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div>
-                                <label class="block text-xs font-medium text-slate-700 mb-1">Kecamatan Tinggal <span class="text-red-500">*</span></label>
-                                <select name="kecamatan" id="register-kecamatan" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
-                                    <option value="">Pilih Kecamatan di Kab. Demak</option>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Provinsi <span class="text-red-500">*</span></label>
+                                <select name="provinsi" id="register-provinsi" onchange="App.handleProvinsiChange(this.value)" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <!-- Diisi dinamis oleh App.populateDropdowns() -->
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Kabupaten / Kota <span class="text-red-500">*</span></label>
+                                <select name="kabupaten" id="register-kabupaten" onchange="App.handleKabupatenChange(this.value)" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <!-- Diisi dinamis oleh App.populateDropdowns() -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Tingkat 3 & 4: Kecamatan & Desa / Kelurahan -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Kecamatan <span class="text-red-500">*</span></label>
+                                <select name="kecamatan" id="register-kecamatan" onchange="App.handleKecamatanChange(this.value)" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <option value="">Pilih Kecamatan</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-slate-700 mb-1">Desa / Kelurahan <span class="text-red-500">*</span></label>
-                                <input type="text" name="desa" required placeholder="Contoh: Bintoro / Buko" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                <select name="desa" id="register-desa" onchange="App.handleDesaChange(this.value)" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                    <option value="">Pilih Desa / Kelurahan</option>
+                                </select>
+                                <div id="register-desa-custom-box" class="hidden mt-1.5">
+                                    <input type="text" name="desaCustom" id="register-desa-custom" placeholder="Ketik nama desa/kelurahan Anda..." class="w-full text-xs px-3 py-1.5 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-kmf-500">
+                                </div>
                             </div>
                         </div>
 
-                        <div>
-                            <label class="block text-xs font-medium text-slate-700 mb-1">Alamat Lengkap</label>
-                            <input type="text" name="alamat" placeholder="Jalan, RT/RW, Dusun..." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                        <!-- RT/RW & Alamat Lengkap -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div class="md:col-span-1">
+                                <label class="block text-xs font-medium text-slate-700 mb-1">RT / RW <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                                <input type="text" name="rtRw" placeholder="Contoh: RT 01 / RW 07" class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-xs font-medium text-slate-700 mb-1">Alamat Lengkap / Dusun <span class="text-slate-400 font-normal">(Jalan / Blok / Dusun)</span></label>
+                                <input type="text" name="alamat" placeholder="Contoh: Kauman Rimbukidul, Jl. Kyai Singkil..." class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <!-- Titik Lokasi Google Maps -->
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-xs font-medium text-slate-700">Titik Lokasi Google Maps <span class="text-slate-400 font-normal">(Tautan / GPS)</span></label>
+                                <button type="button" onclick="App.getCurrentLocationForRegister()" class="text-[10.5px] text-kmf-700 hover:text-kmf-800 font-bold flex items-center gap-1 active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-crosshairs text-emerald-600"></i> Ambil Titik GPS Saya
+                                </button>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-solid fa-map-location-dot text-red-500"></i>
+                                </div>
+                                <input type="url" name="titikLokasiMaps" id="register-maps" placeholder="https://maps.google.com/?q=... atau gunakan tombol GPS di atas" class="w-full pl-9 pr-3.5 py-2 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                            </div>
+                            <p class="text-[10px] text-slate-400 mt-1">Memudahkan pemetaan sebaran santri & silaturahmi saat ada agenda alumni.</p>
+                        </div>
+
+                        <!-- Profesi & Pekerjaan -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1 border-t border-slate-200/60">
                             <div>
                                 <label class="block text-xs font-medium text-slate-700 mb-1">Kategori Profesi <span class="text-red-500">*</span></label>
                                 <select name="profesiKategori" id="register-profesi" required class="w-full text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-kmf-500">
@@ -2733,6 +2785,19 @@
                     <button onclick="App.saveGasSettings()" class="bg-kmf-600 text-white font-semibold text-xs px-4 py-2 rounded-xl hover:bg-kmf-700 transition">
                         Simpan Pengaturan
                     </button>
+
+                    <!-- Sinkronisasi Tajuk/Header Database 28 Kolom -->
+                    <div class="pt-4 border-t border-slate-100 space-y-2">
+                        <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5 text-emerald-700">
+                            <i class="fa-solid fa-table-columns"></i> Sinkronisasi 28 Kolom Database Spreadsheet
+                        </h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed">
+                            Fitur ini secara otomatis menyelaraskan dan memperbarui baris tajuk (header baris ke-1) sheet <strong>Pending</strong> dan <strong>Alumni</strong> menjadi 28 kolom standar tanpa menghapus data pendaftar yang sudah ada di spreadsheet.
+                        </p>
+                        <button id="btn-sync-headers" onclick="App.syncSpreadsheetHeaders()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer">
+                            <i class="fa-solid fa-arrows-rotate"></i> Sinkronkan 28 Kolom Spreadsheet Sekarang
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
