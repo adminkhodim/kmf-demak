@@ -1410,7 +1410,7 @@
         </section>
 
         <!-- ==================== TAB: UNDANGAN DIGITAL INTERAKTIF SELAPANAN KMF DEMAK ==================== -->
-        <section id="view-undangan-selapanan" class="tab-content hidden space-y-4 relative pb-16">
+        <section id="view-undangan-selapanan" class="tab-content hidden relative pb-16">
             
             <!-- Floating Dock Controls (Musik & Auto Scroll) -->
             <div id="floating-undangan-controls" class="undangan-floating-dock hidden">
@@ -1474,26 +1474,32 @@
             <!-- ANCHOR TOP -->
             <div id="undangan-content-top"></div>
 
-            <!-- TOP NAVBAR UNDANGAN -->
-            <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between gap-3 sticky top-16 z-30 backdrop-blur-md bg-white/95">
-                <div class="flex items-center gap-2.5">
-                    <button type="button" onclick="App.navigateTo('agenda')" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition active:scale-95 text-sm" title="Kembali">
+            <!-- TOP NAVBAR UNDANGAN (MENEMPEL PERSIS DI BAWAH HEADER) -->
+            <div class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-xs px-3.5 py-2.5 sm:px-6 sm:py-3 flex items-center justify-between gap-3 w-full">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <button type="button" onclick="App.navigateTo('agenda')" class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-90 text-slate-700 flex items-center justify-center transition shrink-0 text-xs sm:text-sm cursor-pointer shadow-2xs" title="Kembali ke Agenda">
                         <i class="fa-solid fa-arrow-left"></i>
                     </button>
-                    <div>
-                        <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                            <i class="fa-solid fa-bullhorn text-[9px]"></i> Warta Resmi Cabang
-                        </span>
-                        <h2 class="text-xs sm:text-sm font-bold text-slate-800 line-clamp-1">Undangan Selapanan KMF Demak</h2>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                <i class="fa-solid fa-bullhorn text-[8px]"></i> Warta Resmi
+                            </span>
+                            <span class="text-[10px] text-slate-400 font-medium hidden sm:inline">KMF Demak</span>
+                        </div>
+                        <h2 class="text-xs sm:text-sm font-bold text-slate-800 truncate">Undangan Selapanan KMF Demak</h2>
                     </div>
                 </div>
-                <div class="flex items-center gap-1.5">
-                    <button type="button" onclick="UndanganSelapanan.shareToWhatsApp(UndanganSelapanan.guestName)" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <button type="button" onclick="UndanganSelapanan.shareToWhatsApp(UndanganSelapanan.guestName)" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs cursor-pointer">
                         <i class="fa-brands fa-whatsapp text-sm text-emerald-200"></i>
                         <span class="hidden sm:inline">Bagikan</span>
                     </button>
                 </div>
             </div>
+
+            <!-- WRAPPER KONTEN UNDANGAN (DENGAN PADDING & SPACING RAPI) -->
+            <div class="max-w-xl md:max-w-2xl mx-auto p-3 sm:p-5 space-y-4">
 
             <!-- HERO SALAM & PENGANTAR -->
             <div class="bg-gradient-to-br from-emerald-900 via-teal-950 to-slate-900 text-white p-5 sm:p-7 rounded-3xl border border-emerald-700/40 shadow-xl space-y-3 text-center relative overflow-hidden">
@@ -1846,7 +1852,8 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
         <!-- ==================== TAB 2: WARTA & BERITA KMF DEMAK ==================== -->
         <section id="view-berita" class="tab-content hidden space-y-3 sm:space-y-4">

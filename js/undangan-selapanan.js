@@ -161,10 +161,11 @@ const UndanganSelapanan = {
         }
 
         // Smooth scroll ke atas konten utama
-        const contentHeader = document.getElementById('undangan-content-top');
-        if (contentHeader) {
-            contentHeader.scrollIntoView({ behavior: 'smooth' });
+        const container = this.getScrollContainer();
+        if (container) {
+            container.scrollTo({ top: 0, behavior: 'smooth' });
         }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
     tutupUndanganKembali: function() {
@@ -231,22 +232,49 @@ const UndanganSelapanan = {
     },
 
     /**
+     * Helper untuk mendapatkan elemen container scroll aplikasi (yaitu <main> pada kmf_app)
+     */
+    getScrollContainer: function() {
+        const mainEl = document.querySelector('main');
+        if (mainEl && (mainEl.scrollHeight > mainEl.clientHeight || mainEl.scrollTop > 0)) {
+            return mainEl;
+        }
+        return document.scrollingElement || document.documentElement || document.body;
+    },
+
+    /**
      * 5. Mesin Auto-Scroll Otomatis & Cerdas
      */
     initAutoScroll: function() {
         const toggleBtn = document.getElementById('btn-undangan-autoscroll');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', () => {
+        if (toggleBtn && !toggleBtn._hasAutoScrollListener) {
+            toggleBtn._hasAutoScrollListener = true;
+            toggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 this.toggleAutoScroll();
             });
         }
 
-        // Pause otomatis jika user menyentuh/menggeser layar manual
-        const pauseOnUserInteraction = () => {
-            if (this.isAutoScrolling) {
-                this.stopAutoScroll();
+        // Pause otomatis hanya jika user menyentuh/menggeser layar secara sengaja (bukan menekan tombol floating)
+        const pauseOnUserInteraction = (e) => {
+            if (!this.isAutoScrolling) return;
+
+            // Beri toleransi waktu awal setelah tombol start ditekan agar tidak langsung mati
+            if (Date.now() - (this.lastAutoScrollStartTime || 0) < 700) return;
+
+            // Abaikan jika interaksi berada di tombol floating dock
+            if (e && e.target && (e.target.closest('#floating-undangan-controls') || e.target.closest('.undangan-fab'))) {
+                return;
             }
+
+            this.stopAutoScroll();
         };
+
+        const container = this.getScrollContainer();
+        container.addEventListener('touchstart', pauseOnUserInteraction, { passive: true });
+        container.addEventListener('wheel', pauseOnUserInteraction, { passive: true });
+        container.addEventListener('mousedown', pauseOnUserInteraction, { passive: true });
 
         window.addEventListener('touchstart', pauseOnUserInteraction, { passive: true });
         window.addEventListener('wheel', pauseOnUserInteraction, { passive: true });
@@ -262,21 +290,35 @@ const UndanganSelapanan = {
 
     startAutoScroll: function() {
         this.isAutoScrolling = true;
+        this.lastAutoScrollStartTime = Date.now();
         this.updateAutoScrollUI();
+
+        const container = this.getScrollContainer();
 
         const scrollStep = () => {
             if (!this.isAutoScrolling) return;
 
-            // Cek apakah sudah mentok paling bawah
-            if ((window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 10)) {
+            // Cek apakah sudah mentok di paling bawah konten
+            const maxScroll = container.scrollHeight - container.clientHeight;
+            if (container.scrollTop >= maxScroll - 4) {
                 this.stopAutoScroll();
                 return;
             }
 
-            window.scrollBy({ top: 1.5, behavior: 'auto' });
+            // Gulir kontainer <main> secara halus dan bertahap
+            container.scrollTop += 1.6;
+
+            // Cadangan jika pada browser tertentu scroll berada pada window/document
+            if (window.scrollY < document.documentElement.scrollHeight - window.innerHeight - 4) {
+                window.scrollBy({ top: 1.6, behavior: 'auto' });
+            }
+
             this.scrollAnimId = requestAnimationFrame(scrollStep);
         };
 
+        if (this.scrollAnimId) {
+            cancelAnimationFrame(this.scrollAnimId);
+        }
         this.scrollAnimId = requestAnimationFrame(scrollStep);
     },
 
@@ -296,13 +338,13 @@ const UndanganSelapanan = {
 
         if (this.isAutoScrolling) {
             btn.classList.add('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400');
-            btn.classList.remove('bg-slate-900/80', 'text-slate-300');
-            icon.className = 'fa-solid fa-pause text-sm';
-            btn.setAttribute('title', 'Jeda Auto-Scroll');
+            btn.classList.remove('bg-slate-900/85', 'text-slate-200');
+            icon.className = 'fa-solid fa-pause text-sm text-white';
+            btn.setAttribute('title', 'Jeda Auto-Scroll (Sedang Aktif)');
         } else {
             btn.classList.remove('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400');
-            btn.classList.add('bg-slate-900/80', 'text-slate-300');
-            icon.className = 'fa-solid fa-angles-down text-sm animate-bounce';
+            btn.classList.add('bg-slate-900/85', 'text-slate-200');
+            icon.className = 'fa-solid fa-angles-down text-sm text-slate-200 animate-bounce';
             btn.setAttribute('title', 'Mulai Auto-Scroll');
         }
     },
