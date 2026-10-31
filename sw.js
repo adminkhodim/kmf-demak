@@ -4,7 +4,7 @@
  * hisab jadwal sholat, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.3.0';
+const CACHE_NAME = 'kmf-demak-v2.4.0';
 const STATIC_ASSETS = [
     './',
     './index.html',
@@ -18,7 +18,14 @@ const STATIC_ASSETS = [
     './js/api.js',
     './assets/img/logo.png',
     './assets/icons/icon-192.png',
-    './assets/icons/icon-512.png'
+    './assets/icons/icon-512.png',
+    './assets/img/banners/poster-selapanan.jpg',
+    './assets/img/usaha/usaha-sarung-batik.jpg',
+    './assets/img/usaha/usaha-buku-fiqhsosial.jpg',
+    './assets/img/usaha/usaha-bandeng-presto.jpg',
+    './assets/img/usaha/usaha-madu-randu.jpg',
+    './assets/img/usaha/usaha-kopi-muria.jpg',
+    './assets/img/usaha/usaha-koko-kurta.jpg'
 ];
 
 self.addEventListener('install', (event) => {

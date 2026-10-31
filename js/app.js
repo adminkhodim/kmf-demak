@@ -39,6 +39,11 @@ const App = {
 
         // 3. Listener PWA Install Prompt & Deteksi iOS
         this.initPwaInstall();
+
+        // 4. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
+        setTimeout(() => {
+            this.checkHomePosterPopup();
+        }, 700);
     },
 
     /**
@@ -2127,6 +2132,14 @@ const App = {
         if (container && window.KMF_DATA && window.KMF_DATA.agendaList) {
             container.innerHTML = window.KMF_DATA.agendaList.map(item => `
                 <div class="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-kmf-500 transition space-y-2">
+                    ${item.poster ? `
+                    <div class="relative w-full aspect-[2/1] rounded-xl overflow-hidden mb-2 bg-slate-900 border border-slate-100 shadow-xs">
+                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 bg-emerald-600/95 backdrop-blur-sm text-white text-[9.5px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+                            <i class="fa-solid fa-bullhorn text-[8.5px] mr-1"></i>Agenda Utama
+                        </span>
+                    </div>
+                    ` : ''}
                     <div class="flex items-start justify-between gap-2">
                         <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200/70">
                             ${item.kategori}
@@ -2960,6 +2973,102 @@ const App = {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
         }
+    },
+
+    /**
+     * ==================== FITUR POSTER POP UP WARTA SELAPANAN (ALA ASNAWIYYAH) ====================
+     */
+    homePosterTimer: null,
+
+    /**
+     * Periksa dan munculkan modal Poster Pop Up
+     * @param {boolean} force - jika true (misal diklik dari icon lonceng), abaikan cek session dismissed
+     */
+    checkHomePosterPopup: function(force = false) {
+        try {
+            // Jika sudah ditutup oleh user pada sesi tab ini dan bukan klik eksplisit (force)
+            if (!force && sessionStorage.getItem('kmf_poster_selapanan_dismissed')) {
+                return;
+            }
+
+            const modal = document.getElementById('homePosterModal');
+            const content = document.getElementById('homePosterContent');
+            if (!modal || !content) return;
+
+            // Jika sedang bukan di tab home dan bukan force, jangan munculkan
+            const curHome = document.getElementById('view-home');
+            if (curHome && curHome.classList.contains('hidden') && !force) return;
+
+            // Cari agenda dengan status isPopup atau ambil poster selapanan utama
+            const selapananItem = (window.KMF_DATA && window.KMF_DATA.agendaList)
+                ? window.KMF_DATA.agendaList.find(a => a.isPopup || a.kategori === 'Selapanan')
+                : null;
+
+            const imgEl = document.getElementById('home-poster-img');
+            const imgWrapper = document.getElementById('home-poster-img-wrapper');
+            const textWrapper = document.getElementById('home-poster-text-wrapper');
+
+            if (selapananItem && selapananItem.poster) {
+                if (imgEl) imgEl.src = selapananItem.poster;
+                if (imgWrapper) imgWrapper.classList.remove('hidden');
+                if (textWrapper) textWrapper.classList.add('hidden');
+            } else {
+                if (imgWrapper) imgWrapper.classList.add('hidden');
+                if (textWrapper) textWrapper.classList.remove('hidden');
+                if (selapananItem) {
+                    const titleEl = document.getElementById('home-poster-title');
+                    const descEl = document.getElementById('home-poster-summary');
+                    if (titleEl) titleEl.textContent = selapananItem.title;
+                    if (descEl) descEl.textContent = selapananItem.deskripsi;
+                }
+            }
+
+            if (this.homePosterTimer) clearTimeout(this.homePosterTimer);
+
+            this.homePosterTimer = setTimeout(() => {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 50);
+            }, 200);
+        } catch (e) {
+            console.warn('checkHomePosterPopup error:', e);
+        }
+    },
+
+    /**
+     * Buka pop up poster secara manual (dipicu tombol lonceng warta)
+     */
+    openHomePoster: function(force = true) {
+        this.checkHomePosterPopup(force);
+    },
+
+    /**
+     * Tutup modal Poster Pop Up
+     * @param {boolean} dismissSession - simpan status tutup ke sessionStorage
+     */
+    closeHomePoster: function(dismissSession = true) {
+        const modal = document.getElementById('homePosterModal');
+        const content = document.getElementById('homePosterContent');
+        if (modal && content) {
+            if (dismissSession) {
+                sessionStorage.setItem('kmf_poster_selapanan_dismissed', 'true');
+            }
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+    },
+
+    /**
+     * Aksi ketika user mengetuk poster: tutup poster dan buka detail agenda kegiatan
+     */
+    openSelapananFromPoster: function() {
+        this.closeHomePoster(false);
+        this.openAgendaModal();
     }
 };
 

@@ -56,11 +56,13 @@ const KMF_DATA = {
         {
             id: 1,
             title: "Pertemuan Selapanan & Khataman KMF Demak",
-            tanggal: "Ahad Pahing, 25 Oktober 2026",
+            tanggal: "Ahad Pahing, 15 November 2026",
             waktu: "09.00 WIB - Selesai",
             tempat: "Kediaman KH. Ahmad Fauzi (Wedung, Demak)",
-            deskripsi: "Khataman Al-Qur'an, pembacaan wirid Masyayikh Kajen, dan musyawarah pemutakhiran data sensus alumni.",
-            kategori: "Selapanan"
+            deskripsi: "Khataman Al-Qur'an bil-Ghoib, pembacaan wirid Masyayikh Kajen, dan koordinasi pemutakhiran data sensus alumni.",
+            kategori: "Selapanan",
+            poster: "assets/img/banners/poster-selapanan.jpg",
+            isPopup: true
         },
         {
             id: 2,
