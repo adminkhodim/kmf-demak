@@ -163,9 +163,14 @@ const UndanganSelapanan = {
         // Smooth scroll ke atas konten utama
         const container = this.getScrollContainer();
         if (container) {
-            container.scrollTo({ top: 0, behavior: 'smooth' });
+            container.scrollTo({ top: 0, behavior: 'instant' });
         }
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        // Otomatis langsung aktifkan Auto-Scroll saat undangan dibuka
+        setTimeout(() => {
+            this.startAutoScroll();
+        }, 950);
     },
 
     tutupUndanganKembali: function() {
@@ -249,34 +254,17 @@ const UndanganSelapanan = {
         if (this._hasInitAutoScrollEvents) return;
         this._hasInitAutoScrollEvents = true;
 
-        // Pause otomatis hanya jika user benar-benar menggeser konten layar secara manual (touchmove / wheel / key)
-        const handleManualScrollInterrupt = (e) => {
-            if (!this.isAutoScrolling) return;
-
-            // Beri toleransi waktu awal setelah tombol start ditekan agar tidak langsung mati
-            if (Date.now() - (this.lastAutoScrollStartTime || 0) < 700) return;
-
-            // Abaikan jika interaksi berada di tombol floating dock
-            if (e && e.target && (e.target.closest('#floating-undangan-controls') || e.target.closest('.undangan-fab'))) {
-                return;
+        // Jeda otomatis hanya jika user fokus mengetik pada input/textarea formulir RSVP
+        const pauseOnFormFocus = (e) => {
+            if (this.isAutoScrolling && e && e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                this.stopAutoScroll();
             }
-
-            this.stopAutoScroll();
         };
 
-        const mainEl = document.querySelector('main');
-        if (mainEl) {
-            mainEl.addEventListener('touchmove', handleManualScrollInterrupt, { passive: true });
-            mainEl.addEventListener('wheel', handleManualScrollInterrupt, { passive: true });
+        const form = document.getElementById('undangan-rsvp-form');
+        if (form) {
+            form.addEventListener('focusin', pauseOnFormFocus, { passive: true });
         }
-
-        window.addEventListener('touchmove', handleManualScrollInterrupt, { passive: true });
-        window.addEventListener('wheel', handleManualScrollInterrupt, { passive: true });
-        window.addEventListener('keydown', (e) => {
-            if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Space'].includes(e.code || e.key)) {
-                handleManualScrollInterrupt(e);
-            }
-        }, { passive: true });
     },
 
     toggleAutoScroll: function(e) {
