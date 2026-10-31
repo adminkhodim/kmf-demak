@@ -4,12 +4,12 @@
 /* eslint-disable no-undef */
 
 /**
- * Service Worker KMF Demak PWA (v2.6.4)
+ * Service Worker KMF Demak PWA (v2.6.5)
  * Menyediakan cache offline penuh untuk teks amalan (Tahlil, Yasin, Wirid, Istighotsah),
  * hisab jadwal sholat, direktori alumni, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.6.4';
+const CACHE_NAME = 'kmf-demak-v2.6.5';
 const STATIC_ASSETS = [
     './',
     './manifest.json',

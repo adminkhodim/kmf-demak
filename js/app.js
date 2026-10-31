@@ -2080,9 +2080,19 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
             initials = initials.toUpperCase();
 
             // Cek apakah santri memiliki foto profil terunggah
-            const avatarContent = (user.foto && user.foto.trim()) ?
-                `<img src="${user.foto}" alt="${user.nama}" class="w-full h-full object-cover rounded-2xl">` :
+            const avatarContent = (user.foto && user.foto.trim() && !user.foto.includes('logo.png')) ?
+                `<img src="${user.foto}" alt="${user.nama}" class="w-full h-full object-cover rounded-2xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span>${initials}</span>';">` :
                 `<span>${initials}</span>`;
+
+            const statusBadge = user.isPending ? `
+                <span class="text-[9.5px] bg-amber-400 text-amber-950 font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-2xs">
+                    <i class="fa-solid fa-clock text-[9px]"></i> Menunggu Verifikasi
+                </span>
+            ` : `
+                <span class="text-[9.5px] bg-emerald-500 text-white font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-2xs">
+                    <i class="fa-solid fa-circle-check text-[9px]"></i> Terdaftar
+                </span>
+            `;
 
             cardContainer.innerHTML = `
                 <div class="bg-gradient-to-r from-kmf-900 via-kmf-800 to-blue-950 text-white p-4 sm:p-5 rounded-3xl shadow-sm border border-kmf-600/60 relative overflow-hidden space-y-3.5">
@@ -2095,9 +2105,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="text-[9.5px] bg-emerald-500 text-white font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-2xs">
-                                    <i class="fa-solid fa-circle-check text-[9px]"></i> Terdaftar
-                                </span>
+                                ${statusBadge}
                                 <span class="text-[9.5px] bg-white/15 text-blue-100 font-medium px-2 py-0.5 rounded-full">
                                     Kec. ${user.kecamatan || 'Demak'}
                                 </span>
@@ -2257,50 +2265,122 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
         }
     },
 
-    handleUserLogin: function(e) {
+    handleUserLogin: async function(e) {
         e.preventDefault();
-        const wa = document.getElementById('auth-login-wa').value.trim();
-        const pin = document.getElementById('auth-login-pin').value.trim();
+        const waInput = document.getElementById('auth-login-wa');
+        if (!waInput) return;
+        const rawWa = waInput.value.trim();
 
-        if (!wa) {
+        if (!rawWa) {
             alert('Silakan masukkan nomor WhatsApp Anda.');
             return;
         }
 
-        // Cari di data alumni tersimpan jika ada
-        let matchedUser = null;
-        try {
-            const list = window.KMF_API ? window.KMF_API.getAlumniList() : [];
-            matchedUser = list.find(a => (a.whatsapp && a.whatsapp.replace(/\D/g, '') === wa.replace(/\D/g, '')) || (a.telepon && a.telepon.replace(/\D/g, '') === wa.replace(/\D/g, '')));
-        } catch (err) {}
+        // Ambil hanya angka dari input
+        const cleanWa = rawWa.replace(/\D/g, '');
+        if (cleanWa.length < 8) {
+            alert('Nomor WhatsApp tidak valid. Masukkan minimal 8-15 digit angka.');
+            return;
+        }
 
-        const userName = matchedUser ? matchedUser.nama : 'Santri KMF Demak';
-        const userTahun = matchedUser ? (matchedUser.tahunLulus || matchedUser.angkatan || '2018') : '2018';
-        const userKec = matchedUser ? matchedUser.kecamatan : 'Demak';
-
-        this.currentUser = {
-            id: matchedUser ? (matchedUser.id || 'santri-' + Date.now()) : ('santri-' + Date.now()),
-            nama: userName,
-            whatsapp: wa,
-            panggilan: matchedUser ? (matchedUser.panggilan || '') : '',
-            tahunLulus: userTahun,
-            marhalah: matchedUser ? (matchedUser.marhalah || '') : '',
-            pondokKajen: matchedUser ? (matchedUser.pondokKajen || '') : '',
-            guruKajen: matchedUser ? (matchedUser.guruKajen || '') : '',
-            kecamatan: userKec,
-            desa: matchedUser ? (matchedUser.desa || '') : '',
-            alamat: matchedUser ? (matchedUser.alamat || '') : '',
-            profesiKategori: matchedUser ? (matchedUser.profesiKategori || '') : '',
-            profesiDetail: matchedUser ? (matchedUser.profesiDetail || '') : '',
-            foto: matchedUser ? (matchedUser.foto || '') : '',
-            pin: pin,
-            isLoggedIn: true
+        // Normalisasi format nomor WA (menyamakan 08xxx, 628xxx, atau 8xxx)
+        const matchWa = (targetWa) => {
+            if (!targetWa) return false;
+            const targetClean = String(targetWa).replace(/\D/g, '');
+            if (!targetClean) return false;
+            if (targetClean === cleanWa) return true;
+            const norm1 = cleanWa.replace(/^(0|62)/, '');
+            const norm2 = targetClean.replace(/^(0|62)/, '');
+            return norm1 === norm2 || cleanWa.endsWith(norm2) || targetClean.endsWith(norm1);
         };
 
-        localStorage.setItem('kmf_user_session', JSON.stringify(this.currentUser));
-        this.closeAuthModal();
-        this.renderUserProfileCard();
-        alert(`Alhamdulillah, Ahlan wa Sahlan ${userName}! Anda berhasil masuk.`);
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const origBtnText = submitBtn ? submitBtn.innerHTML : '';
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Memeriksa Sensus Alumni...</span>';
+        }
+
+        try {
+            // 1. Cari di daftar Alumni Terverifikasi (Cache & GAS)
+            let alumniList = [];
+            if (window.KMF_API && window.KMF_API.getApprovedAlumni) {
+                alumniList = await window.KMF_API.getApprovedAlumni();
+            }
+            let matchedUser = alumniList.find(a => matchWa(a.whatsapp || a.noWa || a.nomorWhatsapp || a.telepon));
+
+            // 2. Jika belum ada di Alumni Terverifikasi, cari di Antrean Pending Sensus
+            let isPending = false;
+            if (!matchedUser && window.KMF_API && window.KMF_API.getPendingList) {
+                const pendingList = await window.KMF_API.getPendingList();
+                matchedUser = pendingList.find(p => matchWa(p.noWa || p.whatsapp || p.nomorWhatsapp || p.telepon));
+                if (matchedUser) isPending = true;
+            }
+
+            // 3. Jika belum ditemukan, lakukan live fetch langsung ke Google Apps Script (Pending)
+            if (!matchedUser && window.KMF_API && window.KMF_API.getPendingList) {
+                const livePending = await window.KMF_API.getPendingList(true);
+                matchedUser = livePending.find(p => matchWa(p.noWa || p.whatsapp || p.nomorWhatsapp || p.telepon));
+                if (matchedUser) isPending = true;
+            }
+
+            // 4. Jika masih belum ditemukan, lakukan live fetch Alumni dari Google Apps Script
+            if (!matchedUser && window.KMF_API && window.KMF_API.getApprovedAlumni) {
+                const liveAlumni = await window.KMF_API.getApprovedAlumni(true);
+                matchedUser = liveAlumni.find(a => matchWa(a.whatsapp || a.noWa || a.nomorWhatsapp || a.telepon));
+            }
+
+            // 5. Cek fallback data awal mockdata jika ada
+            if (!matchedUser && window.KMF_DATA && window.KMF_DATA.alumniList) {
+                matchedUser = window.KMF_DATA.alumniList.find(a => matchWa(a.whatsapp || a.telepon));
+            }
+
+            if (!matchedUser) {
+                alert(`Nomor WhatsApp (${rawWa}) belum terdaftar di Sensus Alumni KMF Demak.\n\nPastikan nomor yang dimasukkan sama persis dengan saat mendaftar, atau silakan isi Formulir Sensus Alumni terlebih dahulu.`);
+                return;
+            }
+
+            const userName = matchedUser.nama || matchedUser.namaLengkap || 'Sahabat Alumni';
+            const userTahun = matchedUser.tahunLulus || matchedUser.angkatan || matchedUser.tahunAngkatan || '2018';
+            const userKec = matchedUser.kecamatan || 'Demak';
+
+            this.currentUser = {
+                id: matchedUser.id || matchedUser.idPendaftar || ('santri-' + Date.now()),
+                nama: userName,
+                whatsapp: rawWa,
+                panggilan: matchedUser.panggilan || '',
+                tahunLulus: userTahun,
+                marhalah: matchedUser.marhalah || matchedUser.pendidikanTerakhir || "Mathali'ul Falah",
+                pondokKajen: matchedUser.pondokKajen || matchedUser.asramaPondok || '',
+                guruKajen: matchedUser.guruKajen || '',
+                kecamatan: userKec,
+                desa: matchedUser.desa || matchedUser.desaKelurahan || '',
+                alamat: matchedUser.alamat || matchedUser.alamatLengkap || '',
+                profesiKategori: matchedUser.profesiKategori || matchedUser.profesiPekerjaan || '',
+                profesiDetail: matchedUser.profesiDetail || '',
+                foto: matchedUser.foto || matchedUser.urlFotoProfil || '',
+                isPending: isPending,
+                isLoggedIn: true
+            };
+
+            localStorage.setItem('kmf_user_session', JSON.stringify(this.currentUser));
+            this.closeAuthModal();
+            this.renderUserProfileCard();
+
+            if (isPending) {
+                alert(`Alhamdulillah, Ahlan wa Sahlan Sahabat ${userName}!\n\nAnda berhasil masuk ke Akun Santri. Data sensus Anda saat ini sedang dalam antrean verifikasi pengurus.`);
+            } else {
+                alert(`Alhamdulillah, Ahlan wa Sahlan Sahabat ${userName}!\n\nAnda berhasil masuk ke Akun Santri KMF Demak. e-KTA Digital Anda siap diakses.`);
+            }
+        } catch (err) {
+            console.error('Error saat login santri:', err);
+            alert('Terjadi kendala saat memeriksa data: ' + err.message);
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = origBtnText;
+            }
+        }
     },
 
     handleUserLogout: function() {
