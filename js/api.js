@@ -47,7 +47,21 @@ const KMF_API = {
             try {
                 const res = await fetch(`${gasUrl}?action=getAlumni`);
                 const data = await res.json();
-                if (data.status === 'success') return data.data;
+                if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
+                    return data.data.map(item => ({
+                        id: item.id || item.idAlumni || '',
+                        nama: item.nama || item.namaLengkap || '',
+                        angkatan: item.angkatan || item.tahunAngkatan || '',
+                        kecamatan: item.kecamatan || '',
+                        desa: item.desa || item.desaKelurahan || '',
+                        alamat: item.alamat || item.alamatLengkap || '',
+                        noWa: String(item.noWa || item.nomorWhatsapp || ''),
+                        pekerjaan: item.pekerjaan || item.profesiPekerjaan || '',
+                        pendidikan: item.pendidikan || item.pendidikanTerakhir || '',
+                        foto: item.foto || item.urlFotoProfil || 'assets/img/logo.png',
+                        status: item.status || item.statusVerifikasi || 'APPROVED'
+                    }));
+                }
             } catch (err) {
                 console.warn('Gagal memuat dari Google Apps Script, beralih ke cache lokal:', err);
             }
@@ -65,7 +79,38 @@ const KMF_API = {
             try {
                 const res = await fetch(`${gasUrl}?action=getUsaha`);
                 const data = await res.json();
-                if (data.status === 'success') return data.data;
+                if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
+                    return data.data.map((item, idx) => {
+                        const nama = item.namaUsaha || item.namaUsahaProduk || '';
+                        const mock = (window.KMF_DATA && window.KMF_DATA.usahaList)
+                            ? window.KMF_DATA.usahaList.find(m => m.namaUsaha.toLowerCase() === nama.toLowerCase() || m.id === (item.id || item.idUsaha))
+                            : null;
+
+                        return {
+                            id: item.id || item.idUsaha || ('USH-DMK-' + idx),
+                            alumniId: item.alumniId || item.idAlumni || '',
+                            pemilik: item.pemilik || item.namaPemilik || (mock ? mock.pemilik : 'Alumni KMF'),
+                            namaUsaha: nama || (mock ? mock.namaUsaha : 'Produk Santri'),
+                            kategori: item.kategori || item.kategoriUsaha || (mock ? mock.kategori : 'Lainnya'),
+                            kecamatan: item.kecamatan || (mock ? mock.kecamatan : 'Demak'),
+                            desa: item.desa || (mock ? mock.desa : ''),
+                            alamatLengkap: item.alamatLengkap || item.alamatTokoUsaha || (mock ? mock.alamatLengkap : ''),
+                            waBisnis: String(item.waBisnis || item.nomorWhatsappOrder || (mock ? mock.waBisnis : '6281234567890')),
+                            linkGmaps: item.linkGmaps || item.linkGoogleMaps || 'https://maps.google.com',
+                            deskripsi: item.deskripsi || item.deskripsiProduk || (mock ? mock.deskripsi : ''),
+                            foto: item.foto || item.urlFotoProduk || (mock ? mock.foto : 'assets/img/usaha/usaha-sarung-batik.jpg'),
+                            harga: Number(item.harga) || (mock ? mock.harga : 75000),
+                            hargaCoret: Number(item.hargaCoret) || (mock ? mock.hargaCoret : 0),
+                            diskon: item.diskon || (mock ? mock.diskon : ''),
+                            rating: Number(item.rating) || (mock ? mock.rating : 4.9),
+                            terjual: item.terjual || (mock ? mock.terjual : '200+ terjual'),
+                            badge: item.badge || (mock ? mock.badge : 'Bebas Ongkir'),
+                            isOfficial: item.isOfficial !== undefined ? item.isOfficial : (mock ? mock.isOfficial : true),
+                            cashback: item.cashback || (mock ? mock.cashback : ''),
+                            status: item.status || 'APPROVED'
+                        };
+                    });
+                }
             } catch (err) {
                 console.warn('Gagal memuat dari Google Apps Script, beralih ke cache lokal:', err);
             }
