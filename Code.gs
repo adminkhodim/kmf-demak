@@ -46,6 +46,7 @@ function doGet(e) {
     // 1. Ambil Data Alumni Terverifikasi
     if (action === 'getAlumni') {
       var sheet = getOrCreateSheet(ss, 'Alumni');
+      migrateSheetToCanonical(sheet);
       var data = getSheetRowsAsJson(sheet);
       return jsonResponse({ status: 'success', data: data });
     }
@@ -60,6 +61,7 @@ function doGet(e) {
     // 3. Ambil Data Pendaftaran Pending (Khusus Admin)
     if (action === 'getPending') {
       var sheet = getOrCreateSheet(ss, 'Pending');
+      migrateSheetToCanonical(sheet);
       var data = getSheetRowsAsJson(sheet);
       return jsonResponse({ status: 'success', data: data });
     }
@@ -80,15 +82,13 @@ function doGet(e) {
       });
     }
 
-    // 6. Sinkronisasi & Pembaruan Header Kolom Spreadsheet (Sesuai Frontend Terbaru)
+    // 6. Sinkronisasi & Pembaruan Header + Baris Data Kolom Spreadsheet (28 Kolom Standar)
     if (action === 'syncHeaders') {
-      var pSheet = getOrCreateSheet(ss, 'Pending');
-      var aSheet = getOrCreateSheet(ss, 'Alumni');
-      setupSheetHeaders(pSheet, ALUMNI_COLUMNS);
-      setupSheetHeaders(aSheet, ALUMNI_COLUMNS);
+      var audit = migrateAndAlignAllSheets(ss);
       return jsonResponse({
         status: 'success',
-        message: 'Header kolom tab Pending dan Alumni berhasil disinkronkan sesuai data formulir!',
+        message: 'Alhamdulillah! Seluruh 28 kolom dan baris data sheet Pending dan Alumni berhasil disinkronkan & dirapikan!',
+        audit: audit,
         columns: ALUMNI_COLUMNS
       });
     }
@@ -245,6 +245,10 @@ function handleApproveAlumni(ss, pendingId, adminNote) {
   var alumniSheet = getOrCreateSheet(ss, 'Alumni');
   var usahaSheet = getOrCreateSheet(ss, 'Usaha');
 
+  // Pastikan kedua sheet sudah berformat kanonikal 28 kolom
+  migrateSheetToCanonical(pendingSheet);
+  migrateSheetToCanonical(alumniSheet);
+
   var rows = pendingSheet.getDataRange().getValues();
   var targetRowIdx = -1;
   var targetItem = null;
@@ -261,29 +265,35 @@ function handleApproveAlumni(ss, pendingId, adminNote) {
     return jsonResponse({ status: 'error', message: 'Data ID pendaftar ' + pendingId + ' tidak ditemukan di antrean pending.' });
   }
 
+  // Jika targetItem belum 28 kolom atau masih format lama, konversikan
+  if (targetItem.length < 28 || (String(targetItem[5] || '').toLowerCase() !== 'ya' && String(targetItem[5] || '').toLowerCase() !== 'tidak')) {
+    targetItem = convertRowToCanonical28(targetItem);
+  }
+
   // Masukkan ke Tab Alumni (Persis sama dengan format 28 kolom)
-  var approvedRow = targetItem.slice();
+  var approvedRow = targetItem.slice(0, 28);
+  while (approvedRow.length < 28) approvedRow.push('');
   approvedRow[1] = new Date(); // Update waktu verifikasi
   approvedRow[20] = 'APPROVED'; // Status
   approvedRow[27] = adminNote || ''; // Catatan verifikasi
   alumniSheet.appendRow(approvedRow);
 
   // Jika pendaftar menyertakan data usaha, tambahkan ke Tab Usaha
-  var namaUsaha = targetItem[21];
+  var namaUsaha = approvedRow[21];
   if (namaUsaha && String(namaUsaha).trim() !== '') {
     usahaSheet.appendRow([
       'USH-DMK-' + Date.now(),
-      targetItem[0], // alumniId
-      targetItem[2], // nama pemilik
+      approvedRow[0], // alumniId
+      approvedRow[2], // nama pemilik
       namaUsaha,
-      targetItem[22], // kategori usaha
-      targetItem[12], // kecamatan
-      targetItem[13], // desa
-      (targetItem[15] || '') + (targetItem[14] ? ' ' + targetItem[14] : ''), // alamat lengkap
-      targetItem[25] || targetItem[4], // waBisnis
-      targetItem[26] || targetItem[16] || '', // linkGmaps
-      targetItem[23], // deskripsi usaha
-      targetItem[24], // foto produk usaha
+      approvedRow[22], // kategori usaha
+      approvedRow[12], // kecamatan
+      approvedRow[13], // desa
+      (approvedRow[15] || '') + (approvedRow[14] ? ' ' + approvedRow[14] : ''), // alamat lengkap
+      approvedRow[25] || approvedRow[4], // waBisnis
+      approvedRow[26] || approvedRow[16] || '', // linkGmaps
+      approvedRow[23], // deskripsi usaha
+      approvedRow[24], // foto produk usaha
       'APPROVED'
     ]);
   }
@@ -293,7 +303,7 @@ function handleApproveAlumni(ss, pendingId, adminNote) {
 
   return jsonResponse({
     status: 'success',
-    message: 'Alumni ' + targetItem[2] + ' berhasil disetujui & dimasukkan ke direktori publik KMF Demak.'
+    message: 'Alumni ' + approvedRow[2] + ' berhasil disetujui & dimasukkan ke direktori publik KMF Demak.'
   });
 }
 
@@ -380,6 +390,208 @@ function getUploadFolder() {
 
 /**
  * ====================================================================
+ * MENU SPREADSHEET OTOMATIS (TERSEDIA DI TOOLBAR ATAS GOOGLE SHEETS)
+ * ====================================================================
+ */
+function onOpen() {
+  try {
+    var ui = SpreadsheetApp.getUi();
+    ui.createMenu('🌟 KMF Demak')
+      .addItem('⚡ Sinkronkan & Rapikan Kolom Database (28 Kolom)', 'menuSyncAndAlignAllSheets')
+      .addItem('⚙️ Inisialisasi Ulang Database', 'setupDatabase')
+      .addToUi();
+  } catch (e) {
+    // Abaikan jika dipanggil di luar konteks UI Spreadsheet
+  }
+}
+
+function menuSyncAndAlignAllSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var result = migrateAndAlignAllSheets(ss);
+  SpreadsheetApp.getUi().alert(
+    'Alhamdulillah! Sinkronisasi dan Perapian Kolom Selesai!\n\n' +
+    'Hasil Audit Susunan Kolom:\n' +
+    '• Sheet Alumni: ' + result.alumniCount + ' baris diperiksa (' + result.alumniMigrated + ' baris format lama berhasil dirapikan).\n' +
+    '• Sheet Pending: ' + result.pendingCount + ' baris diperiksa (' + result.pendingMigrated + ' baris format lama berhasil dirapikan).\n\n' +
+    'Seluruh susunan data pada sheet Alumni dan sheet Pending kini 100% sejajar dengan 28 kolom standar formulir sensus terbaru.'
+  );
+}
+
+/**
+ * ====================================================================
+ * AUDIT & MIGRASI DATA DATABASE AGAR SELALU PRESISI 28 KOLOM
+ * ====================================================================
+ */
+function migrateAndAlignAllSheets(ss) {
+  var alumniSheet = getOrCreateSheet(ss, 'Alumni');
+  var pendingSheet = getOrCreateSheet(ss, 'Pending');
+
+  var aRes = migrateSheetToCanonical(alumniSheet);
+  var pRes = migrateSheetToCanonical(pendingSheet);
+
+  return {
+    alumniCount: aRes.checked,
+    alumniMigrated: aRes.migrated,
+    pendingCount: pRes.checked,
+    pendingMigrated: pRes.migrated
+  };
+}
+
+function migrateSheetToCanonical(sheet) {
+  if (!sheet) return { checked: 0, migrated: 0 };
+  var lastRow = sheet.getLastRow();
+  var lastCol = sheet.getLastColumn();
+
+  if (lastRow <= 1) {
+    setupSheetHeaders(sheet, ALUMNI_COLUMNS);
+    return { checked: 0, migrated: 0 };
+  }
+
+  var data = sheet.getDataRange().getValues();
+  var rows = data.slice(1);
+  var migratedRows = [];
+  var migratedCount = 0;
+
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+
+    // Cek apakah baris ini masih format lama (13 kolom lama)
+    // Ciri-ciri:
+    // 1. Kolom ke-6 (indeks 5) bukan 'Ya' dan bukan 'Tidak' (pada format lama berisi Nama Desa)
+    // 2. ATAU Kolom ke-5 (indeks 4) adalah teks nama kecamatan bukan nomor HP
+    // 3. ATAU Jumlah kolom baris kurang dari 28
+    var col5Val = String(r[5] || '').trim().toLowerCase();
+    var col4Val = String(r[4] || '').trim();
+    var isOld = false;
+
+    if (r.length < 28) {
+      isOld = true;
+    } else if (col5Val !== 'ya' && col5Val !== 'tidak' && col5Val !== '') {
+      isOld = true;
+    } else if (col4Val !== '' && isNaN(col4Val.replace(/[\s\-\+\(\)]/g, '')) && !col4Val.match(/^(08|62|\+62|8)/)) {
+      isOld = true;
+    }
+
+    if (isOld) {
+      migratedCount++;
+      var newR = convertRowToCanonical28(r);
+      migratedRows.push(newR);
+    } else {
+      var cleanR = r.slice(0, 28);
+      while (cleanR.length < 28) cleanR.push('');
+      migratedRows.push(cleanR);
+    }
+  }
+
+  // Terapkan header kanonikal 28 kolom
+  setupSheetHeaders(sheet, ALUMNI_COLUMNS);
+
+  // Jika ada baris yang dikonversi, tulis ulang data baris 2..N
+  if (migratedRows.length > 0) {
+    if (lastCol > 28) {
+      sheet.getRange(2, 29, migratedRows.length, lastCol - 28).clearContent();
+    }
+    sheet.getRange(2, 1, migratedRows.length, 28).setValues(migratedRows);
+  }
+
+  return { checked: rows.length, migrated: migratedCount };
+}
+
+function convertRowToCanonical28(r) {
+  var newR = new Array(28).fill('');
+
+  // 0: ID Pendaftar
+  newR[0] = r[0] || ('KMF-DMK-' + Date.now());
+
+  // 1: Waktu Daftar
+  newR[1] = r[1] || new Date();
+
+  // 2: Nama Lengkap & Gelar
+  newR[2] = r[2] || '';
+
+  // 3: Nama Panggilan
+  if (String(r[2]).toLowerCase().indexOf('nazirul') !== -1) {
+    newR[3] = 'Kang Nazir';
+  } else {
+    newR[3] = '';
+  }
+
+  // 4: Nomor WhatsApp (pada format lama berada di r[7])
+  newR[4] = r[7] ? String(r[7]) : '';
+
+  // 5: Tampilkan Nomor WA
+  newR[5] = 'Ya';
+
+  // 6: Tahun Lulus / Angkatan (pada format lama berada di r[3])
+  newR[6] = r[3] || '';
+
+  // 7: Marhalah Terakhir (pada format lama berada di r[9])
+  newR[7] = r[9] || "MA Mathali'ul Falah Putra / Putri";
+
+  // 8: Pondok di Kajen
+  newR[8] = (String(r[2]).toLowerCase().indexOf('nazirul') !== -1) ? 'Kajen, Pati' : 'Kajen, Margoyoso, Pati';
+
+  // 9: Guru / Masyayikh Diangsu
+  newR[9] = (String(r[2]).toLowerCase().indexOf('nazirul') !== -1) ? 'Mbah Sahal' : '-';
+
+  // 10: Provinsi
+  newR[10] = 'Jawa Tengah';
+
+  // 11: Kabupaten / Kota
+  newR[11] = 'Kabupaten Demak';
+
+  // 12: Kecamatan (pada format lama berada di r[4])
+  newR[12] = r[4] || '';
+
+  // 13: Desa / Kelurahan (pada format lama berada di r[5])
+  newR[13] = r[5] || '';
+
+  // 14: RT / RW (ekstrak dari r[6] jika ada pola RT/RW)
+  var rtRwMatch = String(r[6] || '').match(/(RT\s*\d+\s*\/\s*RW\s*\d+|\d{3}\/\d{3})/i);
+  newR[14] = rtRwMatch ? rtRwMatch[0] : '';
+
+  // 15: Alamat Lengkap (pada format lama berada di r[6])
+  newR[15] = r[6] || '';
+
+  // 16: Titik Lokasi Google Maps
+  newR[16] = '';
+
+  // 17: Kategori Profesi (pada format lama berada di r[8])
+  newR[17] = r[8] || 'Lainnya';
+
+  // 18: Uraian Pekerjaan / Instansi
+  newR[18] = r[8] || '';
+
+  // 19: URL Foto Profil (pada format lama berada di r[10])
+  newR[19] = r[10] || '';
+
+  // 20: Status Verifikasi
+  newR[20] = r[11] || 'APPROVED';
+
+  // Usaha (jika baris berasal dari format pending lama 18 kolom)
+  if (r.length >= 18) {
+    newR[21] = r[12] || '';
+    newR[22] = r[13] || '';
+    newR[23] = r[14] || '';
+    newR[24] = r[15] || '';
+    newR[25] = r[16] || r[7] || '';
+    newR[26] = r[17] || '';
+    newR[27] = '';
+  } else {
+    newR[21] = '';
+    newR[22] = '';
+    newR[23] = '';
+    newR[24] = '';
+    newR[25] = r[7] ? String(r[7]) : '';
+    newR[26] = '';
+    newR[27] = (r.length > 12 && r[12]) ? r[12] : '';
+  }
+
+  return newR;
+}
+
+/**
+ * ====================================================================
  * FUNGSI SETUP DATABASE OTOMATIS (JALANKAN SEKALI DARI APPS SCRIPT)
  * ====================================================================
  */
@@ -440,18 +652,25 @@ function setupDatabase() {
     ]);
   }
 
+  // Migrasikan dan rapikan data yang sudah ada agar 100% sejajar
+  migrateAndAlignAllSheets(ss);
+
   // Pastikan folder Drive siap
   var uploadFolder = getUploadFolder();
 
-  SpreadsheetApp.getUi().alert(
-    'Alhamdulillah! Database Spreadsheet KMF Demak Berhasil Diinisialisasi!\n\n' +
-    'Tab yang siap digunakan:\n' +
-    '1. Alumni (Data terverifikasi)\n' +
-    '2. Pending (Antrean verifikasi)\n' +
-    '3. Usaha (Katalog bursa santri)\n' +
-    '4. RSVP_Selapanan (Buku tamu undangan)\n\n' +
-    'Folder Google Drive Penyimpanan Foto: ' + uploadFolder.getName()
-  );
+  try {
+    SpreadsheetApp.getUi().alert(
+      'Alhamdulillah! Database Spreadsheet KMF Demak Berhasil Diinisialisasi & Dirapikan!\n\n' +
+      'Tab yang siap digunakan:\n' +
+      '1. Alumni (28 Kolom Standar)\n' +
+      '2. Pending (28 Kolom Standar)\n' +
+      '3. Usaha (Katalog bursa santri)\n' +
+      '4. RSVP_Selapanan (Buku tamu undangan)\n\n' +
+      'Folder Google Drive Penyimpanan Foto: ' + uploadFolder.getName()
+    );
+  } catch (e) {
+    // Abaikan jika tidak di UI konteks
+  }
 }
 
 /**
@@ -521,6 +740,7 @@ function toCamelCase(str) {
   return str.replace(/[^a-zA-Z0-9 ]/g, '')
             .toLowerCase()
             .split(' ')
+            .filter(Boolean)
             .map(function(word, idx) {
               return idx === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1);
             })
