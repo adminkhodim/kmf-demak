@@ -55,11 +55,19 @@ const KMF_DATA = {
     agendaList: [
         {
             id: 1,
-            title: "Pertemuan Selapanan & Khataman KMF Demak",
-            tanggal: "Ahad Pahing, 15 November 2026",
-            waktu: "09.00 WIB - Selesai",
-            tempat: "Kediaman KH. Ahmad Fauzi (Wedung, Demak)",
-            deskripsi: "Khataman Al-Qur'an bil-Ghoib, pembacaan wirid Masyayikh Kajen, dan koordinasi pemutakhiran data sensus alumni.",
+            title: "Selapanan KMF Demak bersama KH. Abdul Aziz Musyaffa'",
+            hari: "Ahad",
+            tanggal: "Ahad, 01 November 2026",
+            waktu: "09.00 WIB s/d selesai",
+            pemateri: "KH. Abdul Aziz Musyaffa'",
+            tempat: "Rumah KH. Abdul Aziz Musyaffa' - Demak Kota",
+            alamat: "Pondok Pesantren 'Nurul Hikmah', Jl. Kyai Sidqi No. 1b Bintoro, Demak",
+            maps: "https://maps.app.goo.gl/EvjHdS5waFtwAnzv8",
+            deskripsi: "Selapanan rutin dan silaturrahim seluruh Anggota KMF Demak. Mauidhoh hasanah dan kajian oleh KH. Abdul Aziz Musyaffa'.",
+            donasi: "Kotak Infaq saat Acara atau Transfer No Rek 1208305397 (BNI An. Ahmad Muntohar)",
+            bank: "BNI",
+            rekening: "1208305397",
+            atasNama: "Ahmad Muntohar",
             kategori: "Selapanan",
             poster: "assets/img/banners/poster-selapanan.jpg",
             isPopup: true
@@ -67,6 +75,7 @@ const KMF_DATA = {
         {
             id: 2,
             title: "Ziarah Masyayikh Kajen & Silaturrahim Dzurriyyah",
+            hari: "Ahad",
             tanggal: "Ahad Wage, 15 November 2026",
             waktu: "07.00 WIB - Selesai",
             tempat: "Komplek Makam Mbah Mutamakkin & Masyayikh Kajen - Pati",

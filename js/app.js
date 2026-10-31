@@ -399,25 +399,38 @@ const App = {
 
         // Render Agenda Desktop & Mobile
         const agendaHtml = window.KMF_DATA.agendaList.map(item => `
-            <div class="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-kmf-500 transition space-y-1.5">
+            <div class="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-kmf-500 transition space-y-2">
                 <div class="flex items-start justify-between gap-2">
                     <span class="text-[9.5px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-kmf-700 border border-emerald-200/70">
                         ${item.kategori}
                     </span>
                     <span class="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                        <i class="fa-regular fa-clock text-kmf-600"></i> ${item.tanggal}
+                        <i class="fa-regular fa-calendar-check text-kmf-600"></i> ${item.tanggal}
                     </span>
                 </div>
                 <h4 class="font-bold text-slate-800 text-sm leading-tight">${item.title}</h4>
+                ${item.pemateri ? `
+                <div class="text-[11px] font-semibold text-emerald-800 flex items-center gap-1.5 bg-emerald-50/70 px-2 py-1 rounded-lg">
+                    <i class="fa-solid fa-microphone text-emerald-600 text-[10px]"></i>
+                    <span>Pemateri: <strong>${item.pemateri}</strong></span>
+                </div>
+                ` : ''}
                 <p class="text-xs text-slate-500 leading-relaxed">${item.deskripsi}</p>
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 gap-1.5">
                     <div class="flex items-center gap-1.5 text-[11px] font-medium truncate">
                         <i class="fa-solid fa-location-dot text-rose-500 shrink-0"></i>
                         <span class="truncate">${item.tempat}</span>
                     </div>
-                    <a href="https://wa.me/?text=${encodeURIComponent('Undangan Kegiatan KMF Demak: *' + item.title + '* pada ' + item.tanggal + ' di ' + item.tempat)}" target="_blank" class="shrink-0 text-[10.5px] text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg">
-                        <i class="fa-brands fa-whatsapp"></i> Bagikan
-                    </a>
+                    <div class="flex items-center gap-1 shrink-0">
+                        ${item.maps ? `
+                        <a href="${item.maps}" target="_blank" class="text-[10px] text-blue-700 hover:text-blue-800 font-bold flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-lg border border-blue-200 transition" title="Buka Maps">
+                            <i class="fa-solid fa-map-location-dot text-[11px]"></i> Maps
+                        </a>
+                        ` : ''}
+                        <button onclick="App.openAgendaModal()" class="text-[10px] text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200 transition">
+                            Detail <i class="fa-solid fa-arrow-right text-[8.5px]"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `).join('');
@@ -2130,37 +2143,123 @@ const App = {
 
         const container = document.getElementById('modal-agenda-container');
         if (container && window.KMF_DATA && window.KMF_DATA.agendaList) {
-            container.innerHTML = window.KMF_DATA.agendaList.map(item => `
-                <div class="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-kmf-500 transition space-y-2">
+            container.innerHTML = window.KMF_DATA.agendaList.map(item => {
+                const isSelapanan = item.kategori === 'Selapanan';
+                const waShareText = isSelapanan ? `*INFO SELAPANAN KMF DEMAK*
+
+Assalamualaikum warahmatullahi wabarakatuh
+
+Diberitahukan kepada segenap seluruh Anggota KMF Demak, bahwa akan dilaksanakan Selapanan KMF DEMAK pada:
+
+📌 *Hari* : ${item.hari || 'Ahad'}
+🗓️ *Tanggal* : ${item.tanggal}
+⏱️ *Pukul* : ${item.waktu}
+📢 *Pemateri* : ${item.pemateri || "KH. Abdul Aziz Musyaffa'"} 
+🏡 *Tempat* : ${item.tempat}
+🚔 *Maps* : 
+${item.maps || 'https://maps.app.goo.gl/EvjHdS5waFtwAnzv8'}
+
+Demikian pemberitahuan dan undangan ini kami sampaikan.
+Kurang lebihnya mohon maaf dan terima kasih.
+
+Wassalamu'alaikum warahmatullahi wabarakatuh
+
+NB : 
+- Donasi acara bisa lewat Kotak Infaq saat Acara atau lewat Transfer No Rek 1208305397 (BNI An. Ahmad Muntohar).`
+                : `Undangan Kegiatan KMF Demak: *${item.title}* pada ${item.tanggal} di ${item.tempat}`;
+
+                return `
+                <div class="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-kmf-500 transition space-y-3">
                     ${item.poster ? `
-                    <div class="relative w-full aspect-[2/1] rounded-xl overflow-hidden mb-2 bg-slate-900 border border-slate-100 shadow-xs">
-                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover">
+                    <div class="relative w-full aspect-[2/1] sm:aspect-[2.3/1] rounded-xl overflow-hidden bg-slate-900 border border-slate-100 shadow-xs cursor-pointer group" onclick="App.openHomePoster(true)" title="Ketuk untuk perbesar poster">
+                        <img src="${item.poster}" alt="${item.title}" class="w-full h-full object-cover object-top transition duration-300 group-hover:scale-105">
                         <span class="absolute top-2 left-2 bg-emerald-600/95 backdrop-blur-sm text-white text-[9.5px] font-bold px-2 py-0.5 rounded-full shadow-xs">
                             <i class="fa-solid fa-bullhorn text-[8.5px] mr-1"></i>Agenda Utama
                         </span>
+                        <span class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm text-white text-[9px] font-medium px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <i class="fa-solid fa-expand text-[8px]"></i> Lihat Poster Penuh
+                        </span>
                     </div>
                     ` : ''}
+
                     <div class="flex items-start justify-between gap-2">
-                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200/70">
+                        <span class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200/70">
                             ${item.kategori}
                         </span>
-                        <span class="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
-                            <i class="fa-regular fa-clock text-kmf-600"></i> ${item.tanggal}
+                        <span class="text-xs font-bold text-kmf-700 bg-blue-50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5 border border-blue-100">
+                            <i class="fa-regular fa-calendar-check text-kmf-600"></i> ${item.tanggal}
                         </span>
                     </div>
-                    <h4 class="font-bold text-slate-800 text-sm sm:text-base leading-snug">${item.title}</h4>
-                    <p class="text-xs text-slate-600 leading-relaxed">${item.deskripsi}</p>
-                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 gap-2">
-                        <div class="flex items-center gap-1.5 text-[11.5px] font-medium min-w-0">
-                            <i class="fa-solid fa-location-dot text-rose-500 shrink-0"></i>
-                            <span class="truncate">${item.tempat}</span>
+
+                    <div>
+                        <h4 class="font-extrabold text-slate-900 text-base sm:text-lg leading-snug">${item.title}</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mt-1">${item.deskripsi}</p>
+                    </div>
+
+                    <!-- Detail Spesifik Agenda -->
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2.5 text-xs text-slate-700">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-blue-100 text-kmf-700 flex items-center justify-center shrink-0 text-[11px]"><i class="fa-regular fa-clock"></i></span>
+                                <div><span class="text-[10px] text-slate-400 block font-medium">Pukul / Waktu</span><strong class="text-slate-800">${item.waktu}</strong></div>
+                            </div>
+                            ${item.pemateri ? `
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 text-[11px]"><i class="fa-solid fa-microphone"></i></span>
+                                <div><span class="text-[10px] text-slate-400 block font-medium">Pemateri</span><strong class="text-slate-800">${item.pemateri}</strong></div>
+                            </div>
+                            ` : ''}
                         </div>
-                        <a href="https://wa.me/?text=${encodeURIComponent('Undangan Kegiatan KMF Demak: *' + item.title + '* pada ' + item.tanggal + ' di ' + item.tempat)}" target="_blank" class="shrink-0 text-xs text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1.5 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 active:scale-95 transition">
-                            <i class="fa-brands fa-whatsapp text-sm"></i> Bagikan
+
+                        <div class="pt-2 border-t border-slate-200/60 flex items-start gap-2">
+                            <span class="w-6 h-6 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 text-[11px] mt-0.5"><i class="fa-solid fa-location-dot"></i></span>
+                            <div class="flex-1 min-w-0">
+                                <span class="text-[10px] text-slate-400 block font-medium">Tempat Acara</span>
+                                <strong class="text-slate-800 block">${item.tempat}</strong>
+                                ${item.alamat ? `<p class="text-[11px] text-slate-500 mt-0.5">${item.alamat}</p>` : ''}
+                            </div>
+                        </div>
+
+                        ${item.maps ? `
+                        <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-map-location-dot mr-1 text-blue-600"></i>Panduan Lokasi Maps:</span>
+                            <a href="${item.maps}" target="_blank" class="text-xs text-blue-700 hover:text-blue-800 font-bold flex items-center gap-1.5 bg-blue-100/80 hover:bg-blue-200 px-3 py-1.5 rounded-lg border border-blue-300 transition active:scale-95 shadow-2xs">
+                                <span>Buka Google Maps</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                            </a>
+                        </div>
+                        ` : ''}
+
+                        ${item.rekening ? `
+                        <div class="pt-2 border-t border-slate-200/60 bg-emerald-50/70 -mx-3.5 -mb-3.5 p-3.5 rounded-b-xl border-t border-emerald-200/80 space-y-1.5">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10.5px] font-extrabold uppercase text-emerald-900 tracking-wider flex items-center gap-1">
+                                    <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> Donasi Acara Selapanan
+                                </span>
+                                <span class="text-[10px] text-emerald-700 font-medium">Kotak Infaq / Transfer</span>
+                            </div>
+                            <div class="flex items-center justify-between bg-white px-3 py-2 rounded-lg border border-emerald-200/90 shadow-2xs">
+                                <div>
+                                    <div class="text-[10px] text-slate-400 font-semibold">${item.bank} &bull; a.n. ${item.atasNama}</div>
+                                    <div class="font-mono font-black text-sm text-slate-900">${item.rekening}</div>
+                                </div>
+                                <button type="button" onclick="App.copyRekening('${item.rekening}', this)" class="text-xs font-bold text-emerald-800 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-2.5 py-1.5 rounded-lg transition active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> Salin
+                                </button>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- Footer Card Aksi Bagikan WA -->
+                    <div class="pt-1 flex items-center justify-end">
+                        <a href="https://wa.me/?text=${encodeURIComponent(waShareText)}" target="_blank" class="w-full sm:w-auto text-xs text-white font-bold flex items-center justify-center gap-2 bg-[#00AA5B] hover:bg-[#028e4d] px-4 py-2.5 rounded-xl shadow-sm active:scale-95 transition cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-sm"></i> Bagikan Undangan ke WhatsApp
                         </a>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         modal.classList.remove('hidden');

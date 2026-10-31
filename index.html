@@ -3299,18 +3299,18 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             
-            <!-- Poster Image Container (Rasio Postingan Instagram 4:5 / 3:4) -->
-            <div id="home-poster-img-wrapper" class="relative w-full aspect-[4/5] bg-slate-950 overflow-hidden cursor-pointer rounded-3xl" onclick="App.openSelapananFromPoster()" title="Ketuk untuk melihat detail Selapanan">
-                <img id="home-poster-img" src="assets/img/banners/poster-selapanan.jpg" alt="Poster Selapanan KMF Demak" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <!-- Poster Image Container (Rasio Flyer 2:3 Optimal) -->
+            <div id="home-poster-img-wrapper" class="relative w-full aspect-[2/3] max-h-[82vh] bg-slate-950 overflow-hidden cursor-pointer rounded-3xl shadow-2xl" onclick="App.openSelapananFromPoster()" title="Ketuk untuk melihat detail Selapanan">
+                <img id="home-poster-img" src="assets/img/banners/poster-selapanan.jpg" alt="Poster Selapanan KMF Demak" class="w-full h-full object-contain sm:object-cover transition-transform duration-500 group-hover:scale-102">
                 
                 <!-- Hint Bar di bagian bawah poster -->
-                <div class="absolute inset-x-0 bottom-0 py-2.5 px-4 bg-gradient-to-t from-black/95 via-black/60 to-transparent flex items-center justify-between text-white text-[11px] font-bold tracking-wide backdrop-blur-[2px]">
+                <div class="absolute inset-x-0 bottom-0 py-2.5 px-4 bg-gradient-to-t from-black/95 via-black/70 to-transparent flex items-center justify-between text-white text-[11px] font-bold tracking-wide backdrop-blur-[2px]">
                     <div class="flex items-center space-x-1.5 truncate pr-2">
                         <i class="fa-solid fa-bullhorn text-amber-400 text-xs animate-bounce"></i>
                         <span class="truncate">Warta Selapanan KMF Demak</span>
                     </div>
-                    <span class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 px-2.5 py-1 rounded-full text-[10px] font-black shrink-0 flex items-center gap-1 shadow-md">
-                        Lihat Detail <i class="fa-solid fa-arrow-right text-[9px]"></i>
+                    <span class="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white px-3 py-1 rounded-full text-[10.5px] font-black shrink-0 flex items-center gap-1 shadow-md">
+                        Info Lengkap <i class="fa-solid fa-arrow-right text-[9px]"></i>
                     </span>
                 </div>
             </div>
@@ -3322,8 +3322,8 @@
                     <span class="text-[10px] text-slate-400"><i class="fa-solid fa-star text-[9px] text-amber-500 mr-1"></i>Agenda Terdekat</span>
                 </div>
                 <div class="space-y-1.5">
-                    <h3 id="home-poster-title" class="text-base font-bold text-slate-900 leading-snug">Pertemuan Selapanan & Khataman KMF Demak</h3>
-                    <p id="home-poster-summary" class="text-xs text-slate-600 leading-relaxed line-clamp-4">Khataman Al-Qur'an bil-Ghoib, pembacaan wirid Masyayikh Kajen, dan koordinasi pemutakhiran data sensus alumni cabang Demak.</p>
+                    <h3 id="home-poster-title" class="text-base font-bold text-slate-900 leading-snug">Selapanan KMF Demak bersama KH. Abdul Aziz Musyaffa'</h3>
+                    <p id="home-poster-summary" class="text-xs text-slate-600 leading-relaxed line-clamp-4">Ahad, 01 November 2026 (09.00 WIB s/d selesai) di Rumah KH. Abdul Aziz Musyaffa' / PP. Nurul Hikmah Bintoro, Demak Kota. Klik untuk informasi rute Maps dan donasi acara.</p>
                 </div>
                 <button type="button" class="w-full py-2.5 px-4 bg-gradient-to-r from-kmf-700 to-kmf-800 hover:from-kmf-600 hover:to-kmf-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-2">
                     <span>Buka Detail Agenda</span>
