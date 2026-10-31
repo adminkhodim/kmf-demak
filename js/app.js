@@ -9,6 +9,7 @@ const App = {
     currentAmalanTab: 'tahlil',
     selectedUsahaCategory: '',
     selectedBeritaCategory: '',
+    selectedAgendaCategory: '',
     currentSlideIndex: 0,
     sliderInterval: null,
     isAdminLoggedIn: false,
@@ -33,6 +34,7 @@ const App = {
         await this.renderAlumniList();
         await this.renderUsahaList();
         this.renderBeritaList();
+        this.renderAgendaPage();
         this.renderAmalan();
         this.renderUserProfileCard();
         await this.updatePendingBadge();
@@ -378,6 +380,11 @@ const App = {
             this.renderUserProfileCard();
         }
 
+        // Tindakan spesifik jika membuka agenda
+        if (targetTab === 'agenda') {
+            this.renderAgendaPage();
+        }
+
         // Scroll kembali ke atas layar (baik main container maupun window)
         const mainEl = document.querySelector('main');
         if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'instant' });
@@ -427,7 +434,7 @@ const App = {
                             <i class="fa-solid fa-map-location-dot text-[11px]"></i> Maps
                         </a>
                         ` : ''}
-                        <button onclick="App.openAgendaModal()" class="text-[10px] text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200 transition">
+                        <button onclick="App.openAgendaDetail('${item.id}')" class="text-[10px] text-emerald-700 hover:text-emerald-800 font-bold flex items-center gap-1 bg-emerald-50 px-2 py-1 rounded-lg border border-emerald-200 transition">
                             Detail <i class="fa-solid fa-arrow-right text-[8.5px]"></i>
                         </button>
                     </div>
@@ -678,6 +685,230 @@ const App = {
 
     closeBeritaDetail: function() {
         const modal = document.getElementById('modal-detail-berita');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    },
+
+    /**
+     * ==================== HALAMAN & MODAL AGENDA KEGIATAN KMF DEMAK (ALA BERITA) ====================
+     */
+
+    /**
+     * Render Halaman Penuh Agenda & Kegiatan (Format Ala Halaman Berita)
+     */
+    renderAgendaPage: function() {
+        const container = document.getElementById('agenda-cards-container');
+        const badgeCount = document.getElementById('agenda-count-badge');
+        const list = (window.KMF_DATA && window.KMF_DATA.agendaList) || [];
+
+        if (!container) return;
+
+        const keyword = (document.getElementById('filter-agenda-keyword')?.value || '').toLowerCase();
+        const selectedCat = this.selectedAgendaCategory;
+
+        const filtered = list.filter(item => {
+            const matchKeyword = !keyword || 
+                (item.title && item.title.toLowerCase().includes(keyword)) ||
+                (item.pemateri && item.pemateri.toLowerCase().includes(keyword)) ||
+                (item.tempat && item.tempat.toLowerCase().includes(keyword)) ||
+                (item.deskripsi && item.deskripsi.toLowerCase().includes(keyword));
+            
+            const matchCat = !selectedCat || item.kategori === selectedCat;
+
+            return matchKeyword && matchCat;
+        });
+
+        if (badgeCount) badgeCount.textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="col-span-full py-12 text-center text-slate-400 bg-white rounded-2xl border border-slate-200 p-6 space-y-2">
+                    <i class="fa-regular fa-calendar-xmark text-4xl text-slate-300"></i>
+                    <p class="text-xs font-medium">Tidak ada agenda kegiatan yang cocok dengan kriteria pencarian.</p>
+                    <button onclick="App.filterAgendaCategory('')" class="text-xs text-rose-600 font-bold hover:underline">Tampilkan Semua Agenda</button>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = filtered.map(item => `
+            <article onclick="App.openAgendaDetail('${item.id}')" class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition cursor-pointer flex flex-col justify-between active:scale-[0.99] group">
+                <!-- Foto / Poster Header -->
+                <div class="relative h-44 sm:h-48 bg-slate-900 overflow-hidden">
+                    <img src="${item.poster || 'assets/img/banners/banner-sensus.jpg'}" alt="${item.title}" class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105">
+                    <span class="absolute top-2.5 left-2.5 text-[9.5px] font-bold px-2.5 py-0.5 rounded-full bg-slate-900/80 backdrop-blur-sm text-white">
+                        ${item.kategori}
+                    </span>
+                    <span class="absolute bottom-2.5 right-2.5 text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-600 text-white shadow-xs">
+                        ${item.tanggal}
+                    </span>
+                </div>
+
+                <!-- Isi Ringkasan Agenda -->
+                <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+                    <div class="space-y-1.5">
+                        <h3 class="font-bold text-sm sm:text-base text-slate-800 group-hover:text-kmf-700 transition leading-snug line-clamp-2">
+                            ${item.title}
+                        </h3>
+                        ${item.pemateri ? `
+                        <div class="text-[11px] font-semibold text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-lg">
+                            <i class="fa-solid fa-microphone text-emerald-600 text-[10px]"></i>
+                            <span class="truncate">Pemateri: <strong>${item.pemateri}</strong></span>
+                        </div>
+                        ` : ''}
+                        <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                            ${item.deskripsi}
+                        </p>
+                    </div>
+
+                    <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-1 text-[11px] text-slate-500 truncate mr-2">
+                            <i class="fa-solid fa-location-dot text-rose-500 shrink-0"></i>
+                            <span class="truncate">${item.tempat}</span>
+                        </div>
+                        <span class="text-[11px] font-bold text-rose-600 group-hover:text-rose-700 flex items-center gap-1 shrink-0">
+                            Selengkapnya <i class="fa-solid fa-arrow-right text-[9px] transition group-hover:translate-x-0.5"></i>
+                        </span>
+                    </div>
+                </div>
+            </article>
+        `).join('');
+    },
+
+    filterAgendaCategory: function(cat) {
+        this.selectedAgendaCategory = cat;
+        document.querySelectorAll('.chip-agenda-btn').forEach(btn => {
+            if (btn.getAttribute('data-cat') === cat) {
+                btn.classList.add('bg-rose-600', 'text-white');
+                btn.classList.remove('bg-slate-100', 'text-slate-700');
+            } else {
+                btn.classList.remove('bg-rose-600', 'text-white');
+                btn.classList.add('bg-slate-100', 'text-slate-700');
+            }
+        });
+        this.renderAgendaPage();
+    },
+
+    /**
+     * Buka Modal Detail Agenda Lengkap (Persis Seperti Halaman Detail Berita tapi Lebih Kaya)
+     */
+    openAgendaDetail: function(id) {
+        const list = (window.KMF_DATA && window.KMF_DATA.agendaList) || [];
+        const item = list.find(a => String(a.id) === String(id));
+        if (!item) return;
+
+        const modal = document.getElementById('modal-detail-agenda');
+        if (!modal) return;
+
+        // Foto & Kategori
+        const fotoEl = document.getElementById('modal-agenda-foto');
+        if (fotoEl) fotoEl.src = item.poster || 'assets/img/banners/banner-sensus.jpg';
+
+        const catEl = document.getElementById('modal-agenda-kategori-badge');
+        if (catEl) catEl.textContent = item.kategori;
+
+        // Tanggal & Waktu
+        const tglEl = document.getElementById('modal-agenda-tanggal-badge');
+        if (tglEl) tglEl.textContent = item.tanggal;
+
+        const wktBadge = document.getElementById('modal-agenda-waktu-badge');
+        if (wktBadge) wktBadge.textContent = item.waktu;
+
+        const wktText = document.getElementById('modal-agenda-waktu-text');
+        if (wktText) wktText.textContent = item.waktu;
+
+        // Judul
+        const judulEl = document.getElementById('modal-agenda-judul');
+        if (judulEl) judulEl.textContent = item.title;
+
+        // Pemateri
+        const pemateriBox = document.getElementById('modal-agenda-pemateri-box');
+        const pemateriText = document.getElementById('modal-agenda-pemateri-text');
+        if (item.pemateri) {
+            if (pemateriBox) pemateriBox.classList.remove('hidden');
+            if (pemateriText) pemateriText.textContent = item.pemateri;
+        } else {
+            if (pemateriBox) pemateriBox.classList.add('hidden');
+        }
+
+        // Tempat & Alamat
+        const tempatText = document.getElementById('modal-agenda-tempat-text');
+        if (tempatText) tempatText.textContent = item.tempat;
+
+        const alamatText = document.getElementById('modal-agenda-alamat-text');
+        if (alamatText) alamatText.textContent = item.alamat || '';
+
+        // Maps
+        const mapsBox = document.getElementById('modal-agenda-maps-box');
+        const mapsLink = document.getElementById('modal-agenda-maps-link');
+        if (item.maps) {
+            if (mapsBox) mapsBox.classList.remove('hidden');
+            if (mapsLink) mapsLink.href = item.maps;
+        } else {
+            if (mapsBox) mapsBox.classList.add('hidden');
+        }
+
+        // Donasi / Rekening
+        const donasiBox = document.getElementById('modal-agenda-donasi-box');
+        const bankText = document.getElementById('modal-agenda-bank-text');
+        const rekText = document.getElementById('modal-agenda-rekening-text');
+        const copyBtn = document.getElementById('modal-agenda-copy-btn');
+        if (item.rekening) {
+            if (donasiBox) donasiBox.classList.remove('hidden');
+            if (bankText) bankText.textContent = `${item.bank || 'BNI'} • a.n. ${item.atasNama || 'Ahmad Muntohar'}`;
+            if (rekText) rekText.textContent = item.rekening;
+            if (copyBtn) copyBtn.setAttribute('onclick', `App.copyRekening('${item.rekening}', this)`);
+        } else {
+            if (donasiBox) donasiBox.classList.add('hidden');
+        }
+
+        // Konten Lengkap Paragraf
+        const contentContainer = document.getElementById('modal-agenda-konten');
+        if (contentContainer) {
+            const rawContent = item.konten || item.deskripsi || '';
+            contentContainer.innerHTML = rawContent.split('\n\n').map(p => `
+                <p class="leading-relaxed text-slate-700 text-xs sm:text-sm">${p.replace(/\n/g, '<br>')}</p>
+            `).join('');
+        }
+
+        // WhatsApp Share Link
+        const waShareBtn = document.getElementById('modal-agenda-wa-share');
+        if (waShareBtn) {
+            const isSelapanan = item.kategori === 'Selapanan';
+            const waShareText = isSelapanan ? `*INFO SELAPANAN KMF DEMAK*
+
+Assalamualaikum warahmatullahi wabarakatuh
+
+Diberitahukan kepada segenap seluruh Anggota KMF Demak, bahwa akan dilaksanakan Selapanan KMF DEMAK pada:
+
+📌 *Hari* : ${item.hari || 'Ahad'}
+🗓️ *Tanggal* : ${item.tanggal}
+⏱️ *Pukul* : ${item.waktu}
+📢 *Pemateri* : ${item.pemateri || "KH. Abdul Aziz Musyaffa'"} 
+🏡 *Tempat* : ${item.tempat}
+${item.alamat ? '📍 *Alamat* : ' + item.alamat + '\n' : ''}🚔 *Maps* : 
+${item.maps || 'https://maps.app.goo.gl/EvjHdS5waFtwAnzv8'}
+
+Demikian pemberitahuan dan undangan ini kami sampaikan.
+Kurang lebihnya mohon maaf dan terima kasih.
+
+Wassalamu'alaikum warahmatullahi wabarakatuh
+
+NB : 
+- Donasi acara bisa lewat Kotak Infaq saat Acara atau lewat Transfer No Rek 1208305397 (BNI An. Ahmad Muntohar).`
+            : `Undangan Kegiatan KMF Demak: *${item.title}*\nTanggal: ${item.tanggal}\nWaktu: ${item.waktu}\nTempat: ${item.tempat}\n${item.maps ? 'Maps: ' + item.maps : ''}`;
+
+            waShareBtn.href = `https://wa.me/?text=${encodeURIComponent(waShareText)}`;
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    },
+
+    closeAgendaDetailModal: function() {
+        const modal = document.getElementById('modal-detail-agenda');
         if (modal) {
             modal.classList.add('hidden');
             modal.classList.remove('flex');
@@ -3167,7 +3398,7 @@ NB :
      */
     openSelapananFromPoster: function() {
         this.closeHomePoster(false);
-        this.openAgendaModal();
+        this.openAgendaDetail(1);
     }
 };
 

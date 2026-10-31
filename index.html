@@ -150,7 +150,13 @@
                     <span>Direktori Alumni</span>
                 </button>
 
-                <!-- 3. Bursa Usaha -->
+                <!-- 3. Agenda Cabang -->
+                <button onclick="App.navigateTo('agenda')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="agenda">
+                    <i class="fa-solid fa-calendar-check text-xs text-slate-400"></i>
+                    <span>Agenda Cabang</span>
+                </button>
+
+                <!-- 4. Bursa Usaha -->
                 <button onclick="App.navigateTo('usaha')" class="nav-desktop-btn px-3.5 py-1.5 rounded-full font-semibold text-xs text-slate-700 hover:text-kmf-600 hover:bg-slate-100 transition flex items-center gap-1.5" data-target="usaha">
                     <i class="fa-solid fa-store text-xs text-slate-400"></i>
                     <span>Bursa Usaha</span>
@@ -259,7 +265,7 @@
                         </button>
 
                         <!-- 5. Agenda Cabang -->
-                        <button onclick="App.openAgendaModal()" class="flex flex-col items-center group transition active:scale-95">
+                        <button onclick="App.navigateTo('agenda')" class="flex flex-col items-center group transition active:scale-95">
                             <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition duration-200 border border-rose-200/50">
                                 <i class="fa-solid fa-calendar-check"></i>
                             </div>
@@ -1260,7 +1266,9 @@
                                             <i class="fa-regular fa-calendar-days text-kmf-600"></i> Agenda &amp; Khataman
                                         </h3>
                                     </div>
-                                    <span class="text-[10.5px] bg-blue-100 text-kmf-800 px-2 py-0.5 rounded-full font-bold">Terkini</span>
+                                    <button onclick="App.navigateTo('agenda')" class="text-xs text-kmf-600 hover:text-kmf-700 font-bold hover:underline flex items-center gap-1 cursor-pointer">
+                                        Semua Agenda <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                                    </button>
                                 </div>
                                 <div id="home-agenda-container" class="space-y-3">
                                     <!-- Dinamis via App.renderHome() -->
@@ -1356,6 +1364,50 @@
 
         </section>
 
+
+        <!-- ==================== TAB: AGENDA & KEGIATAN KMF DEMAK (ALA HALAMAN BERITA) ==================== -->
+        <section id="view-agenda" class="tab-content hidden space-y-3 sm:space-y-4">
+            <!-- Header & Filter Agenda -->
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-xs space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <h2 class="font-bold text-base sm:text-lg text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-check text-rose-600"></i> Agenda &amp; Kegiatan KMF Demak
+                        </h2>
+                        <p class="text-[11px] sm:text-xs text-slate-500">Jadwal Selapanan, pengajian, ziarah masyayikh, dan temu silaturrahim alumni santri Mathole'.</p>
+                    </div>
+                    <span class="text-[10px] bg-rose-50 text-rose-700 font-bold px-2.5 py-1 rounded-full border border-rose-200 self-start sm:self-auto flex items-center gap-1">
+                        <i class="fa-solid fa-bullhorn text-[9px] animate-bounce"></i> Jadwal Resmi
+                    </span>
+                </div>
+
+                <!-- Input Pencarian Agenda -->
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                    <input type="text" id="filter-agenda-keyword" placeholder="Cari nama agenda, pemateri, tempat..." oninput="App.renderAgendaPage()" class="w-full pl-8 pr-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
+                </div>
+
+                <!-- Chips Kategori Agenda -->
+                <div id="agenda-category-chips" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 text-xs">
+                    <button onclick="App.filterAgendaCategory('')" class="chip-agenda-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-rose-600 text-white font-medium text-xs active:scale-95 transition" data-cat="">Semua Agenda</button>
+                    <button onclick="App.filterAgendaCategory('Selapanan')" class="chip-agenda-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Selapanan">Selapanan</button>
+                    <button onclick="App.filterAgendaCategory('Ziarah')" class="chip-agenda-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Ziarah">Ziarah</button>
+                    <button onclick="App.filterAgendaCategory('Kegiatan')" class="chip-agenda-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Kegiatan">Kegiatan</button>
+                    <button onclick="App.filterAgendaCategory('Kajian')" class="chip-agenda-btn whitespace-nowrap px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs active:scale-95 transition" data-cat="Kajian">Kajian &amp; Diklat</button>
+                </div>
+            </div>
+
+            <!-- Counter Hasil Agenda -->
+            <div class="flex items-center justify-between text-xs px-1 text-slate-500">
+                <span>Menampilkan <strong id="agenda-count-badge" class="text-slate-800">0</strong> agenda</span>
+                <span class="text-[10.5px] text-slate-400">Ketuk agenda untuk rincian selengkapnya</span>
+            </div>
+
+            <!-- List Grid Agenda Cards -->
+            <div id="agenda-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                <!-- Dinamis via App.renderAgendaPage() -->
+            </div>
+        </section>
 
         <!-- ==================== TAB 2: WARTA & BERITA KMF DEMAK ==================== -->
         <section id="view-berita" class="tab-content hidden space-y-3 sm:space-y-4">
@@ -2309,6 +2361,108 @@
                         Tutup
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DETAIL AGENDA LENGKAP (ALA HALAMAN BERITA) ==================== -->
+    <div id="modal-detail-agenda" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-auto modal-animate-enter flex flex-col max-h-[92vh]">
+            <!-- Foto / Poster Header -->
+            <div class="relative h-48 sm:h-56 bg-slate-950 overflow-hidden shrink-0">
+                <img id="modal-agenda-foto" src="" alt="Agenda" class="w-full h-full object-cover object-top">
+                <span id="modal-agenda-kategori-badge" class="absolute top-3 left-3 text-[10px] bg-rose-600/90 backdrop-blur-sm text-white px-2.5 py-1 rounded-md font-bold shadow-sm">
+                    Kategori
+                </span>
+                <button type="button" onclick="App.closeAgendaDetailModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white flex items-center justify-center transition active:scale-95 cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Body Detail Agenda (Scrollable) -->
+            <div class="p-4 sm:p-5 space-y-4 overflow-y-auto flex-1">
+                <div class="space-y-1.5">
+                    <div class="flex items-center gap-2 text-[11px] text-slate-400">
+                        <span id="modal-agenda-tanggal-badge" class="font-bold text-kmf-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">Tanggal</span>
+                        <span>&bull;</span>
+                        <span id="modal-agenda-waktu-badge" class="text-slate-600 font-medium">Waktu</span>
+                    </div>
+                    <h3 id="modal-agenda-judul" class="text-base sm:text-lg font-black text-slate-900 leading-snug">Judul Agenda</h3>
+                </div>
+
+                <!-- Info Grid (Waktu, Pemateri, Tempat) -->
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5 text-xs text-slate-700">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-blue-100 text-kmf-700 flex items-center justify-center shrink-0 text-xs"><i class="fa-regular fa-clock"></i></span>
+                            <div>
+                                <span class="text-[10px] text-slate-400 block font-medium">Waktu Acara</span>
+                                <strong id="modal-agenda-waktu-text" class="text-slate-800">09.00 WIB s/d selesai</strong>
+                            </div>
+                        </div>
+                        <div id="modal-agenda-pemateri-box" class="flex items-center gap-2">
+                            <span class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 text-xs"><i class="fa-solid fa-microphone"></i></span>
+                            <div class="min-w-0">
+                                <span class="text-[10px] text-slate-400 block font-medium">Pemateri / Muballigh</span>
+                                <strong id="modal-agenda-pemateri-text" class="text-slate-800 truncate block">KH. Abdul Aziz Musyaffa'</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-200/60 flex items-start gap-2">
+                        <span class="w-7 h-7 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 text-xs mt-0.5"><i class="fa-solid fa-location-dot"></i></span>
+                        <div class="flex-1 min-w-0">
+                            <span class="text-[10px] text-slate-400 block font-medium">Lokasi / Tempat</span>
+                            <strong id="modal-agenda-tempat-text" class="text-slate-800 block">Rumah KH. Abdul Aziz Musyaffa'</strong>
+                            <p id="modal-agenda-alamat-text" class="text-[11px] text-slate-500 mt-0.5"></p>
+                        </div>
+                    </div>
+
+                    <div id="modal-agenda-maps-box" class="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                        <span class="text-[11px] text-slate-500 font-medium"><i class="fa-solid fa-map-location-dot mr-1 text-blue-600"></i>Panduan Rute:</span>
+                        <a id="modal-agenda-maps-link" href="#" target="_blank" class="text-xs text-blue-700 hover:text-blue-800 font-bold flex items-center gap-1.5 bg-blue-100/80 hover:bg-blue-200 px-3 py-1.5 rounded-lg border border-blue-300 transition active:scale-95 shadow-2xs">
+                            <span>Buka Google Maps</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+
+                    <!-- Donasi Infaq Box -->
+                    <div id="modal-agenda-donasi-box" class="pt-2 border-t border-slate-200/60 bg-emerald-50/70 -mx-3.5 -mb-3.5 p-3.5 rounded-b-2xl border-t border-emerald-200/80 space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10.5px] font-extrabold uppercase text-emerald-900 tracking-wider flex items-center gap-1">
+                                <i class="fa-solid fa-hand-holding-dollar text-emerald-600"></i> Donasi Acara Selapanan
+                            </span>
+                            <span class="text-[10px] text-emerald-700 font-medium">Kotak Infaq / Transfer</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white px-3 py-2 rounded-lg border border-emerald-200/90 shadow-2xs">
+                            <div>
+                                <div id="modal-agenda-bank-text" class="text-[10px] text-slate-400 font-semibold">BNI &bull; a.n. Ahmad Muntohar</div>
+                                <div id="modal-agenda-rekening-text" class="font-mono font-black text-sm text-slate-900">1208305397</div>
+                            </div>
+                            <button type="button" id="modal-agenda-copy-btn" onclick="App.copyRekening('1208305397', this)" class="text-xs font-bold text-emerald-800 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-2.5 py-1.5 rounded-lg transition active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-regular fa-copy"></i> Salin
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Konten Paragraf Lengkap (Ala Berita) -->
+                <div class="space-y-2 pt-1">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Deskripsi &amp; Susunan Acara</h4>
+                    <div id="modal-agenda-konten" class="space-y-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed border-t border-slate-100 pt-2">
+                        <!-- Paragraf dinamis via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Modal Detail Agenda -->
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-2 shrink-0">
+                <button type="button" onclick="App.closeAgendaDetailModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-100 text-xs font-bold transition">
+                    Tutup
+                </button>
+                <a id="modal-agenda-wa-share" href="#" target="_blank" class="flex-1 sm:flex-initial text-xs text-white font-bold flex items-center justify-center gap-2 bg-[#00AA5B] hover:bg-[#028e4d] px-5 py-2.5 rounded-xl shadow-sm active:scale-95 transition cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-sm"></i> Bagikan Undangan
+                </a>
             </div>
         </div>
     </div>

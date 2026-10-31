@@ -51,11 +51,12 @@ const KMF_DATA = {
         "Lainnya"
     ],
 
-    // Agenda / Kegiatan Terdekat KMF Demak
+    // Agenda / Kegiatan Terdekat KMF Demak (Format Kaya Ala Halaman Berita)
     agendaList: [
         {
             id: 1,
             title: "Selapanan KMF Demak bersama KH. Abdul Aziz Musyaffa'",
+            kategori: "Selapanan",
             hari: "Ahad",
             tanggal: "Ahad, 01 November 2026",
             waktu: "09.00 WIB s/d selesai",
@@ -63,24 +64,66 @@ const KMF_DATA = {
             tempat: "Rumah KH. Abdul Aziz Musyaffa' - Demak Kota",
             alamat: "Pondok Pesantren 'Nurul Hikmah', Jl. Kyai Sidqi No. 1b Bintoro, Demak",
             maps: "https://maps.app.goo.gl/EvjHdS5waFtwAnzv8",
-            deskripsi: "Selapanan rutin dan silaturrahim seluruh Anggota KMF Demak. Mauidhoh hasanah dan kajian oleh KH. Abdul Aziz Musyaffa'.",
+            deskripsi: "Selapanan rutin dan silaturrahim akbar seluruh Anggota KMF Demak dengan mauidhoh hasanah oleh KH. Abdul Aziz Musyaffa'.",
+            konten: "Assalamualaikum warahmatullahi wabarakatuh.\n\nDiberitahukan kepada segenap seluruh Anggota dan Alumni KMF Demak, bahwa akan diselenggarakan agenda rutin Selapanan dan Silaturrahim KMF Cabang Demak.\n\nKegiatan ini akan diisi dengan mauidhoh hasanah dan kajian keagamaan oleh pemateri terhormat KH. Abdul Aziz Musyaffa'. Seluruh alumni Perguruan Islam Mathali'ul Falah (Kajen, Pati) yang berdomisili di Kabupaten Demak diharapkan berkenan hadir bersama keluarga guna mempererat tali ukhuwah dan menyambung sanad keilmuan para Masyayikh.\n\nSusunan acara meliputi pembacaan Al-Qur'an bil-Ghoib, wirid dan fatihah Masyayikh Mathole', mauidhoh hasanah, serta musyawarah pemutakhiran program sensus digital alumni cabang Demak.\n\nDonasi dan infaq operasional kegiatan dapat disalurkan melalui kotak infaq di lokasi acara atau transfer ke rekening BNI 1208305397 (a.n. Ahmad Muntohar).\n\nWassalamu'alaikum warahmatullahi wabarakatuh.",
             donasi: "Kotak Infaq saat Acara atau Transfer No Rek 1208305397 (BNI An. Ahmad Muntohar)",
             bank: "BNI",
             rekening: "1208305397",
             atasNama: "Ahmad Muntohar",
-            kategori: "Selapanan",
             poster: "assets/img/banners/poster-selapanan.jpg",
             isPopup: true
         },
         {
             id: 2,
             title: "Ziarah Masyayikh Kajen & Silaturrahim Dzurriyyah",
+            kategori: "Ziarah",
             hari: "Ahad",
             tanggal: "Ahad Wage, 15 November 2026",
-            waktu: "07.00 WIB - Selesai",
+            waktu: "07.00 WIB s/d Selesai",
+            pemateri: "Pengurus Cabang KMF Demak",
             tempat: "Komplek Makam Mbah Mutamakkin & Masyayikh Kajen - Pati",
-            deskripsi: "Rombongan bersama alumni KMF Cabang Demak (titik kumpul Masjid Agung Demak).",
-            kategori: "Ziarah"
+            alamat: "Desa Kajen, Kec. Margoyoso, Kab. Pati (Titik Kumpul: Halaman Masjid Agung Demak)",
+            maps: "https://maps.google.com/?q=Makam+Mbah+Mutamakkin+Kajen+Pati",
+            deskripsi: "Rombongan bersama ziarah maqbarah Masyayikh Kajen dan sowan silaturrahim dzurriyyah para guru Mathole'.",
+            konten: "Agenda ziarah tahunan alumni KMF Cabang Demak menuju maqbarah Masyayikh Kajen di Pati.\n\nRute ziarah mencakup makam Al-Maghfurlah KH. Ahmad Mutamakkin, Hadhratusy Syaikh KH. MA. Sahal Mahfudh, KH. Abdullah Salam, KH. Damanhuri, KH. Naji Muadz, dan para auliya' Masyayikh Kajen lainnya.\n\nTitik kumpul keberangkatan dipusatkan di halaman Masjid Agung Demak pukul 07.00 WIB tepat. Disediakan armada bus dan iring-iringan kendaraan roda empat. Diharapkan peserta ziarah berpakaian sopan khas santri (baju koko/putih dan sarung/busana muslimah).",
+            donasi: "Infaq rombongan via koordinator kecamatan",
+            bank: "BNI",
+            rekening: "1208305397",
+            atasNama: "Ahmad Muntohar",
+            poster: "assets/img/berita/berita-ziarah-kajen.jpg",
+            isPopup: false
+        },
+        {
+            id: 3,
+            title: "Sema'an Al-Qur'an 30 Juz Bil-Ghoib Santri Demak",
+            kategori: "Kegiatan",
+            hari: "Ahad",
+            tanggal: "Ahad Kliwon, 29 November 2026",
+            waktu: "08.30 WIB s/d 12.00 WIB",
+            pemateri: "Majelis Huffadz Alumni Mathole' Demak",
+            tempat: "Masjid Jami' Mranggen, Kab. Demak",
+            alamat: "Kecamatan Mranggen, Kabupaten Demak",
+            maps: "https://maps.google.com/?q=Mranggen+Demak",
+            deskripsi: "Sema'an Al-Qur'an bil-ghoib 30 juz khatam serentak oleh para huffadz alumni Mathali'ul Falah.",
+            konten: "Majelis Khotmil Qur'an bil-Ghoib rutin diselenggarakan untuk memupuk kecintaan terhadap Al-Qur'an dan menyambung tradisi nderes Al-Qur'an para alumni pesantren Kajen.\n\nAcara dimulai sejak bakda sholat Subuh dan ditutup dengan doa khotmil Qur'an serta tasyakuran santri menjelang dhuhur.",
+            poster: "assets/img/banners/banner-khataman.jpg",
+            isPopup: false
+        },
+        {
+            id: 4,
+            title: "Halaqah Fiqh Sosial & Sarasehan Ekonomi Santri",
+            kategori: "Kajian",
+            hari: "Ahad",
+            tanggal: "Ahad Pon, 13 Desember 2026",
+            waktu: "09.00 WIB s/d 13.00 WIB",
+            pemateri: "Tim Kajian Fiqh Sosial & Praktisi Usaha KMF",
+            tempat: "Aula Pertemuan PCNU Kabupaten Demak",
+            alamat: "Jl. Sultan Fatah No. 34, Demak Kota",
+            maps: "https://maps.google.com/?q=PCNU+Demak",
+            deskripsi: "Kajian interaktif kontekstualisasi Fiqh Sosial Mbah Sahal untuk penguatan jejaring bursa usaha santri.",
+            konten: "Halaqah ilmiah yang membedah karya-karya pemikiran KH. MA. Sahal Mahfudh mengenai pemberdayaan masyarakat dan ekonomi kerakyatan berbasis pesantren.\n\nAcara ini juga dirangkai dengan temu jaringan para pelaku usaha alumni KMF di Kabupaten Demak untuk saling sinergi dan kolaborasi pemasaran produk santri.",
+            poster: "assets/img/berita/berita-wirausaha-santri.jpg",
+            isPopup: false
         }
     ],
 
