@@ -2081,7 +2081,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
 
             // Cek apakah santri memiliki foto profil terunggah
             const avatarContent = (user.foto && user.foto.trim() && !user.foto.includes('logo.png')) ?
-                `<img src="${user.foto}" alt="${user.nama}" class="w-full h-full object-cover rounded-2xl" onerror="this.onerror=null; this.parentElement.innerHTML='<span>${initials}</span>';">` :
+                `<img src="${user.foto}" alt="${user.nama}" class="w-full h-full object-cover object-top block" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" onerror="this.onerror=null; this.parentElement.innerHTML='<span>${initials}</span>';">` :
                 `<span>${initials}</span>`;
 
             const statusBadge = user.isPending ? `
@@ -2100,7 +2100,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                         <i class="fa-solid fa-id-card"></i>
                     </div>
                     <div class="relative z-10 flex items-center gap-3.5">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xl shrink-0 shadow-md border-2 border-white/30 overflow-hidden">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-900 text-slate-950 font-black flex items-center justify-center text-xl shrink-0 shadow-md border-2 border-white/40 overflow-hidden relative" style="width: 56px; height: 56px; min-width: 56px; min-height: 56px; max-width: 56px; max-height: 56px;">
                             ${avatarContent}
                         </div>
                         <div class="flex-1 min-w-0">
@@ -2159,7 +2159,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                         <i class="fa-solid fa-mosque"></i>
                     </div>
                     <div class="relative z-10 flex items-center gap-3.5">
-                        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl shrink-0 shadow-inner">
+                        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-2xl shrink-0 shadow-inner" style="width: 56px; height: 56px; min-width: 56px; min-height: 56px; max-width: 56px; max-height: 56px;">
                             <i class="fa-solid fa-user-circle text-amber-300"></i>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -2434,11 +2434,12 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
 
         if (avatarEl) {
             const fotoUrl = user.foto || (user.urlFotoProfil) || '';
+            avatarEl.style.cssText = "width: 54px; height: 81px; min-width: 54px; min-height: 81px; max-width: 54px; max-height: 81px;";
             if (fotoUrl && fotoUrl.trim() && !fotoUrl.includes('logo.png')) {
-                avatarEl.className = "w-13 sm:w-16 aspect-[2/3] rounded-xl overflow-hidden border-2 border-white/90 shadow-md shrink-0 flex items-center justify-center bg-slate-900";
-                avatarEl.innerHTML = `<img src="${fotoUrl}" alt="${user.nama || 'Alumni'}" class="w-full h-full object-cover" onerror="this.parentElement.className='w-13 sm:w-16 aspect-[2/3] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white'; this.parentElement.innerText='${initials}';">`;
+                avatarEl.className = "w-[54px] sm:w-[64px] h-[81px] sm:h-[96px] rounded-xl overflow-hidden border-2 border-white/90 shadow-md shrink-0 flex items-center justify-center bg-slate-900 relative";
+                avatarEl.innerHTML = `<img src="${fotoUrl}" alt="${user.nama || 'Alumni'}" class="w-full h-full object-cover object-top block" style="width: 100%; height: 100%; object-fit: cover; object-position: top center;" onerror="this.parentElement.className='w-[54px] sm:w-[64px] h-[81px] sm:h-[96px] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white'; this.parentElement.innerText='${initials}';">`;
             } else {
-                avatarEl.className = "w-13 sm:w-16 aspect-[2/3] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white";
+                avatarEl.className = "w-[54px] sm:w-[64px] h-[81px] sm:h-[96px] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white";
                 avatarEl.innerText = initials;
             }
         }
