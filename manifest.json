@@ -9,7 +9,7 @@
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#1d4ed8",
-  "categories": ["social", "community", "lifestyle"],
+  "categories": ["social", "lifestyle"],
   "icons": [
     {
       "src": "assets/icons/icon-192.png",
