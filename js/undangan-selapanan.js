@@ -246,18 +246,11 @@ const UndanganSelapanan = {
      * 5. Mesin Auto-Scroll Otomatis & Cerdas
      */
     initAutoScroll: function() {
-        const toggleBtn = document.getElementById('btn-undangan-autoscroll');
-        if (toggleBtn && !toggleBtn._hasAutoScrollListener) {
-            toggleBtn._hasAutoScrollListener = true;
-            toggleBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.toggleAutoScroll();
-            });
-        }
+        if (this._hasInitAutoScrollEvents) return;
+        this._hasInitAutoScrollEvents = true;
 
-        // Pause otomatis hanya jika user menyentuh/menggeser layar secara sengaja (bukan menekan tombol floating)
-        const pauseOnUserInteraction = (e) => {
+        // Pause otomatis hanya jika user benar-benar menggeser konten layar secara manual (touchmove / wheel / key)
+        const handleManualScrollInterrupt = (e) => {
             if (!this.isAutoScrolling) return;
 
             // Beri toleransi waktu awal setelah tombol start ditekan agar tidak langsung mati
@@ -271,16 +264,34 @@ const UndanganSelapanan = {
             this.stopAutoScroll();
         };
 
-        const container = this.getScrollContainer();
-        container.addEventListener('touchstart', pauseOnUserInteraction, { passive: true });
-        container.addEventListener('wheel', pauseOnUserInteraction, { passive: true });
-        container.addEventListener('mousedown', pauseOnUserInteraction, { passive: true });
+        const mainEl = document.querySelector('main');
+        if (mainEl) {
+            mainEl.addEventListener('touchmove', handleManualScrollInterrupt, { passive: true });
+            mainEl.addEventListener('wheel', handleManualScrollInterrupt, { passive: true });
+        }
 
-        window.addEventListener('touchstart', pauseOnUserInteraction, { passive: true });
-        window.addEventListener('wheel', pauseOnUserInteraction, { passive: true });
+        window.addEventListener('touchmove', handleManualScrollInterrupt, { passive: true });
+        window.addEventListener('wheel', handleManualScrollInterrupt, { passive: true });
+        window.addEventListener('keydown', (e) => {
+            if (['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Space'].includes(e.code || e.key)) {
+                handleManualScrollInterrupt(e);
+            }
+        }, { passive: true });
     },
 
-    toggleAutoScroll: function() {
+    toggleAutoScroll: function(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Debounce proteksi agar tidak terpicu berulang dalam 280ms
+        const now = Date.now();
+        if (this._lastToggleTime && (now - this._lastToggleTime < 280)) {
+            return;
+        }
+        this._lastToggleTime = now;
+
         if (this.isAutoScrolling) {
             this.stopAutoScroll();
         } else {
@@ -289,28 +300,42 @@ const UndanganSelapanan = {
     },
 
     startAutoScroll: function() {
+        if (this.isAutoScrolling) return;
         this.isAutoScrolling = true;
         this.lastAutoScrollStartTime = Date.now();
         this.updateAutoScrollUI();
 
-        const container = this.getScrollContainer();
+        const mainEl = document.querySelector('main');
 
         const scrollStep = () => {
             if (!this.isAutoScrolling) return;
 
-            // Cek apakah sudah mentok di paling bawah konten
-            const maxScroll = container.scrollHeight - container.clientHeight;
-            if (container.scrollTop >= maxScroll - 4) {
+            // Cek apakah sudah sampai batas paling bawah
+            let atBottom = false;
+            if (mainEl && (mainEl.scrollHeight > mainEl.clientHeight + 8)) {
+                if (mainEl.scrollTop + mainEl.clientHeight >= mainEl.scrollHeight - 6) {
+                    atBottom = true;
+                }
+            } else {
+                const scrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+                const docH = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                if (window.innerHeight + scrollY >= docH - 10) {
+                    atBottom = true;
+                }
+            }
+
+            if (atBottom) {
                 this.stopAutoScroll();
                 return;
             }
 
-            // Gulir kontainer <main> secara halus dan bertahap
-            container.scrollTop += 1.6;
-
-            // Cadangan jika pada browser tertentu scroll berada pada window/document
-            if (window.scrollY < document.documentElement.scrollHeight - window.innerHeight - 4) {
-                window.scrollBy({ top: 1.6, behavior: 'auto' });
+            // Scroll container <main> DAN window secara bersamaan agar 100% bergerak di semua kondisi peramban
+            if (mainEl) {
+                mainEl.scrollTop += 2;
+            }
+            window.scrollBy({ top: 2, behavior: 'auto' });
+            if (document.scrollingElement) {
+                document.scrollingElement.scrollTop += 2;
             }
 
             this.scrollAnimId = requestAnimationFrame(scrollStep);
@@ -337,12 +362,12 @@ const UndanganSelapanan = {
         if (!btn || !icon) return;
 
         if (this.isAutoScrolling) {
-            btn.classList.add('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400');
+            btn.classList.add('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400', 'shadow-lg');
             btn.classList.remove('bg-slate-900/85', 'text-slate-200');
             icon.className = 'fa-solid fa-pause text-sm text-white';
             btn.setAttribute('title', 'Jeda Auto-Scroll (Sedang Aktif)');
         } else {
-            btn.classList.remove('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400');
+            btn.classList.remove('bg-emerald-600', 'text-white', 'ring-2', 'ring-emerald-400', 'shadow-lg');
             btn.classList.add('bg-slate-900/85', 'text-slate-200');
             icon.className = 'fa-solid fa-angles-down text-sm text-slate-200 animate-bounce';
             btn.setAttribute('title', 'Mulai Auto-Scroll');
