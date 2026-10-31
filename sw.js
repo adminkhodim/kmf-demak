@@ -1,13 +1,12 @@
 /**
- * Service Worker KMF Demak PWA
+ * Service Worker KMF Demak PWA (v2.6.0)
  * Menyediakan cache offline penuh untuk teks amalan (Tahlil, Yasin, Wirid, Istighotsah),
- * hisab jadwal sholat, dan seluruh aset antarmuka.
+ * hisab jadwal sholat, direktori alumni, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.5.6';
+const CACHE_NAME = 'kmf-demak-v2.6.0';
 const STATIC_ASSETS = [
     './',
-    './index.html',
     './manifest.json',
     './css/styles.css',
     './js/app.js',
@@ -20,7 +19,6 @@ const STATIC_ASSETS = [
     './assets/img/logo.png',
     './assets/icons/icon-192.png',
     './assets/icons/icon-512.png',
-    './assets/audio/backsong-selapanan.mp3',
     './assets/img/banners/poster-selapanan.jpg',
     './assets/img/usaha/usaha-sarung-batik.jpg',
     './assets/img/usaha/usaha-buku-fiqhsosial.jpg',
@@ -32,8 +30,20 @@ const STATIC_ASSETS = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(STATIC_ASSETS);
+        caches.open(CACHE_NAME).then(async (cache) => {
+            // Gunakan Promise.allSettled agar kegagalan 1 file (atau redirect 308) tidak menggagalkan instalasi SW
+            await Promise.allSettled(
+                STATIC_ASSETS.map(async (asset) => {
+                    try {
+                        const response = await fetch(asset, { cache: 'no-cache' });
+                        if (response.ok) {
+                            await cache.put(asset, response);
+                        }
+                    } catch (err) {
+                        console.warn('[SW] Lewati aset yang belum siap dicache:', asset);
+                    }
+                })
+            );
         }).then(() => self.skipWaiting())
     );
 });
@@ -53,20 +63,32 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Abaikan permintaan non-GET dan scheme chrome-extension
+    // 1. Abaikan permintaan non-GET dan selain skema http/https
     if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) {
         return;
     }
 
+    // 2. Bypass request API live ke Google Apps Script / Google Drive
+    if (event.request.url.includes('script.google.com') || event.request.url.includes('script.googleusercontent.com')) {
+        return;
+    }
+
+    // 3. Bypass audio streaming / HTTP Range requests agar browser leluasa memutar backsong
+    if (event.request.headers.get('range')) {
+        return;
+    }
+
+    // 4. Cache-First dengan Stale-While-Revalidate untuk aset lokal
     event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
+        caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
             if (cachedResponse) {
-                // Fetch update di latar belakang (Stale-While-Revalidate)
+                // Perbarui cache di latar belakang (revalidate) jika terhubung internet
                 fetch(event.request).then((networkResponse) => {
-                    if (networkResponse && networkResponse.status === 200) {
-                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
+                    if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+                        const responseClone = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
                     }
-                }).catch(() => {/* Offline */});
+                }).catch(() => {/* Sedang offline */});
                 return cachedResponse;
             }
 
@@ -80,9 +102,9 @@ self.addEventListener('fetch', (event) => {
                 });
                 return networkResponse;
             }).catch(() => {
-                // Fallback jika offline dan request halaman
+                // Fallback offline saat user navigasi halaman utama
                 if (event.request.mode === 'navigate') {
-                    return caches.match('./index.html');
+                    return caches.match('./') || caches.match('/');
                 }
             });
         })

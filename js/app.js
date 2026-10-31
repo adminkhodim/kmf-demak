@@ -3249,17 +3249,18 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
     },
 
     /**
-     * Inisialisasi PWA Install Listener & Deteksi iOS
+     * Inisialisasi PWA Install Listener & Deteksi Multi-Platform (iOS, Android, Desktop)
      */
     initPwaInstall: function() {
-        const isIOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        const isStandalone = window.navigator.standalone === true || 
+                             window.matchMedia('(display-mode: standalone)').matches ||
+                             document.referrer.includes('android-app://');
 
         const btnDesk = document.getElementById('btn-install-pwa');
         const btnMob = document.getElementById('mobile-btn-install-app');
 
-        // Jika dibuka di perangkat iOS/iPhone dan belum dalam mode standalone (belum diinstal)
-        if (isIOS && !isStandalone) {
+        // Jika belum terpasang sebagai PWA mandiri, tampilkan tombol pasang
+        if (!isStandalone) {
             if (btnMob) {
                 btnMob.classList.remove('hidden');
                 btnMob.classList.add('flex');
@@ -3316,7 +3317,25 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
     },
 
     openIosInstallModal: function() {
+        const isIOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
         const modal = document.getElementById('modal-install-ios');
+        const badge = document.getElementById('install-badge-platform');
+        const title = document.getElementById('install-title-platform');
+        const guideIos = document.getElementById('install-guide-ios');
+        const guideAndroid = document.getElementById('install-guide-android');
+
+        if (isIOS) {
+            if (badge) badge.textContent = 'iOS Safari';
+            if (title) title.textContent = 'Pasang di iPhone / iPad';
+            if (guideIos) guideIos.classList.remove('hidden');
+            if (guideAndroid) guideAndroid.classList.add('hidden');
+        } else {
+            if (badge) badge.textContent = 'Android / Desktop';
+            if (title) title.textContent = 'Pasang di Layar Utama';
+            if (guideIos) guideIos.classList.add('hidden');
+            if (guideAndroid) guideAndroid.classList.remove('hidden');
+        }
+
         if (modal) {
             modal.classList.remove('hidden');
             modal.classList.add('flex');

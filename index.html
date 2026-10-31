@@ -183,6 +183,13 @@
 
             <!-- Tombol Aksi Kanan Kapsul -->
             <div class="flex items-center gap-2 lg:gap-3 shrink-0">
+                <!-- Tombol Install PWA Desktop -->
+                <button id="btn-install-pwa" onclick="App.installPWA()" title="Pasang Aplikasi KMF di Komputer / Ponsel"
+                    class="hidden items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer">
+                    <i class="fa-solid fa-cloud-arrow-down text-xs"></i>
+                    <span>Pasang App</span>
+                </button>
+
                 <!-- Tombol Warta Poster Selapanan (Ala Asnawiyyah) -->
                 <button onclick="App.openHomePoster(true)" title="Warta Selapanan & Agenda KMF"
                     class="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-600 flex items-center justify-center text-xs border border-slate-200/80 shadow-xs transition active:scale-95 cursor-pointer">
@@ -3828,27 +3835,27 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL PANDUAN INSTAL PWA IOS / IPHONE ==================== -->
-    <div id="modal-install-ios" onclick="if(event.target === this) App.closeIosInstallModal()" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 sm:p-4">
+    <!-- ==================== MODAL PANDUAN INSTAL PWA ==================== -->
+    <div id="modal-install-ios" onclick="if(event.target === this) App.closeIosInstallModal()" class="fixed inset-0 z-[10050] hidden bg-slate-900/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-100 modal-animate-enter space-y-4 relative">
             <!-- Header Modal -->
             <div class="flex items-center gap-3">
                 <img src="assets/img/logo.png" alt="Logo KMF Demak" class="w-12 h-12 rounded-2xl p-1 bg-kmf-50 border border-kmf-100 object-contain shadow-xs">
                 <div class="flex-1 min-w-0">
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[9.5px] bg-slate-900 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">iOS Safari</span>
-                        <span class="text-[9.5px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200/80">PWA Ready</span>
+                        <span id="install-badge-platform" class="text-[9.5px] bg-slate-900 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Aplikasi PWA</span>
+                        <span class="text-[9.5px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200/80">Siap Pasang</span>
                     </div>
-                    <h3 class="font-bold text-sm text-slate-800 mt-1">Pasang di iPhone / iPad</h3>
-                    <p class="text-[11px] text-slate-500">Akses instan di layar utama tanpa App Store</p>
+                    <h3 id="install-title-platform" class="font-bold text-sm text-slate-800 mt-1">Pasang KMF Demak</h3>
+                    <p class="text-[11px] text-slate-500">Akses instan di layar utama tanpa repot buka browser</p>
                 </div>
                 <button type="button" onclick="App.closeIosInstallModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs transition">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <!-- Petunjuk Langkah-Langkah -->
-            <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 space-y-3">
+            <!-- Petunjuk Langkah-Langkah iOS Safari -->
+            <div id="install-guide-ios" class="bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 space-y-3">
                 <div class="flex items-start gap-2.5">
                     <div class="w-6 h-6 rounded-lg bg-blue-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
                         1
@@ -3884,11 +3891,33 @@
                 </div>
             </div>
 
-            <!-- Pointer Panah Bawah Safari -->
-            <div class="text-center pt-0.5">
-                <div class="inline-flex items-center gap-1.5 text-[11px] text-blue-600 font-semibold animate-bounce">
-                    <i class="fa-solid fa-arrow-down"></i>
-                    <span>Tombol Bagikan (Share) ada di bilah bawah Safari</span>
+            <!-- Petunjuk Langkah-Langkah Android & Desktop -->
+            <div id="install-guide-android" class="hidden bg-slate-50 rounded-2xl p-3.5 border border-slate-200/80 space-y-3">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        1
+                    </div>
+                    <div class="text-xs text-slate-700 leading-snug">
+                        Ketuk ikon menu titik tiga (<strong class="text-slate-900 text-sm">⋮</strong>) di pojok kanan atas layar browser Anda.
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-2.5">
+                    <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        2
+                    </div>
+                    <div class="text-xs text-slate-700 leading-snug">
+                        Pilih menu <strong class="text-slate-900">"Instal Aplikasi"</strong> atau <strong class="text-slate-900">"Tambahkan ke Layar Utama"</strong>.
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-2.5">
+                    <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-2xs">
+                        3
+                    </div>
+                    <div class="text-xs text-slate-700 leading-snug">
+                        Konfirmasi tombol <strong class="text-emerald-700 font-bold">"Instal"</strong>. Ikon KMF Demak akan langsung muncul di beranda HP / Desktop Anda.
+                    </div>
                 </div>
             </div>
 
