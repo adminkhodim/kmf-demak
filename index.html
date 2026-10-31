@@ -183,13 +183,6 @@
 
             <!-- Tombol Aksi Kanan Kapsul -->
             <div class="flex items-center gap-2 lg:gap-3 shrink-0">
-                <!-- Tombol Install PWA Desktop -->
-                <button id="btn-install-pwa" onclick="App.installPWA()" title="Pasang Aplikasi KMF di Komputer / Ponsel"
-                    class="hidden items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition active:scale-95 cursor-pointer">
-                    <i class="fa-solid fa-cloud-arrow-down text-xs"></i>
-                    <span>Pasang App</span>
-                </button>
-
                 <!-- Tombol Warta Poster Selapanan (Ala Asnawiyyah) -->
                 <button onclick="App.openHomePoster(true)" title="Warta Selapanan & Agenda KMF"
                     class="relative w-9 h-9 rounded-full bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-600 flex items-center justify-center text-xs border border-slate-200/80 shadow-xs transition active:scale-95 cursor-pointer">
@@ -3250,72 +3243,78 @@
                 </button>
             </div>
 
-            <!-- FISIK KARTU KTA VIRTUAL ELEGAN & MEWAH -->
-            <div id="kta-card-render" class="relative rounded-3xl p-5 shadow-2xl border-2 border-amber-400/90 text-white select-none overflow-hidden space-y-4"
+            <!-- FISIK KARTU KTA VIRTUAL ELEGAN & MEWAH (Rasio Asli E-Money ID-1 = 1.58 : 1) -->
+            <div id="kta-card-render" class="relative w-full max-w-sm sm:max-w-md mx-auto aspect-[1.58/1] rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-2xl border-2 border-amber-400/90 text-white select-none overflow-hidden flex flex-col justify-between"
                 style="background: linear-gradient(135deg, #061527 0%, #0c2542 45%, #153c66 100%); box-shadow: 0 15px 35px -5px rgba(6, 21, 39, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);">
                 
                 <!-- Efek Glow Ornamen & Watermark Kubah -->
                 <div class="absolute -top-16 -right-16 w-40 h-40 bg-amber-400/15 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -bottom-16 -left-16 w-40 h-40 bg-blue-500/20 rounded-full blur-2xl pointer-events-none"></div>
-                <div class="absolute right-2 -bottom-2 text-white/5 text-9xl pointer-events-none leading-none">
+                <div class="absolute right-2 -bottom-2 text-white/5 text-8xl sm:text-9xl pointer-events-none leading-none">
                     <i class="fa-solid fa-mosque"></i>
                 </div>
 
                 <!-- Bagian 1: Header Kartu -->
-                <div class="flex items-center justify-between relative z-10 border-b border-white/15 pb-3">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-10 h-10 rounded-full bg-white p-1 shadow-md border border-amber-300 flex items-center justify-center shrink-0">
+                <div class="flex items-center justify-between relative z-10 border-b border-white/15 pb-2">
+                    <div class="flex items-center gap-2 sm:gap-2.5">
+                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white p-1 shadow-md border border-amber-300 flex items-center justify-center shrink-0">
                             <img src="assets/img/logo.png" alt="Logo KMF" class="w-full h-full object-contain">
                         </div>
                         <div>
-                            <span class="text-[8.5px] uppercase tracking-widest text-amber-300 font-extrabold block">e-KTA RESMI ALUMNI</span>
+                            <span class="text-[7.5px] sm:text-[8.5px] uppercase tracking-widest text-amber-300 font-extrabold block">e-KTA RESMI ALUMNI</span>
                             <h4 class="text-xs sm:text-sm font-black text-white tracking-wide leading-tight">KMF CABANG DEMAK</h4>
-                            <span class="text-[9px] text-blue-200/90 block">Keluarga Mathali'ul Falah Kajen - Pati</span>
+                            <span class="text-[8px] sm:text-[9px] text-blue-200/90 block">Keluarga Mathali'ul Falah Kajen - Pati</span>
                         </div>
                     </div>
-                    <div class="flex flex-col items-end gap-1 shrink-0">
-                        <span class="text-[8px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 flex items-center gap-1 shadow-2xs">
+                    <div class="flex flex-col items-end gap-0.5 sm:gap-1 shrink-0">
+                        <span class="text-[7.5px] sm:text-[8px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/25 text-emerald-300 border border-emerald-400/50 flex items-center gap-1 shadow-2xs">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> AKTIF
                         </span>
-                        <span class="text-[8px] font-mono text-amber-300/90 tracking-wider">SMART PASS</span>
+                        <span class="text-[7px] sm:text-[8px] font-mono text-amber-300/90 tracking-wider">SMART PASS</span>
                     </div>
                 </div>
 
-                <!-- Bagian 2: EMV Chip & Contactless Wave -->
-                <div class="relative z-10 flex items-center justify-between pt-0.5">
-                    <!-- Chip Kartu Emas Realistis -->
-                    <div class="w-10 h-8 rounded-md bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 border border-amber-600 shadow-inner flex items-center justify-center p-0.5 shrink-0">
-                        <div class="w-full h-full border border-amber-800/30 rounded-xs grid grid-cols-2 gap-0.5 p-0.5">
-                            <div class="border-b border-r border-amber-800/30"></div>
-                            <div class="border-b border-amber-800/30"></div>
-                            <div class="border-r border-amber-800/30"></div>
-                            <div></div>
-                        </div>
-                    </div>
-                    <!-- Contactless Wifi Icon -->
-                    <div class="text-right flex items-center gap-1.5 text-blue-200/80 font-mono text-[9px] tracking-widest">
-                        <i class="fa-solid fa-wifi rotate-90 text-[11px] text-amber-300"></i>
-                        <span>NFC VERIFIED</span>
-                    </div>
-                </div>
-
-                <!-- Bagian 3: Identitas Alumni (Foto/Avatar & Detail Lengkap) -->
-                <div class="relative z-10 flex items-center gap-3.5 pt-1">
-                    <div id="kta-avatar" class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-2xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white">
+                <!-- Bagian 2 & 3: Tengah (Foto Profil Rasio 2:3 + EMV Chip + Detail Identitas) -->
+                <div class="relative z-10 flex items-center gap-3 sm:gap-4 my-auto">
+                    <!-- Bingkai Pasfoto Alumni Rasio 2:3 -->
+                    <div id="kta-avatar" class="w-13 sm:w-16 aspect-[2/3] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white overflow-hidden">
                         AF
                     </div>
-                    <div class="flex-1 min-w-0">
-                        <div id="kta-nama" class="text-sm sm:text-base font-black text-white tracking-wide truncate leading-tight drop-shadow-xs">
+                    
+                    <!-- Informasi Alumni & Chip -->
+                    <div class="flex-1 min-w-0 flex flex-col justify-between">
+                        <!-- Baris Chip & Contactless Wave -->
+                        <div class="flex items-center justify-between mb-1 sm:mb-1.5">
+                            <!-- Chip Kartu Emas Realistis -->
+                            <div class="w-8 h-6 sm:w-9 sm:h-7 rounded-sm bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 border border-amber-600 shadow-inner flex items-center justify-center p-0.5 shrink-0">
+                                <div class="w-full h-full border border-amber-800/30 rounded-xs grid grid-cols-2 gap-0.5 p-0.5">
+                                    <div class="border-b border-r border-amber-800/30"></div>
+                                    <div class="border-b border-amber-800/30"></div>
+                                    <div class="border-r border-amber-800/30"></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                            <!-- Contactless Wifi Icon -->
+                            <div class="flex items-center gap-1 text-blue-200/80 font-mono text-[8px] sm:text-[9px] tracking-widest">
+                                <i class="fa-solid fa-wifi rotate-90 text-[10px] text-amber-300"></i>
+                                <span>NFC VERIFIED</span>
+                            </div>
+                        </div>
+
+                        <!-- Nama & Nomor Anggota -->
+                        <div id="kta-nama" class="text-xs sm:text-sm font-black text-white tracking-wide truncate leading-tight drop-shadow-xs">
                             Ahmad Fauzi, S.Pd.
                         </div>
-                        <div id="kta-id" class="text-xs text-amber-300 font-mono font-bold tracking-widest mt-1">
+                        <div id="kta-id" class="text-[10px] sm:text-xs text-amber-300 font-mono font-bold tracking-widest mt-0.5">
                             ID: KMF-DMK-2015-0812
                         </div>
-                        <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-                            <span id="kta-angkatan" class="text-[9.5px] bg-white/15 text-white px-2 py-0.5 rounded-md border border-white/20 font-bold backdrop-blur-xs">
+
+                        <!-- Badges Angkatan & Kecamatan -->
+                        <div class="flex items-center gap-1 sm:gap-1.5 mt-1 sm:mt-1.5 flex-wrap">
+                            <span id="kta-angkatan" class="text-[8px] sm:text-[9.5px] bg-white/15 text-white px-1.5 sm:px-2 py-0.5 rounded-md border border-white/20 font-bold backdrop-blur-xs">
                                 Alumni Kajen '15
                             </span>
-                            <span id="kta-kecamatan" class="text-[9.5px] bg-white/15 text-white px-2 py-0.5 rounded-md border border-white/20 font-bold backdrop-blur-xs">
+                            <span id="kta-kecamatan" class="text-[8px] sm:text-[9.5px] bg-white/15 text-white px-1.5 sm:px-2 py-0.5 rounded-md border border-white/20 font-bold backdrop-blur-xs">
                                 Kec. Sayung
                             </span>
                         </div>
@@ -3323,19 +3322,19 @@
                 </div>
 
                 <!-- Bagian 4: Footer Kartu (QR Code & Kaligrafi Shalih Akram) -->
-                <div class="relative z-10 pt-2 border-t border-white/15 flex items-center justify-between">
+                <div class="relative z-10 pt-1.5 sm:pt-2 border-t border-white/15 flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 bg-white p-0.5 rounded-lg shadow-sm flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-qrcode text-slate-950 text-xl"></i>
+                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-white p-0.5 rounded-lg shadow-sm flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-qrcode text-slate-950 text-base sm:text-lg"></i>
                         </div>
                         <div>
-                            <span class="text-[7.5px] text-blue-200/80 block uppercase tracking-wider font-semibold">Verifikasi Digital</span>
-                            <span class="text-[8.5px] font-mono text-amber-300 font-bold block">kmf-demak.or.id</span>
+                            <span class="text-[7px] sm:text-[7.5px] text-blue-200/80 block uppercase tracking-wider font-semibold">Verifikasi Digital</span>
+                            <span class="text-[8px] sm:text-[8.5px] font-mono text-amber-300 font-bold block">kmf-demak.or.id</span>
                         </div>
                     </div>
                     <div class="text-right">
-                        <div class="font-arabic text-amber-300 text-sm leading-none font-bold">صالح أكرم</div>
-                        <div class="text-[8.5px] text-blue-100/80 italic mt-0.5">"Shalih Akram"</div>
+                        <div class="font-arabic text-amber-300 text-xs sm:text-sm leading-none font-bold">صالح أكرم</div>
+                        <div class="text-[7.5px] sm:text-[8.5px] text-blue-100/80 italic mt-0.5">"Shalih Akram"</div>
                     </div>
                 </div>
             </div>

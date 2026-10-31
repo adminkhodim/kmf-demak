@@ -211,9 +211,38 @@ const KMF_API = {
             clearTimeout(timeoutId);
             const data = await res.json();
             if (data.status === 'success' && Array.isArray(data.data)) {
-                this._cache.pending = data.data;
-                localStorage.setItem(this.STORAGE_KEYS.PENDING, JSON.stringify(data.data));
-                return data.data;
+                const mapped = data.data.map((item, idx) => {
+                    const hasUsaha = item.namaUsaha || (item.usaha && item.usaha.namaUsaha);
+                    return {
+                        id: item.id || item.idPendaftar || ('PENDING-' + idx),
+                        nama: item.nama || item.namaLengkap || 'Pendaftar KMF',
+                        panggilan: item.panggilan || '',
+                        tahunLulus: item.tahunLulus || item.tahunAngkatan || '',
+                        marhalah: item.marhalah || item.pendidikanTerakhir || "Mathali'ul Falah",
+                        pondokKajen: item.pondokKajen || item.asramaPondok || 'Kajen, Pati',
+                        guruKajen: item.guruKajen || '',
+                        kecamatan: item.kecamatan || 'Demak',
+                        desa: item.desa || item.desaKelurahan || '',
+                        alamat: item.alamat || item.alamatLengkap || '',
+                        noWa: String(item.noWa || item.nomorWhatsapp || ''),
+                        profesiKategori: item.profesiKategori || item.profesiPekerjaan || '',
+                        profesiDetail: item.profesiDetail || '',
+                        foto: item.foto || item.urlFotoProfil || item.urlFoto || 'assets/img/logo.png',
+                        status: item.status || 'PENDING',
+                        waktuDaftar: item.waktuDaftar || item.waktu || new Date().toISOString(),
+                        usaha: hasUsaha ? {
+                            namaUsaha: item.namaUsaha || (item.usaha ? item.usaha.namaUsaha : ''),
+                            kategori: item.kategoriUsaha || (item.usaha ? item.usaha.kategori : 'Lainnya'),
+                            deskripsi: item.deskripsiUsaha || (item.usaha ? item.usaha.deskripsi : ''),
+                            foto: item.urlFotoUsaha || (item.usaha ? item.usaha.foto : ''),
+                            waBisnis: String(item.whatsAppBisnis || (item.usaha ? item.usaha.waBisnis : '') || item.noWa || item.nomorWhatsapp || ''),
+                            linkGmaps: item.linkGoogleMaps || (item.usaha ? item.usaha.linkGmaps : '')
+                        } : null
+                    };
+                });
+                this._cache.pending = mapped;
+                localStorage.setItem(this.STORAGE_KEYS.PENDING, JSON.stringify(mapped));
+                return mapped;
             }
         } catch (err) {
             console.warn('[KMF_API] Gagal fetch pending dari GAS:', err.message);

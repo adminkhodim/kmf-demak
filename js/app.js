@@ -2329,15 +2329,16 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
         this.renderUserProfileCard();
     },
 
-    openKtaModal: function() {
+    openKtaModal: function(customUser = null) {
         const modal = document.getElementById('modal-kta-santri');
         if (!modal) return;
 
-        const user = this.currentUser || {
+        const user = customUser || this.currentUser || {
             nama: 'Alumni Santri Kajen',
             whatsapp: '08123456789',
             tahunLulus: '2015',
-            kecamatan: 'Demak'
+            kecamatan: 'Demak',
+            foto: ''
         };
 
         const nameParts = (user.nama || 'Santri').trim().split(' ');
@@ -2350,12 +2351,22 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
         const avatarEl = document.getElementById('kta-avatar');
         const namaEl = document.getElementById('kta-nama');
         const idEl = document.getElementById('kta-id');
-        const detailEl = document.getElementById('kta-detail');
 
-        if (avatarEl) avatarEl.innerText = initials;
+        if (avatarEl) {
+            const fotoUrl = user.foto || (user.urlFotoProfil) || '';
+            if (fotoUrl && fotoUrl.trim() && !fotoUrl.includes('logo.png')) {
+                avatarEl.className = "w-13 sm:w-16 aspect-[2/3] rounded-xl overflow-hidden border-2 border-white/90 shadow-md shrink-0 flex items-center justify-center bg-slate-900";
+                avatarEl.innerHTML = `<img src="${fotoUrl}" alt="${user.nama || 'Alumni'}" class="w-full h-full object-cover" onerror="this.parentElement.className='w-13 sm:w-16 aspect-[2/3] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white'; this.parentElement.innerText='${initials}';">`;
+            } else {
+                avatarEl.className = "w-13 sm:w-16 aspect-[2/3] rounded-xl bg-gradient-to-br from-amber-400 via-amber-300 to-amber-600 text-slate-950 font-black text-xl flex items-center justify-center shrink-0 shadow-lg border-2 border-white";
+                avatarEl.innerText = initials;
+            }
+        }
+
         if (namaEl) namaEl.innerText = user.nama || 'Santri KMF Demak';
-        const lastDigits = user.whatsapp ? user.whatsapp.slice(-4) : '1912';
-        if (idEl) idEl.innerText = `ID: KMF-DMK-${user.tahunLulus || '2020'}-${lastDigits}`;
+        const waNum = user.whatsapp || user.noWa || '';
+        const lastDigits = waNum ? waNum.slice(-4) : '1912';
+        if (idEl) idEl.innerText = user.id ? `ID: ${user.id}` : `ID: KMF-DMK-${user.tahunLulus || '2020'}-${lastDigits}`;
         
         const angkatanEl = document.getElementById('kta-angkatan');
         const kecEl = document.getElementById('kta-kecamatan');
@@ -3153,11 +3164,20 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
     },
 
     renderAdminPending: async function() {
-        const pending = await window.KMF_API.getPendingList();
         const container = document.getElementById('admin-pending-container');
         const badge = document.getElementById('admin-badge-pending');
         if (!container) return;
 
+        // Tampilkan indikator loading saat sinkronisasi langsung dengan Spreadsheet
+        container.innerHTML = `
+            <div class="text-center py-10 bg-white rounded-2xl border border-slate-200 p-6 space-y-2">
+                <i class="fa-solid fa-circle-notch fa-spin text-2xl text-kmf-600"></i>
+                <h4 class="font-bold text-slate-700 text-sm">Menghubungkan ke Google Spreadsheet...</h4>
+                <p class="text-xs text-slate-500">Memeriksa data antrean verifikasi sensus alumni terbaru.</p>
+            </div>
+        `;
+
+        const pending = await window.KMF_API.getPendingList(true);
         if (badge) badge.textContent = pending.length;
 
         if (pending.length === 0) {
@@ -3173,11 +3193,11 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
             return;
         }
 
-        container.innerHTML = pending.map(item => `
+        container.innerHTML = pending.map((item, idx) => `
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
                 <div class="flex items-start gap-3.5">
-                    <div class="w-16 h-16 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
-                        <img src="${item.foto}" alt="${item.nama}" class="w-full h-full object-cover">
+                    <div class="w-16 aspect-[2/3] rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-xs flex items-center justify-center">
+                        <img src="${item.foto}" alt="${item.nama}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='assets/img/logo.png';">
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between">
@@ -3187,10 +3207,10 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                             </span>
                         </div>
                         <div class="text-xs text-slate-600 mt-1 space-y-0.5">
-                            <div>Lulus: <strong>${item.tahunLulus}</strong> • ${item.marhalah}</div>
-                            <div>Pondok Kajen: <strong>${item.pondokKajen}</strong> (Guru: ${item.guruKajen || '-'})</div>
+                            <div>Lulus: <strong>${item.tahunLulus || '-'}</strong> • ${item.marhalah || "Mathali'ul Falah"}</div>
+                            <div>Pondok Kajen: <strong>${item.pondokKajen || '-'}</strong> (Guru: ${item.guruKajen || '-'})</div>
                             <div>Domisili: Kec. ${item.kecamatan}, Desa ${item.desa || '-'}</div>
-                            <div>Profesi: ${item.profesiKategori} (${item.profesiDetail || '-'})</div>
+                            <div>Profesi: ${item.profesiKategori || '-'} (${item.profesiDetail || '-'})</div>
                             <div>No WA: <a href="https://wa.me/${item.noWa}" target="_blank" class="text-emerald-700 font-semibold underline">${item.noWa}</a></div>
                         </div>
 
@@ -3199,22 +3219,39 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                                 <div class="font-bold text-amber-900 flex items-center gap-1">
                                     <i class="fa-solid fa-store text-amber-600"></i> Usaha Terlampir: ${item.usaha.namaUsaha}
                                 </div>
-                                <div class="text-slate-600">${item.usaha.deskripsi}</div>
+                                <div class="text-slate-600">${item.usaha.deskripsi || '-'}</div>
                             </div>
                         ` : ''}
                     </div>
                 </div>
 
-                <div class="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
-                    <button onclick="App.handleRejectAlumni('${item.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 transition">
-                        <i class="fa-solid fa-times"></i> Tolak
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
+                    <button onclick='App.previewPendingKta(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs text-kmf-700 hover:text-kmf-800 font-semibold flex items-center gap-1">
+                        <i class="fa-solid fa-id-card"></i> Pratinjau e-KTA
                     </button>
-                    <button onclick="App.handleApproveAlumni('${item.id}')" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 hover:bg-kmf-700 text-white transition flex items-center gap-1.5 shadow-sm">
-                        <i class="fa-solid fa-check"></i> Setujui (Approve)
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="App.handleRejectAlumni('${item.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 transition">
+                            <i class="fa-solid fa-times"></i> Tolak
+                        </button>
+                        <button onclick="App.handleApproveAlumni('${item.id}')" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 hover:bg-kmf-700 text-white transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-check"></i> Setujui (Approve)
+                        </button>
+                    </div>
                 </div>
             </div>
         `).join('');
+    },
+
+    previewPendingKta: function(item) {
+        if (!item) return;
+        this.openKtaModal({
+            id: item.id,
+            nama: item.nama,
+            whatsapp: item.noWa,
+            tahunLulus: item.tahunLulus,
+            kecamatan: item.kecamatan,
+            foto: item.foto
+        });
     },
 
     handleApproveAlumni: async function(id) {
@@ -3275,18 +3312,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                              window.matchMedia('(display-mode: standalone)').matches ||
                              document.referrer.includes('android-app://');
 
-        const btnDesk = document.getElementById('btn-install-pwa');
         const btnMob = document.getElementById('mobile-btn-install-app');
 
-        // Jika belum terpasang sebagai PWA mandiri, tampilkan tombol pasang
+        // Jika belum terpasang sebagai PWA mandiri di mobile, tampilkan tombol pasang
         if (!isStandalone) {
             if (btnMob) {
                 btnMob.classList.remove('hidden');
                 btnMob.classList.add('flex');
-            }
-            if (btnDesk) {
-                btnDesk.classList.remove('hidden');
-                btnDesk.classList.add('flex');
             }
         }
 
@@ -3295,10 +3327,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
             e.preventDefault();
             this.deferredInstallPrompt = e;
             
-            if (btnDesk) {
-                btnDesk.classList.remove('hidden');
-                btnDesk.classList.add('flex');
-            }
             if (btnMob) {
                 btnMob.classList.remove('hidden');
                 btnMob.classList.add('flex');
@@ -3308,7 +3336,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
         // Sembunyikan tombol jika sudah berhasil diinstal
         window.addEventListener('appinstalled', () => {
             this.deferredInstallPrompt = null;
-            if (btnDesk) btnDesk.classList.add('hidden');
             if (btnMob) btnMob.classList.add('hidden');
             console.log('KMF PWA berhasil diinstal!');
         });
