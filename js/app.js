@@ -3013,7 +3013,8 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                 tampilkanWa: formData.get('tampilkanWa') !== null,
                 profesiKategori: formData.get('profesiKategori'),
                 profesiDetail: formData.get('profesiDetail') || '',
-                foto: fotoBase64
+                foto: fotoBase64,
+                fotoBase64: fotoBase64
             };
 
             if (hasUsaha) {
@@ -3023,7 +3024,8 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                     deskripsi: formData.get('deskripsiUsaha'),
                     waBisnis: formData.get('waBisnis') || payload.noWa,
                     linkGmaps: formData.get('linkGmaps') || '',
-                    foto: fotoUsahaBase64
+                    foto: fotoUsahaBase64,
+                    fotoBase64: fotoUsahaBase64
                 };
             }
 
