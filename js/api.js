@@ -13,6 +13,9 @@ const KMF_API = {
         ADMIN_PIN: 'kmf_demak_admin_pin'
     },
 
+    // Endpoint Resmi Google Apps Script Web App KMF Demak
+    DEFAULT_GAS_URL: 'https://script.google.com/macros/s/AKfycbxWznM6FqPhwf3bquu3SpuVDVYc5xfz2yXIES25JXxzBo8NK_hzVdTFYfxe-ExzzRs/exec',
+
     // Default PIN Pengurus (1912: Tahun berdirinya Mathali'ul Falah Kajen)
     DEFAULT_PIN: '1912',
 
@@ -20,6 +23,9 @@ const KMF_API = {
      * Inisialisasi data dari localStorage atau fallback ke KMF_DATA
      */
     init: function() {
+        if (!localStorage.getItem(this.STORAGE_KEYS.GAS_URL)) {
+            localStorage.setItem(this.STORAGE_KEYS.GAS_URL, this.DEFAULT_GAS_URL);
+        }
         if (!localStorage.getItem(this.STORAGE_KEYS.ALUMNI)) {
             localStorage.setItem(this.STORAGE_KEYS.ALUMNI, JSON.stringify(window.KMF_DATA.alumniList));
         }
@@ -219,7 +225,14 @@ const KMF_API = {
                 const res = await fetch(`${gasUrl}?action=getRSVP`);
                 const data = await res.json();
                 if (data.status === 'success' && Array.isArray(data.data) && data.data.length > 0) {
-                    return data.data;
+                    return data.data.map(item => ({
+                        id: item.id || item.idRespon || ('rsvp_' + Math.random()),
+                        nama: item.nama || item.namaSahabatAlumni || 'Sahabat Alumni',
+                        asal: item.asal || item.asalAngkatanKecamatan || 'Alumni KMF',
+                        kehadiran: item.kehadiran || item.statusKehadiran || 'hadir',
+                        pesan: item.pesan || item.doaRestuPesan || '',
+                        waktu: item.waktu || item.waktuKirim || new Date().toISOString()
+                    }));
                 }
             } catch (err) {
                 console.warn('Gagal memuat RSVP dari Google Apps Script, beralih ke cache lokal:', err);
@@ -239,10 +252,15 @@ const KMF_API = {
                 await fetch(gasUrl, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         action: 'submitRSVP',
-                        data: payload
+                        data: {
+                            id: payload.id,
+                            nama: payload.nama,
+                            asal: payload.asal,
+                            kehadiran: payload.kehadiran,
+                            pesan: payload.pesan
+                        }
                     })
                 });
             } catch (err) {
@@ -264,7 +282,7 @@ const KMF_API = {
     },
 
     getGasUrl: function() {
-        return localStorage.getItem(this.STORAGE_KEYS.GAS_URL) || '';
+        return localStorage.getItem(this.STORAGE_KEYS.GAS_URL) || this.DEFAULT_GAS_URL;
     },
 
     setGasUrl: function(url) {
