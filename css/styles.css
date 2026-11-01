@@ -430,5 +430,31 @@ body {
   color: #2563eb;
 }
 
+/* ==================== SPLASH SCREEN (ELEGANT MOBILE & DESKTOP) ==================== */
+@keyframes splashProgressBar {
+  0% { width: 0%; }
+  45% { width: 65%; }
+  100% { width: 100%; }
+}
+
+@keyframes splashPopIn {
+  0% { transform: scale(0.88); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.splash-content-anim {
+  animation: splashPopIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.splash-progress-bar {
+  animation: splashProgressBar 0.95s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.splash-fade-out {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.5s ease-out !important;
+}
+
 
 

@@ -76,6 +76,24 @@ const App = {
         setTimeout(() => {
             this.checkHomePosterPopup();
         }, 700);
+
+        // 8. Tutup Splash Screen setelah inisialisasi selesai dengan transisi halus
+        setTimeout(() => {
+            this.hideSplashScreen();
+        }, 850);
+    },
+
+    /**
+     * Menutup Layar Pembuka (Splash Screen) dengan Transisi Mulus
+     */
+    hideSplashScreen: function() {
+        const splash = document.getElementById('kmf-splash-screen');
+        if (splash) {
+            splash.classList.add('splash-fade-out');
+            setTimeout(() => {
+                splash.style.display = 'none';
+            }, 550);
+        }
     },
 
     /**

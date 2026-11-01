@@ -55,6 +55,45 @@
 </head>
 <body class="h-full flex overflow-hidden bg-slate-100 text-slate-800 antialiased font-sans select-none">
 
+    <!-- ==================== SPLASH SCREEN (ALA MOBILE APP NATIVE) ==================== -->
+    <div id="kmf-splash-screen" class="fixed inset-0 z-[9999] flex flex-col items-center justify-between py-12 px-6 bg-gradient-to-b from-[#06142a] via-[#0b244d] to-[#103366] text-white select-none transition-opacity duration-500 ease-out">
+        <!-- Spacer Atas -->
+        <div class="h-4"></div>
+
+        <!-- Konten Tengah: Logo KMF, Branding & Progress Bar -->
+        <div class="flex flex-col items-center text-center space-y-5 splash-content-anim max-w-xs w-full">
+            <div class="relative">
+                <!-- Glow Aura -->
+                <div class="absolute -inset-4 bg-gradient-to-tr from-blue-500/25 via-amber-400/20 to-blue-400/30 rounded-full blur-2xl animate-pulse"></div>
+                <!-- Box Bingkai Logo KMF -->
+                <div class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-white p-3.5 shadow-2xl border-2 border-white/40 flex items-center justify-center transform transition duration-500 hover:scale-105">
+                    <img src="assets/img/logo.png" alt="Logo KMF Demak" class="w-full h-full object-contain">
+                </div>
+            </div>
+
+            <!-- Teks Identitas Resmi -->
+            <div class="space-y-1.5">
+                <div class="flex items-center justify-center gap-2">
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white font-['Poppins']">KMF DEMAK</h1>
+                    <span class="text-[9.5px] bg-kmf-gold text-slate-950 font-black px-2 py-0.5 rounded-full shadow-xs uppercase tracking-wider">Cabang</span>
+                </div>
+                <p class="text-xs sm:text-[13px] font-bold tracking-widest text-blue-200 uppercase">Portal Administrasi Pengurus</p>
+                <p class="text-[11px] text-blue-300/80 font-medium">Sistem Informasi Manajemen Sensus & Alumni</p>
+            </div>
+
+            <!-- Animated Loading Progress Bar -->
+            <div class="w-48 sm:w-56 h-1.5 bg-blue-950/70 rounded-full overflow-hidden border border-blue-400/30 mt-3 relative shadow-inner">
+                <div class="splash-progress-bar h-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Tagline Bawah / Footer Identitas -->
+        <div class="text-center space-y-1">
+            <p class="text-xs font-semibold text-blue-200/90 tracking-wide">Mathali'ul Falah • Kajen, Pati</p>
+            <p class="text-[10px] text-blue-300/60 font-mono tracking-wider">Keluarga Mathali'ul Falah Cabang Demak</p>
+        </div>
+    </div>
+
     <!-- ==================== SIDEBAR DESKTOP (GAYA MUBAROKAH - TEMA BIRU UTAMA) ==================== -->
     <aside id="admin-sidebar" class="admin-sidebar-blue text-white w-64 lg:w-72 flex-col justify-between hidden md:flex shrink-0 h-screen sticky top-0 border-r border-blue-900/60 shadow-2xl z-30 transition-all duration-300">
         
@@ -757,6 +796,15 @@
                     if (loginBox) loginBox.classList.remove('hidden');
                     if (dashBox) dashBox.classList.add('hidden');
                 }
+
+                // Tutup splash screen admin
+                setTimeout(() => {
+                    const splash = document.getElementById('kmf-splash-screen');
+                    if (splash) {
+                        splash.classList.add('splash-fade-out');
+                        setTimeout(() => { splash.style.display = 'none'; }, 550);
+                    }
+                }, 850);
             }
         });
 
