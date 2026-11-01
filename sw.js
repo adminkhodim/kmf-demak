@@ -9,7 +9,7 @@
  * hisab jadwal sholat, direktori alumni, dan seluruh aset antarmuka.
  */
 
-const CACHE_NAME = 'kmf-demak-v2.6.7';
+const CACHE_NAME = 'kmf-demak-v2.7.0';
 const STATIC_ASSETS = [
     './',
     './manifest.json',

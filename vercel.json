@@ -41,6 +41,10 @@
   ],
   "rewrites": [
     {
+      "source": "/admin",
+      "destination": "/index.html?page=admin"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

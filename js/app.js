@@ -49,8 +49,20 @@ const App = {
             });
         }
 
-        // 5. Deteksi Tautan Langsung Undangan Digital (?p=selapanan&to=Nama)
+        // 5. Cek Sesi Admin & Deteksi Rute Langsung (/admin, ?page=admin, #admin)
+        this.checkAdminSession();
         const urlParams = new URLSearchParams(window.location.search);
+        const path = window.location.pathname.toLowerCase();
+        const hash = window.location.hash.toLowerCase();
+        const pageParam = urlParams.get('page') || urlParams.get('tab');
+        if (path.endsWith('/admin') || hash === '#admin' || pageParam === 'admin') {
+            setTimeout(() => {
+                this.navigateTo('admin');
+            }, 100);
+            return;
+        }
+
+        // 6. Deteksi Tautan Langsung Undangan Digital (?p=selapanan&to=Nama)
         const pParam = urlParams.get('p') || urlParams.get('tab') || urlParams.get('invitasi') || urlParams.get('undangan');
         if (pParam === 'selapanan' || pParam === 'undangan-selapanan' || urlParams.has('invitasi') || urlParams.has('to')) {
             const guestName = urlParams.get('to') || urlParams.get('nama') || urlParams.get('guest');
@@ -60,7 +72,7 @@ const App = {
             return;
         }
 
-        // 6. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
+        // 7. Poster Pop Up Notifikasi Selapanan (Ala Asnawiyyah)
         setTimeout(() => {
             this.checkHomePosterPopup();
         }, 700);
@@ -122,6 +134,29 @@ const App = {
                         </button>
                     `;
                 }
+            });
+        }
+
+        // Inisialisasi Filter Multi-Dimensi Admin (Sensus Alumni)
+        const adminFilterKec = document.getElementById('admin-filter-kecamatan');
+        const adminFilterPondok = document.getElementById('admin-filter-pondok');
+        const adminFilterGuru = document.getElementById('admin-filter-guru');
+
+        if (adminFilterKec && window.KMF_DATA && window.KMF_DATA.kecamatanList) {
+            window.KMF_DATA.kecamatanList.forEach(kec => {
+                adminFilterKec.innerHTML += `<option value="${kec}">Kec. ${kec}</option>`;
+            });
+        }
+
+        if (adminFilterPondok && window.KMF_DATA && window.KMF_DATA.pondokKajenList) {
+            window.KMF_DATA.pondokKajenList.forEach(pdk => {
+                adminFilterPondok.innerHTML += `<option value="${pdk}">${pdk}</option>`;
+            });
+        }
+
+        if (adminFilterGuru && window.KMF_DATA && window.KMF_DATA.guruKajenList) {
+            window.KMF_DATA.guruKajenList.forEach(guru => {
+                adminFilterGuru.innerHTML += `<option value="${guru}">${guru}</option>`;
             });
         }
     },
@@ -500,10 +535,11 @@ const App = {
 
         // Tindakan spesifik jika membuka admin
         if (targetTab === 'admin') {
+            this.checkAdminSession();
             if (this.isAdminLoggedIn) {
                 document.getElementById('admin-login-box')?.classList.add('hidden');
                 document.getElementById('admin-dashboard-box')?.classList.remove('hidden');
-                this.renderAdminPending();
+                this.switchAdminModule(this.currentAdminModule || 'overview');
             } else {
                 document.getElementById('admin-login-box')?.classList.remove('hidden');
                 document.getElementById('admin-dashboard-box')?.classList.add('hidden');
@@ -3318,16 +3354,38 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
     },
 
     /**
-     * Logika Panel Admin Pengurus
+     * ====================================================================
+     * PORTAL ADMIN PENGURUS KMF DEMAK (GAYA PROYEK ASNAWIYYAH)
+     * ====================================================================
      */
+    currentAdminModule: 'overview',
+    currentAdminSensusTab: 'pending',
+
+    checkAdminSession: function() {
+        const session = localStorage.getItem('kmf_admin_session');
+        const sessionExpiry = localStorage.getItem('kmf_admin_session_expiry');
+        if (session === 'true' && sessionExpiry && Date.now() < Number(sessionExpiry)) {
+            this.isAdminLoggedIn = true;
+        } else {
+            this.isAdminLoggedIn = false;
+            localStorage.removeItem('kmf_admin_session');
+            localStorage.removeItem('kmf_admin_session_expiry');
+        }
+        return this.isAdminLoggedIn;
+    },
+
     handleAdminLogin: function(e) {
         e.preventDefault();
         const pin = document.getElementById('admin-pin-input').value;
         if (window.KMF_API.verifyAdminPin(pin)) {
             this.isAdminLoggedIn = true;
-            document.getElementById('admin-login-box').classList.add('hidden');
-            document.getElementById('admin-dashboard-box').classList.remove('hidden');
-            this.renderAdminPending();
+            // Sesi admin aktif 24 jam di browser
+            localStorage.setItem('kmf_admin_session', 'true');
+            localStorage.setItem('kmf_admin_session_expiry', String(Date.now() + 24 * 60 * 60 * 1000));
+            
+            document.getElementById('admin-login-box')?.classList.add('hidden');
+            document.getElementById('admin-dashboard-box')?.classList.remove('hidden');
+            this.switchAdminModule('overview');
         } else {
             alert('PIN Pengurus salah! Gunakan PIN default 1912.');
         }
@@ -3335,47 +3393,199 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
 
     handleAdminLogout: function() {
         this.isAdminLoggedIn = false;
-        document.getElementById('admin-pin-input').value = '';
+        localStorage.removeItem('kmf_admin_session');
+        localStorage.removeItem('kmf_admin_session_expiry');
+        const pinInput = document.getElementById('admin-pin-input');
+        if (pinInput) pinInput.value = '';
+        document.getElementById('admin-dashboard-box')?.classList.add('hidden');
+        document.getElementById('admin-login-box')?.classList.remove('hidden');
         this.navigateTo('home');
     },
 
-    switchAdminTab: function(tab) {
-        const viewPending = document.getElementById('admin-view-pending');
-        const viewSettings = document.getElementById('admin-view-settings');
-        const btnPending = document.getElementById('admin-tab-pending');
-        const btnSettings = document.getElementById('admin-tab-settings');
+    switchAdminModule: async function(moduleName, subTab) {
+        this.currentAdminModule = moduleName || 'overview';
 
-        if (tab === 'pending') {
-            viewPending?.classList.remove('hidden');
-            viewSettings?.classList.add('hidden');
+        // 1. Sembunyikan semua sub-modul admin
+        document.querySelectorAll('.admin-module-section').forEach(sec => sec.classList.add('hidden'));
+
+        // 2. Tampilkan modul aktif
+        const activeSec = document.getElementById(`admin-module-${this.currentAdminModule}`);
+        if (activeSec) activeSec.classList.remove('hidden');
+
+        // 3. Update status active pada Desktop Sidebar
+        document.querySelectorAll('.admin-sidebar-btn').forEach(btn => btn.classList.remove('active'));
+        const activeSidebarBtn = document.getElementById(`admin-nav-${this.currentAdminModule}`);
+        if (activeSidebarBtn) activeSidebarBtn.classList.add('active');
+
+        // 4. Update status active pada Mobile Grid Nav
+        document.querySelectorAll('.admin-mob-module-btn').forEach(btn => btn.classList.remove('active'));
+        const activeMobBtn = document.getElementById(`admin-mob-btn-${this.currentAdminModule}`);
+        if (activeMobBtn) activeMobBtn.classList.add('active');
+
+        // 5. Update Title & Subtitle di Header Canvas
+        const titleEl = document.getElementById('admin-canvas-title');
+        const subTitleEl = document.getElementById('admin-canvas-subtitle');
+
+        const moduleMeta = {
+            overview: {
+                title: '<i class="fa-solid fa-chart-pie text-kmf-600"></i> Dashboard Statistik KMF Cabang Demak',
+                subtitle: 'Ringkasan data sensus alumni, bursa usaha, dan agenda selapanan.'
+            },
+            sensus: {
+                title: '<i class="fa-solid fa-id-card text-emerald-600"></i> Manajemen Sensus & e-KTA Alumni',
+                subtitle: 'Verifikasi pendaftar baru dan pencarian direktori sanad santri Kajen.'
+            },
+            usaha: {
+                title: '<i class="fa-solid fa-store text-blue-600"></i> Bursa Produk & Toko Usaha Santri',
+                subtitle: 'Kurasi dan moderasi produk santri Mathali\'ul Falah cabang Demak.'
+            },
+            selapanan: {
+                title: '<i class="fa-solid fa-calendar-check text-purple-600"></i> Presensi & Buku Tamu Selapanan',
+                subtitle: 'Rekap kehadiran fisik, ucapan doa restu santri, dan titip salam masyayikh.'
+            },
+            settings: {
+                title: '<i class="fa-solid fa-sliders text-slate-600"></i> Konfigurasi Sistem & Database Cloud',
+                subtitle: 'Pengaturan Google Apps Script, sinkronisasi 28 kolom, dan PIN keamanan.'
+            }
+        };
+
+        if (moduleMeta[this.currentAdminModule]) {
+            if (titleEl) titleEl.innerHTML = moduleMeta[this.currentAdminModule].title;
+            if (subTitleEl) subTitleEl.textContent = moduleMeta[this.currentAdminModule].subtitle;
+        }
+
+        // 6. Muat Data Modul
+        if (this.currentAdminModule === 'overview') {
+            await this.renderAdminOverview();
+        } else if (this.currentAdminModule === 'sensus') {
+            if (subTab) {
+                this.switchAdminSensusSubTab(subTab);
+            } else {
+                await this.renderAdminSensus();
+            }
+        } else if (this.currentAdminModule === 'usaha') {
+            await this.renderAdminUsaha();
+        } else if (this.currentAdminModule === 'selapanan') {
+            await this.renderAdminSelapanan();
+        } else if (this.currentAdminModule === 'settings') {
+            this.renderAdminSettings();
+        }
+    },
+
+    renderAdminOverview: async function() {
+        const alumni = await window.KMF_API.getApprovedAlumni();
+        const pending = await window.KMF_API.getPendingList();
+        const usaha = await window.KMF_API.getApprovedUsaha();
+        const rsvp = await window.KMF_API.getRSVPList();
+
+        // 1. Update 4 Metrik
+        const alumniCountEl = document.getElementById('admin-stat-alumni-count');
+        const pendingCountEl = document.getElementById('admin-stat-pending-count');
+        const usahaCountEl = document.getElementById('admin-stat-usaha-count');
+        const rsvpCountEl = document.getElementById('admin-stat-rsvp-count');
+
+        if (alumniCountEl) alumniCountEl.textContent = alumni.length;
+        if (pendingCountEl) pendingCountEl.textContent = pending.length;
+        if (usahaCountEl) usahaCountEl.textContent = usaha.length;
+        if (rsvpCountEl) rsvpCountEl.textContent = rsvp ? rsvp.length : 0;
+
+        // Badge Pending
+        const pendingBadge = document.getElementById('admin-stat-pending-badge');
+        const sidebarPendingBadge = document.getElementById('admin-sidebar-badge-pending');
+        const mobPendingDot = document.getElementById('admin-mob-pending-dot');
+
+        if (pending.length > 0) {
+            if (pendingBadge) pendingBadge.classList.remove('hidden');
+            if (sidebarPendingBadge) {
+                sidebarPendingBadge.textContent = pending.length;
+                sidebarPendingBadge.classList.remove('hidden');
+            }
+            if (mobPendingDot) mobPendingDot.classList.remove('hidden');
+        } else {
+            if (pendingBadge) pendingBadge.classList.add('hidden');
+            if (sidebarPendingBadge) sidebarPendingBadge.classList.add('hidden');
+            if (mobPendingDot) mobPendingDot.classList.add('hidden');
+        }
+
+        // 2. Sebaran Alumni di 14 Kecamatan
+        const districtGrid = document.getElementById('admin-overview-district-grid');
+        if (districtGrid && window.KMF_DATA && window.KMF_DATA.kecamatanList) {
+            const counts = {};
+            window.KMF_DATA.kecamatanList.forEach(k => counts[k] = 0);
+            alumni.forEach(a => {
+                if (a.kecamatan && counts[a.kecamatan] !== undefined) {
+                    counts[a.kecamatan]++;
+                }
+            });
+
+            const maxCount = Math.max(...Object.values(counts), 1);
+
+            districtGrid.innerHTML = window.KMF_DATA.kecamatanList.map(kec => {
+                const count = counts[kec] || 0;
+                const pct = Math.round((count / maxCount) * 100);
+                return `
+                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 space-y-1.5">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="font-semibold text-slate-700">Kec. ${kec}</span>
+                            <span class="font-bold ${count > 0 ? 'text-kmf-700' : 'text-slate-400'}">${count} Alumni</span>
+                        </div>
+                        <div class="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
+                            <div class="bg-kmf-600 h-full rounded-full transition-all duration-500" style="width: ${count > 0 ? Math.max(pct, 12) : 0}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    },
+
+    switchAdminSensusSubTab: function(subTab) {
+        this.currentAdminSensusTab = subTab || 'pending';
+        const pendingView = document.getElementById('admin-sensus-pending-view');
+        const approvedView = document.getElementById('admin-sensus-approved-view');
+        const btnPending = document.getElementById('admin-subtab-pending');
+        const btnApproved = document.getElementById('admin-subtab-approved');
+
+        if (this.currentAdminSensusTab === 'pending') {
+            pendingView?.classList.remove('hidden');
+            approvedView?.classList.add('hidden');
             btnPending?.classList.add('bg-kmf-600', 'text-white');
             btnPending?.classList.remove('bg-slate-100', 'text-slate-700');
-            btnSettings?.classList.remove('bg-kmf-600', 'text-white');
-            btnSettings?.classList.add('bg-slate-100', 'text-slate-700');
+            btnApproved?.classList.remove('bg-kmf-600', 'text-white');
+            btnApproved?.classList.add('bg-slate-100', 'text-slate-700');
             this.renderAdminPending();
         } else {
-            viewPending?.classList.add('hidden');
-            viewSettings?.classList.remove('hidden');
-            btnSettings?.classList.add('bg-kmf-600', 'text-white');
-            btnSettings?.classList.remove('bg-slate-100', 'text-slate-700');
+            pendingView?.classList.add('hidden');
+            approvedView?.classList.remove('hidden');
+            btnApproved?.classList.add('bg-kmf-600', 'text-white');
+            btnApproved?.classList.remove('bg-slate-100', 'text-slate-700');
             btnPending?.classList.remove('bg-kmf-600', 'text-white');
             btnPending?.classList.add('bg-slate-100', 'text-slate-700');
-            const urlInput = document.getElementById('admin-gas-url-input');
-            if (urlInput) urlInput.value = window.KMF_API.getGasUrl();
+            this.renderAdminApprovedAlumni();
         }
+    },
+
+    renderAdminSensus: async function() {
+        const pending = await window.KMF_API.getPendingList();
+        const alumni = await window.KMF_API.getApprovedAlumni();
+
+        const badgePending = document.getElementById('admin-badge-pending-tab');
+        const badgeApproved = document.getElementById('admin-badge-approved-tab');
+        if (badgePending) badgePending.textContent = pending.length;
+        if (badgeApproved) badgeApproved.textContent = alumni.length;
+
+        this.switchAdminSensusSubTab(this.currentAdminSensusTab || 'pending');
     },
 
     renderAdminPending: async function() {
         const container = document.getElementById('admin-pending-container');
-        const badge = document.getElementById('admin-badge-pending');
+        const badge = document.getElementById('admin-badge-pending-tab');
         if (!container) return;
 
-        // Tampilkan indikator loading saat sinkronisasi langsung dengan Spreadsheet
         container.innerHTML = `
             <div class="text-center py-10 bg-white rounded-2xl border border-slate-200 p-6 space-y-2">
                 <i class="fa-solid fa-circle-notch fa-spin text-2xl text-kmf-600"></i>
                 <h4 class="font-bold text-slate-700 text-sm">Menghubungkan ke Google Spreadsheet...</h4>
-                <p class="text-xs text-slate-500">Memeriksa data antrean verifikasi sensus alumni terbaru.</p>
+                <p class="text-xs text-slate-500">Memeriksa antrean verifikasi sensus alumni terbaru.</p>
             </div>
         `;
 
@@ -3430,20 +3640,277 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                 </div>
 
                 <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
-                    <button onclick='App.previewPendingKta(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs text-kmf-700 hover:text-kmf-800 font-semibold flex items-center gap-1">
-                        <i class="fa-solid fa-id-card"></i> Pratinjau e-KTA
-                    </button>
                     <div class="flex items-center gap-2">
-                        <button onclick="App.handleRejectAlumni('${item.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 transition">
+                        <button onclick='App.previewPendingKta(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs text-kmf-700 hover:text-kmf-800 font-semibold flex items-center gap-1 cursor-pointer">
+                            <i class="fa-solid fa-id-card"></i> Pratinjau e-KTA
+                        </button>
+                        <button onclick="App.sapaAlumniWa('${item.noWa}', '${item.nama}')" class="text-xs text-emerald-700 hover:text-emerald-800 font-semibold flex items-center gap-1 cursor-pointer">
+                            <i class="fa-brands fa-whatsapp"></i> Sapa WA
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="App.handleRejectAlumni('${item.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 transition cursor-pointer">
                             <i class="fa-solid fa-times"></i> Tolak
                         </button>
-                        <button onclick="App.handleApproveAlumni('${item.id}')" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 hover:bg-kmf-700 text-white transition flex items-center gap-1.5 shadow-sm">
+                        <button onclick="App.handleApproveAlumni('${item.id}')" class="px-4 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 hover:bg-kmf-700 text-white transition flex items-center gap-1.5 shadow-sm cursor-pointer">
                             <i class="fa-solid fa-check"></i> Setujui (Approve)
                         </button>
                     </div>
                 </div>
             </div>
         `).join('');
+    },
+
+    renderAdminApprovedAlumni: async function() {
+        const container = document.getElementById('admin-approved-container');
+        if (!container) return;
+
+        const alumni = await window.KMF_API.getApprovedAlumni();
+        const keyword = (document.getElementById('admin-filter-keyword')?.value || '').toLowerCase().trim();
+        const filterKec = document.getElementById('admin-filter-kecamatan')?.value || '';
+        const filterPondok = document.getElementById('admin-filter-pondok')?.value || '';
+        const filterGuru = document.getElementById('admin-filter-guru')?.value || '';
+
+        const filtered = alumni.filter(item => {
+            const matchKw = !keyword || 
+                (item.nama && item.nama.toLowerCase().includes(keyword)) ||
+                (item.panggilan && item.panggilan.toLowerCase().includes(keyword)) ||
+                (item.noWa && item.noWa.includes(keyword)) ||
+                (item.tahunLulus && String(item.tahunLulus).includes(keyword));
+
+            const matchKec = !filterKec || item.kecamatan === filterKec;
+            const matchPondok = !filterPondok || (item.pondokKajen && item.pondokKajen.includes(filterPondok));
+            const matchGuru = !filterGuru || (item.guruKajen && item.guruKajen.includes(filterGuru));
+
+            return matchKw && matchKec && matchPondok && matchGuru;
+        });
+
+        const badgeApproved = document.getElementById('admin-badge-approved-tab');
+        if (badgeApproved) badgeApproved.textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <i class="fa-solid fa-users-slash text-2xl text-slate-400"></i>
+                    <h4 class="font-bold text-slate-700 text-sm">Tidak ada data alumni yang cocok</h4>
+                    <p class="text-xs text-slate-500">Silakan sesuaikan kata kunci atau reset filter pencarian di atas.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = filtered.map(item => `
+            <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs hover:border-kmf-300 transition flex items-start gap-3.5">
+                <div class="w-13 aspect-[2/3] rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200 shadow-2xs">
+                    <img src="${item.foto}" alt="${item.nama}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='assets/img/logo.png';">
+                </div>
+                <div class="flex-1 min-w-0 space-y-1">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs sm:text-sm leading-tight">${item.nama}</h4>
+                            <p class="text-[10.5px] text-kmf-600 font-semibold">${item.panggilan ? `"${item.panggilan}"` : ''} • Lulus ${item.tahunLulus || '-'}</p>
+                        </div>
+                        <span class="text-[9.5px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-full font-bold shrink-0">
+                            Terverifikasi
+                        </span>
+                    </div>
+
+                    <div class="text-[11px] text-slate-600 grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-0.5 pt-0.5">
+                        <div><i class="fa-solid fa-school text-slate-400 w-3.5"></i> ${item.marhalah || '-'}</div>
+                        <div><i class="fa-solid fa-mosque text-slate-400 w-3.5"></i> ${item.pondokKajen || '-'}</div>
+                        <div><i class="fa-solid fa-chalkboard-user text-slate-400 w-3.5"></i> Guru: ${item.guruKajen || '-'}</div>
+                        <div><i class="fa-solid fa-location-dot text-rose-500 w-3.5"></i> Kec. ${item.kecamatan || '-'} (Desa ${item.desa || '-'})</div>
+                    </div>
+
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap text-xs">
+                        <div class="text-[11px] text-slate-500">
+                            No WA: <a href="https://wa.me/${item.noWa}" target="_blank" class="text-emerald-700 font-semibold underline">${item.noWa || '-'}</a>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick='App.previewPendingKta(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-[10.5px] transition flex items-center gap-1 cursor-pointer">
+                                <i class="fa-solid fa-id-card text-kmf-600"></i> e-KTA
+                            </button>
+                            <button onclick="App.sapaAlumniWa('${item.noWa}', '${item.nama}')" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-semibold rounded-lg text-[10.5px] transition border border-emerald-200/80 flex items-center gap-1 cursor-pointer">
+                                <i class="fa-brands fa-whatsapp text-emerald-600"></i> Sapa WA
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    resetAdminAlumniFilters: function() {
+        const kw = document.getElementById('admin-filter-keyword');
+        const kec = document.getElementById('admin-filter-kecamatan');
+        const pondok = document.getElementById('admin-filter-pondok');
+        const guru = document.getElementById('admin-filter-guru');
+        if (kw) kw.value = '';
+        if (kec) kec.value = '';
+        if (pondok) pondok.value = '';
+        if (guru) guru.value = '';
+        this.renderAdminApprovedAlumni();
+    },
+
+    sapaAlumniWa: function(noWa, nama) {
+        if (!noWa) {
+            alert('Nomor WhatsApp alumni ini tidak tercantum.');
+            return;
+        }
+        let clean = String(noWa).replace(/[^0-9]/g, '');
+        if (clean.startsWith('0')) clean = '62' + clean.slice(1);
+        if (clean.startsWith('8')) clean = '62' + clean;
+
+        const text = encodeURIComponent(
+            `Assalamu'alaikum wr. wb. Sahabat ${nama},\n\n` +
+            `Kami dari Pengurus Cabang KMF Kabupaten Demak (Keluarga Mathali'ul Falah).\n` +
+            `Terima kasih telah berpartisipasi dalam Sensus Santri & Alumni Kajen di Demak. ` +
+            `Salam ukhuwah & silaturrahim salaf fiqh sosial.\n\n` +
+            `Wassalamu'alaikum wr. wb.`
+        );
+        window.open(`https://wa.me/${clean}?text=${text}`, '_blank');
+    },
+
+    renderAdminUsaha: async function() {
+        const container = document.getElementById('admin-usaha-container');
+        const badge = document.getElementById('admin-usaha-total-badge');
+        if (!container) return;
+
+        const usaha = await window.KMF_API.getApprovedUsaha();
+        if (badge) badge.textContent = usaha.length;
+
+        if (usaha.length === 0) {
+            container.innerHTML = `
+                <div class="col-span-full bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-2">
+                    <i class="fa-solid fa-store-slash text-2xl text-slate-400"></i>
+                    <h4 class="font-bold text-slate-700 text-sm">Belum ada usaha santri terdaftar</h4>
+                    <p class="text-xs text-slate-500">Usaha santri yang didaftarkan pada form sensus akan tampil di sini.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = usaha.map(u => `
+            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-2xs space-y-2.5">
+                <div class="flex items-start gap-3">
+                    <div class="w-14 h-14 rounded-xl bg-slate-100 overflow-hidden shrink-0 border border-slate-200">
+                        <img src="${u.foto || 'assets/img/logo.png'}" alt="${u.namaUsaha}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='assets/img/logo.png';">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="text-[9.5px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-bold">
+                            ${u.kategori || 'Usaha Santri'}
+                        </span>
+                        <h4 class="font-bold text-slate-800 text-xs sm:text-sm truncate mt-0.5">${u.namaUsaha}</h4>
+                        <p class="text-[11px] text-slate-600 truncate">Pemilik: <strong>${u.pemilik || '-'}</strong> • Kec. ${u.kecamatan || '-'}</p>
+                    </div>
+                </div>
+                <p class="text-[11.5px] text-slate-600 line-clamp-2">${u.deskripsi || '-'}</p>
+                <div class="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-xs">
+                    ${u.linkGmaps ? `
+                        <a href="${u.linkGmaps}" target="_blank" class="text-blue-600 hover:underline font-semibold flex items-center gap-1 text-[11px]">
+                            <i class="fa-solid fa-map-location-dot"></i> Peta Toko
+                        </a>
+                    ` : '<span class="text-slate-400 text-[10.5px]">Tidak ada maps</span>'}
+                    
+                    ${u.waBisnis ? `
+                        <a href="https://wa.me/${u.waBisnis}" target="_blank" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg text-[10.5px] border border-emerald-200/70 flex items-center gap-1">
+                            <i class="fa-brands fa-whatsapp text-emerald-600"></i> Hubungi Toko
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
+    },
+
+    renderAdminSelapanan: async function() {
+        const container = document.getElementById('admin-selapanan-container');
+        if (!container) return;
+
+        const rsvpList = await window.KMF_API.getRSVPList() || [];
+
+        let countHadir = 0;
+        let countRagu = 0;
+        let countIzin = 0;
+
+        rsvpList.forEach(r => {
+            const st = String(r.kehadiran || '').toLowerCase();
+            if (st.includes('hadir')) countHadir++;
+            else if (st.includes('ragu')) countRagu++;
+            else countIzin++;
+        });
+
+        const statHadirEl = document.getElementById('admin-rsvp-stat-hadir');
+        const statRaguEl = document.getElementById('admin-rsvp-stat-ragu');
+        const statIzinEl = document.getElementById('admin-rsvp-stat-izin');
+
+        if (statHadirEl) statHadirEl.textContent = countHadir;
+        if (statRaguEl) statRaguEl.textContent = countRagu;
+        if (statIzinEl) statIzinEl.textContent = countIzin;
+
+        if (rsvpList.length === 0) {
+            container.innerHTML = `
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 text-center space-y-1">
+                    <p class="text-xs text-slate-500">Belum ada buku tamu atau konfirmasi selapanan yang tercatat.</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = rsvpList.map(item => `
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1 text-xs">
+                <div class="flex items-center justify-between gap-2">
+                    <div class="font-bold text-slate-800">${item.nama}</div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        String(item.kehadiran).toLowerCase().includes('hadir') 
+                            ? 'bg-emerald-100 text-emerald-800' 
+                            : 'bg-amber-100 text-amber-800'
+                    }">
+                        ${item.kehadiran || 'hadir'}
+                    </span>
+                </div>
+                <div class="text-[10.5px] text-slate-500">${item.asal || '-'}</div>
+                ${item.pesan ? `<div class="text-[11.5px] text-slate-700 italic bg-white p-2 rounded-lg border border-slate-100 mt-1">"${item.pesan}"</div>` : ''}
+            </div>
+        `).join('');
+    },
+
+    renderAdminSettings: function() {
+        const urlInput = document.getElementById('admin-gas-url-input');
+        if (urlInput) urlInput.value = window.KMF_API.getGasUrl();
+    },
+
+    pingGasConnection: async function() {
+        const gasUrl = window.KMF_API.getGasUrl();
+        if (!gasUrl) {
+            alert('URL Google Apps Script belum disetel.');
+            return;
+        }
+        try {
+            const res = await fetch(`${gasUrl}?action=ping`);
+            const data = await res.json();
+            alert(`Alhamdulillah! Koneksi Aktif:\n\n${data.message || 'Berhasil terhubung ke Apps Script.'}`);
+        } catch (err) {
+            alert(`Gagal terhubung ke Google Apps Script: ${err.message}`);
+        }
+    },
+
+    changeAdminPin: function() {
+        const input = document.getElementById('admin-new-pin-input');
+        const newPin = (input?.value || '').trim();
+        if (newPin.length < 4) {
+            alert('PIN baru minimal harus 4 digit angka.');
+            return;
+        }
+        window.KMF_API.setAdminPin(newPin);
+        if (input) input.value = '';
+        alert(`Alhamdulillah! PIN Pengurus berhasil diubah menjadi: ${newPin}\nSimpan PIN ini baik-baik.`);
+    },
+
+    refreshAdminData: async function() {
+        await window.KMF_API.getApprovedAlumni(true);
+        await window.KMF_API.getPendingList(true);
+        await this.switchAdminModule(this.currentAdminModule || 'overview');
+        alert('Data admin berhasil disegarkan dari database.');
     },
 
     previewPendingKta: function(item) {
@@ -3527,6 +3994,24 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
                 }
             }
         });
+
+        // Update badge sidebar admin juga
+        const sidebarPendingBadge = document.getElementById('admin-sidebar-badge-pending');
+        const mobPendingDot = document.getElementById('admin-mob-pending-dot');
+        const badgePendingTab = document.getElementById('admin-badge-pending-tab');
+
+        if (pending.length > 0) {
+            if (sidebarPendingBadge) {
+                sidebarPendingBadge.textContent = pending.length;
+                sidebarPendingBadge.classList.remove('hidden');
+            }
+            if (mobPendingDot) mobPendingDot.classList.remove('hidden');
+            if (badgePendingTab) badgePendingTab.textContent = pending.length;
+        } else {
+            if (sidebarPendingBadge) sidebarPendingBadge.classList.add('hidden');
+            if (mobPendingDot) mobPendingDot.classList.add('hidden');
+            if (badgePendingTab) badgePendingTab.textContent = '0';
+        }
     },
 
     /**

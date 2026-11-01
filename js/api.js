@@ -505,6 +505,76 @@ const KMF_API = {
         if (!gasUrl) throw new Error('URL Google Apps Script belum disetel.');
         const res = await fetch(`${gasUrl}?action=syncHeaders`);
         return await res.json();
+    },
+
+    /**
+     * Ekspor Data Alumni ke File CSV / Excel (28 Kolom Standar Lengkap)
+     */
+    exportAlumniToCsv: async function() {
+        const alumni = await this.getApprovedAlumni();
+        if (!alumni || alumni.length === 0) {
+            alert('Belum ada data alumni yang dapat diekspor.');
+            return;
+        }
+
+        const headers = [
+            'ID Alumni', 'Waktu Daftar', 'Nama Lengkap & Gelar', 'Nama Panggilan',
+            'Nomor WhatsApp', 'Tampilkan Nomor WA', 'Tahun Lulus / Angkatan', 'Marhalah Terakhir',
+            'Pondok di Kajen', 'Guru / Masyayikh Diangsu', 'Provinsi', 'Kabupaten / Kota',
+            'Kecamatan', 'Desa / Kelurahan', 'RT / RW', 'Alamat Lengkap', 'Titik Lokasi Google Maps',
+            'Kategori Profesi', 'Uraian Pekerjaan / Instansi', 'URL Foto Profil', 'Status Verifikasi',
+            'Nama Usaha', 'Kategori Usaha', 'Deskripsi Usaha', 'URL Foto Usaha', 'WhatsApp Bisnis',
+            'Link Google Maps Usaha', 'Catatan Pengurus'
+        ];
+
+        const escapeCsv = (val) => {
+            if (val === null || val === undefined) return '""';
+            const str = String(val).replace(/"/g, '""');
+            return `"${str}"`;
+        };
+
+        const rows = alumni.map((item, idx) => [
+            escapeCsv(item.id || ('ALUMNI-' + idx)),
+            escapeCsv(item.waktuDaftar || ''),
+            escapeCsv(item.nama || ''),
+            escapeCsv(item.panggilan || ''),
+            escapeCsv(item.noWa ? "'" + item.noWa : ''),
+            escapeCsv(item.tampilkanWa ? 'Ya' : 'Tidak'),
+            escapeCsv(item.tahunLulus || item.angkatan || ''),
+            escapeCsv(item.marhalah || ''),
+            escapeCsv(item.pondokKajen || ''),
+            escapeCsv(item.guruKajen || ''),
+            escapeCsv(item.provinsi || 'Jawa Tengah'),
+            escapeCsv(item.kabupaten || 'Kabupaten Demak'),
+            escapeCsv(item.kecamatan || ''),
+            escapeCsv(item.desa || ''),
+            escapeCsv(item.rtRw || ''),
+            escapeCsv(item.alamat || ''),
+            escapeCsv(item.titikLokasiMaps || ''),
+            escapeCsv(item.profesiKategori || item.pekerjaan || ''),
+            escapeCsv(item.profesiDetail || ''),
+            escapeCsv(item.foto || ''),
+            escapeCsv(item.status || 'APPROVED'),
+            escapeCsv(item.usaha ? item.usaha.namaUsaha : ''),
+            escapeCsv(item.usaha ? item.usaha.kategori : ''),
+            escapeCsv(item.usaha ? item.usaha.deskripsi : ''),
+            escapeCsv(item.usaha ? item.usaha.foto : ''),
+            escapeCsv(item.usaha && item.usaha.waBisnis ? "'" + item.usaha.waBisnis : ''),
+            escapeCsv(item.usaha ? item.usaha.linkGmaps : ''),
+            escapeCsv(item.catatan || '')
+        ].join(','));
+
+        const csvContent = '\uFEFF' + [headers.map(escapeCsv).join(','), ...rows].join('\r\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const nowStr = new Date().toISOString().split('T')[0];
+        a.href = url;
+        a.download = `Data_Alumni_KMF_Demak_${nowStr}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 };
 

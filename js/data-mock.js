@@ -183,6 +183,41 @@ const KMF_DATA = {
         "Lainnya"
     ],
 
+    // Daftar Asrama / Pondok Pesantren di Kajen & Sekitarnya
+    pondokKajenList: [
+        "Pondok Maslakul Huda (PMH Pusat)",
+        "Pondok Pesantren Maslakul Huda Putra",
+        "Pondok Maslakul Huda Putri",
+        "Pondok Al-Badi'iyyah",
+        "Pondok Wathoniyah",
+        "Pondok Mathali'un Najah",
+        "Pondok Raudlatul Ulum",
+        "Pondok Darul Falah",
+        "Pondok Al-Hadi (Kajen)",
+        "Pondok Kulon Banat Kajen",
+        "Pondok Tanbihul Ghofilin",
+        "Pondok Al-Husna",
+        "Pondok Al-Fattah",
+        "Pondok Yanbu'ul Qur'an",
+        "Ndalem Masyayikh / Non-Asrama",
+        "Lainnya di Kajen / Sekitarnya"
+    ],
+
+    // Masyayikh & Guru Utama yang Diangsu di Kajen
+    guruKajenList: [
+        "KH. MA. Sahal Mahfudh",
+        "KH. Abdullah Salam (Mbah Duloh)",
+        "Ibu Nyai Hj. Nafisah Sahal",
+        "KH. Nafi' Abdillah",
+        "KH. Muhibbi",
+        "KH. Abdul Aziz Musyaffa'",
+        "KH. Ahmad Nadhif Abdul Mujib",
+        "KH. Mujiburrohman (Gus Mujib)",
+        "KH. Abdullah Ubab Maimoen",
+        "KH. Zaki Fuad Abdillah",
+        "Lainnya"
+    ],
+
     // Agenda / Kegiatan Terdekat KMF Demak (Format Kaya Ala Halaman Berita)
     agendaList: [
         {

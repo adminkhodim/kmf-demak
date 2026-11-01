@@ -2716,87 +2716,468 @@
         </section>
 
 
-        <!-- ==================== TAB 8: PANEL PENGURUS (ADMIN) ==================== -->
+        <!-- ==================== TAB 8: PORTAL ADMIN PENGURUS (ALA ASNAWIYYAH) ==================== -->
         <section id="view-admin" class="tab-content hidden space-y-4">
-            <!-- Admin Login Box -->
-            <div id="admin-login-box" class="max-w-md mx-auto bg-white p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs text-center space-y-4">
-                <div class="w-14 h-14 mx-auto rounded-2xl bg-kmf-50 text-kmf-600 flex items-center justify-center text-2xl">
+            <!-- 1. Admin Login Box -->
+            <div id="admin-login-box" class="max-w-md mx-auto bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/90 shadow-sm text-center space-y-5 my-8">
+                <div class="w-16 h-16 mx-auto rounded-2xl bg-kmf-50 text-kmf-700 flex items-center justify-center text-3xl shadow-inner border border-kmf-100">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
                 <div>
-                    <h2 class="font-bold text-base sm:text-lg text-slate-800">Akses Pengurus KMF Demak</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Masukkan PIN Pengurus untuk memverifikasi pendaftaran alumni baru.</p>
+                    <span class="inline-block text-[11px] font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase tracking-wider mb-2">Pusat Komando Sekretariat</span>
+                    <h2 class="font-bold text-lg sm:text-xl text-slate-800">Portal Pengurus KMF Demak</h2>
+                    <p class="text-xs text-slate-500 mt-1 max-w-xs mx-auto">Satu pintu pengelolaan sensus santri, direktori alumni, e-KTA, bursa usaha, dan buku tamu selapanan.</p>
                 </div>
-                <form onsubmit="App.handleAdminLogin(event)" class="space-y-3">
+                <form onsubmit="App.handleAdminLogin(event)" class="space-y-3.5 pt-1">
                     <div>
-                        <input type="password" id="admin-pin-input" placeholder="Masukkan PIN Pengurus" required maxlength="8" class="text-center tracking-widest text-lg font-bold w-full py-2.5 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition">
-                        <p class="text-[10px] text-slate-400 mt-1">PIN Default: 1912 (Tahun Berdiri Mathali'ul Falah)</p>
+                        <label class="block text-xs font-semibold text-slate-700 text-left mb-1.5">PIN Akses Pengurus</label>
+                        <div class="relative">
+                            <input type="password" id="admin-pin-input" placeholder="Masukkan PIN Pengurus" required maxlength="8" class="text-center tracking-widest text-lg font-bold w-full py-2.5 px-3 bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-kmf-500 focus:bg-white transition shadow-2xs">
+                        </div>
+                        <p class="text-[10px] text-slate-400 text-left mt-1.5 flex items-center gap-1">
+                            <i class="fa-solid fa-circle-info text-slate-400"></i> PIN Default Pengurus: <strong class="text-slate-600">1912</strong> (Tahun Mathole' Kajen)
+                        </p>
                     </div>
-                    <button type="submit" class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-semibold py-2.5 rounded-xl transition text-xs shadow-xs active:scale-98">
-                        Buka Panel Verifikasi
+                    <button type="submit" class="w-full bg-kmf-600 hover:bg-kmf-700 text-white font-bold py-2.5 px-4 rounded-xl transition text-xs shadow-md shadow-kmf-600/20 active:scale-98 flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Buka Portal Pengurus</span>
+                    </button>
+                    <button type="button" onclick="App.navigateTo('home')" class="w-full text-xs font-semibold text-slate-500 hover:text-slate-700 py-1 transition cursor-pointer">
+                        Kembali ke Beranda Publik
                     </button>
                 </form>
             </div>
 
-            <!-- Admin Dashboard -->
+            <!-- 2. Admin Command Center Dashboard (Dual-Mode: Desktop Sidebar + Mobile Icon Grid) -->
             <div id="admin-dashboard-box" class="hidden space-y-4">
-                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                            <h2 class="font-bold text-slate-800 text-sm md:text-base">Panel Verifikasi KMF Cabang Demak</h2>
+                
+                <!-- Mobile Top Bar Khusus Admin (Hanya Tampil di Layar HP) -->
+                <div class="block md:hidden bg-white p-3.5 rounded-2xl border border-slate-200/90 shadow-2xs space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <img src="assets/img/logo.png" alt="Logo KMF" class="w-7 h-7 object-contain">
+                            <div>
+                                <h3 class="font-bold text-xs text-slate-800 leading-tight">Portal Pengurus KMF</h3>
+                                <p class="text-[10px] text-emerald-600 font-semibold">Cabang Demak • Sesi Aktif</p>
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-500">Memeriksa keabsahan alumni Kajen sebelum data dipublikasikan.</p>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="App.navigateTo('home')" title="Web Publik" class="p-1.5 text-xs text-slate-500 hover:bg-slate-100 rounded-lg border border-slate-200">
+                                <i class="fa-solid fa-globe"></i>
+                            </button>
+                            <button onclick="App.handleAdminLogout()" title="Keluar" class="px-2.5 py-1 text-xs text-red-600 hover:bg-red-50 border border-red-200 rounded-lg font-bold">
+                                Keluar
+                            </button>
+                        </div>
                     </div>
-                    <button onclick="App.handleAdminLogout()" class="text-xs text-red-600 hover:bg-red-50 border border-red-200 px-3 py-1.5 rounded-lg transition font-medium active:scale-95">
-                        Keluar
-                    </button>
-                </div>
 
-                <!-- Tab Menu Admin -->
-                <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
-                    <button onclick="App.switchAdminTab('pending')" id="admin-tab-pending" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-kmf-600 text-white transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-clock-rotate-left"></i> Menunggu Verifikasi
-                        <span id="admin-badge-pending" class="bg-white/20 px-1.5 py-0.2 rounded-full text-[10px]">0</span>
-                    </button>
-                    <button onclick="App.switchAdminTab('settings')" id="admin-tab-settings" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-gear"></i> Konfigurasi Integrasi
-                    </button>
-                </div>
-
-                <!-- Sub-tab Admin 1: Daftar Pending Verifikasi -->
-                <div id="admin-view-pending" class="space-y-3">
-                    <div id="admin-pending-container" class="space-y-3">
-                        <!-- Dinamis via JS -->
-                    </div>
-                </div>
-
-                <!-- Sub-tab Admin 2: Konfigurasi Google Apps Script -->
-                <div id="admin-view-settings" class="hidden bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4 max-w-xl">
-                    <div>
-                        <h3 class="font-bold text-slate-800 text-sm">Integrasi Google Apps Script (GAS)</h3>
-                        <p class="text-xs text-slate-500">Hubungkan web app ini langsung ke Web App URL Google Spreadsheet Anda.</p>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="block text-xs font-medium text-slate-700">URL Web App Google Apps Script</label>
-                        <input type="url" id="admin-gas-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kmf-500 focus:outline-none">
-                        <p class="text-[10px] text-slate-400">Jika dikosongkan, aplikasi beroperasi menggunakan penyimpanan lokal (LocalStorage/Offline PWA).</p>
-                    </div>
-                    <button onclick="App.saveGasSettings()" class="bg-kmf-600 text-white font-semibold text-xs px-4 py-2 rounded-xl hover:bg-kmf-700 transition">
-                        Simpan Pengaturan
-                    </button>
-
-                    <!-- Sinkronisasi Tajuk/Header Database 28 Kolom -->
-                    <div class="pt-4 border-t border-slate-100 space-y-2">
-                        <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5 text-emerald-700">
-                            <i class="fa-solid fa-table-columns"></i> Sinkronisasi 28 Kolom Database Spreadsheet
-                        </h4>
-                        <p class="text-[11px] text-slate-500 leading-relaxed">
-                            Fitur ini secara otomatis menyelaraskan dan memperbarui baris tajuk (header baris ke-1) sheet <strong>Pending</strong> dan <strong>Alumni</strong> menjadi 28 kolom standar tanpa menghapus data pendaftar yang sudah ada di spreadsheet.
-                        </p>
-                        <button id="btn-sync-headers" onclick="App.syncSpreadsheetHeaders()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-xs cursor-pointer">
-                            <i class="fa-solid fa-arrows-rotate"></i> Sinkronkan 28 Kolom Spreadsheet Sekarang
+                    <!-- Mobile Grid Navigation ala Asnawiyyah (5 Icon Cards) -->
+                    <div class="grid grid-cols-5 gap-1.5 pt-1 border-t border-slate-100 text-center">
+                        <!-- 1. Ringkasan -->
+                        <button onclick="App.switchAdminModule('overview')" id="admin-mob-btn-overview" class="admin-mob-module-btn p-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-chart-pie text-base text-kmf-600"></i>
+                            <span class="text-[9px] font-bold mt-1 text-slate-700">Metrik</span>
                         </button>
+                        <!-- 2. Sensus -->
+                        <button onclick="App.switchAdminModule('sensus')" id="admin-mob-btn-sensus" class="admin-mob-module-btn relative p-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-id-card text-base text-slate-400"></i>
+                            <span id="admin-mob-pending-dot" class="hidden absolute top-1 right-2 w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+                            <span class="text-[9px] font-bold mt-1 text-slate-700">Sensus</span>
+                        </button>
+                        <!-- 3. Usaha -->
+                        <button onclick="App.switchAdminModule('usaha')" id="admin-mob-btn-usaha" class="admin-mob-module-btn p-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-store text-base text-slate-400"></i>
+                            <span class="text-[9px] font-bold mt-1 text-slate-700">Usaha</span>
+                        </button>
+                        <!-- 4. Selapanan -->
+                        <button onclick="App.switchAdminModule('selapanan')" id="admin-mob-btn-selapanan" class="admin-mob-module-btn p-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-calendar-check text-base text-slate-400"></i>
+                            <span class="text-[9px] font-bold mt-1 text-slate-700">Agenda</span>
+                        </button>
+                        <!-- 5. Settings -->
+                        <button onclick="App.switchAdminModule('settings')" id="admin-mob-btn-settings" class="admin-mob-module-btn p-2 rounded-xl transition flex flex-col items-center justify-center">
+                            <i class="fa-solid fa-sliders text-base text-slate-400"></i>
+                            <span class="text-[9px] font-bold mt-1 text-slate-700">Sistem</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Dual-Mode Layout (Desktop Sidebar + Content Canvas) -->
+                <div class="flex flex-col md:flex-row gap-5 items-start">
+                    
+                    <!-- ==================== DESKTOP STICKY LEFT SIDEBAR ==================== -->
+                    <aside class="hidden md:flex flex-col w-64 lg:w-72 shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-2xs p-4 sticky top-20 space-y-4">
+                        <!-- Admin Profile Header -->
+                        <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-kmf-50 to-emerald-50 rounded-xl border border-kmf-200/60">
+                            <img src="assets/img/logo.png" alt="Logo KMF" class="w-10 h-10 object-contain drop-shadow-xs">
+                            <div class="min-w-0">
+                                <h3 class="font-bold text-xs text-slate-800 truncate">Pengurus KMF Demak</h3>
+                                <p class="text-[10.5px] text-kmf-700 font-semibold flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Sesi Administrator
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Nav Items -->
+                        <nav class="space-y-1 text-xs">
+                            <button onclick="App.switchAdminModule('overview')" id="admin-nav-overview" class="admin-sidebar-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold transition text-left cursor-pointer">
+                                <span class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-chart-pie w-4 text-center"></i> Dashboard Statistik
+                                </span>
+                            </button>
+
+                            <button onclick="App.switchAdminModule('sensus')" id="admin-nav-sensus" class="admin-sidebar-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold transition text-left cursor-pointer">
+                                <span class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-id-card w-4 text-center"></i> Sensus & e-KTA Alumni
+                                </span>
+                                <span id="admin-sidebar-badge-pending" class="hidden text-[10px] bg-red-500 text-white font-bold px-1.5 py-0.2 rounded-full">0</span>
+                            </button>
+
+                            <button onclick="App.switchAdminModule('usaha')" id="admin-nav-usaha" class="admin-sidebar-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold transition text-left cursor-pointer">
+                                <span class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-store w-4 text-center"></i> Bursa Usaha Santri
+                                </span>
+                            </button>
+
+                            <button onclick="App.switchAdminModule('selapanan')" id="admin-nav-selapanan" class="admin-sidebar-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold transition text-left cursor-pointer">
+                                <span class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-calendar-check w-4 text-center"></i> Presensi Selapanan
+                                </span>
+                            </button>
+
+                            <button onclick="App.switchAdminModule('settings')" id="admin-nav-settings" class="admin-sidebar-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold transition text-left cursor-pointer">
+                                <span class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-sliders w-4 text-center"></i> Konfigurasi & Database
+                                </span>
+                            </button>
+                        </nav>
+
+                        <!-- Sidebar Quick Utilities & Logout -->
+                        <div class="pt-3 border-t border-slate-100 space-y-2">
+                            <button onclick="window.KMF_API.exportAlumniToCsv()" class="w-full text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-3 py-2 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-file-excel text-emerald-600"></i> Unduh Rekap (.CSV)
+                            </button>
+
+                            <button onclick="App.navigateTo('home')" class="w-full text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-globe text-slate-400"></i> Lihat Web Publik
+                            </button>
+
+                            <button onclick="App.handleAdminLogout()" class="w-full text-xs font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200/80 px-3 py-2 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar (Logout)
+                            </button>
+                        </div>
+                    </aside>
+
+                    <!-- ==================== MAIN CONTENT CANVAS (RIGHT SIDE) ==================== -->
+                    <div class="flex-1 w-full min-w-0 space-y-4">
+                        
+                        <!-- Top Breadcrumb & Status Bar -->
+                        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <h2 id="admin-canvas-title" class="font-bold text-slate-800 text-sm sm:text-base flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-pie text-kmf-600"></i> Dashboard Statistik KMF Cabang Demak
+                                </h2>
+                                <p id="admin-canvas-subtitle" class="text-xs text-slate-500 mt-0.5">Ringkasan data sensus alumni, bursa usaha, dan agenda selapanan.</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button onclick="App.refreshAdminData()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                                </button>
+                                <button onclick="window.KMF_API.exportAlumniToCsv()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition shadow-2xs active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-file-excel"></i> Ekspor Excel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ==================== 1. MODUL OVERVIEW (DASHBOARD METRIK) ==================== -->
+                        <div id="admin-module-overview" class="admin-module-section space-y-4">
+                            <!-- 4 Metrik Cards -->
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                <!-- Card 1: Alumni Terverifikasi -->
+                                <div onclick="App.switchAdminModule('sensus', 'approved')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2 cursor-pointer hover:border-emerald-400 hover:shadow-xs transition group">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-slate-500">Alumni Sahih</span>
+                                        <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-user-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-2xl font-black text-slate-800" id="admin-stat-alumni-count">0</div>
+                                    <p class="text-[10px] text-emerald-700 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-check-circle"></i> Terdata di direktori
+                                    </p>
+                                </div>
+
+                                <!-- Card 2: Menunggu Verifikasi (Pending) -->
+                                <div onclick="App.switchAdminModule('sensus', 'pending')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2 cursor-pointer hover:border-amber-400 hover:shadow-xs transition group">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-slate-500">Antrean Sensus</span>
+                                        <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-clock-rotate-left"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-baseline gap-2">
+                                        <div class="text-2xl font-black text-slate-800" id="admin-stat-pending-count">0</div>
+                                        <span id="admin-stat-pending-badge" class="hidden text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-red-100 text-red-700">Perlu Approval</span>
+                                    </div>
+                                    <p class="text-[10px] text-amber-700 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-hourglass-half"></i> Menunggu persetujuan
+                                    </p>
+                                </div>
+
+                                <!-- Card 3: Usaha Santri -->
+                                <div onclick="App.switchAdminModule('usaha')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2 cursor-pointer hover:border-blue-400 hover:shadow-xs transition group">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-slate-500">Bursa Usaha</span>
+                                        <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-store"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-2xl font-black text-slate-800" id="admin-stat-usaha-count">0</div>
+                                    <p class="text-[10px] text-blue-700 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-bag-shopping"></i> Toko & produk santri
+                                    </p>
+                                </div>
+
+                                <!-- Card 4: RSVP Selapanan -->
+                                <div onclick="App.switchAdminModule('selapanan')" class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2 cursor-pointer hover:border-purple-400 hover:shadow-xs transition group">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-bold text-slate-500">RSVP Selapanan</span>
+                                        <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm group-hover:scale-110 transition">
+                                            <i class="fa-solid fa-calendar-check"></i>
+                                        </div>
+                                    </div>
+                                    <div class="text-2xl font-black text-slate-800" id="admin-stat-rsvp-count">0</div>
+                                    <p class="text-[10px] text-purple-700 font-semibold flex items-center gap-1">
+                                        <i class="fa-solid fa-envelope-open-text"></i> Buku tamu undangan
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Quick Action Bar -->
+                            <div class="bg-gradient-to-r from-kmf-800 to-kmf-900 p-4 sm:p-5 rounded-2xl text-white shadow-sm space-y-3">
+                                <div>
+                                    <h3 class="font-bold text-sm sm:text-base flex items-center gap-2">
+                                        <i class="fa-solid fa-bolt text-amber-400"></i> Aksi Cepat Pengurus (Command Center)
+                                    </h3>
+                                    <p class="text-xs text-slate-300 mt-0.5">Akses cepat tugas rutin administrasi cabang Demak.</p>
+                                </div>
+                                <div class="flex flex-wrap items-center gap-2 pt-1">
+                                    <button onclick="App.switchAdminModule('sensus', 'pending')" class="px-3.5 py-2 rounded-xl bg-white text-kmf-800 font-bold text-xs hover:bg-slate-100 transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                        <i class="fa-solid fa-user-clock text-amber-600"></i> Periksa Antrean Sensus
+                                    </button>
+                                    <button onclick="window.KMF_API.exportAlumniToCsv()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                                        <i class="fa-solid fa-file-excel"></i> Unduh File Excel (.CSV)
+                                    </button>
+                                    <button onclick="App.switchAdminModule('selapanan')" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer">
+                                        <i class="fa-solid fa-book-open"></i> Buku Tamu Selapanan
+                                    </button>
+                                    <button onclick="App.syncSpreadsheetHeaders()" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-semibold text-xs transition flex items-center gap-1.5 cursor-pointer">
+                                        <i class="fa-solid fa-arrows-rotate"></i> Sinkronkan Database
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sebaran Alumni di 14 Kecamatan Kab. Demak -->
+                            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm flex items-center gap-2">
+                                            <i class="fa-solid fa-map-location-dot text-rose-500"></i> Sebaran Alumni di 14 Kecamatan se-Kabupaten Demak
+                                        </h3>
+                                        <p class="text-[11px] text-slate-500">Pantau persebaran anggota alumni Mathali'ul Falah di tiap wilayah kecamatan.</p>
+                                    </div>
+                                    <span class="text-xs font-bold text-kmf-700 bg-kmf-50 px-2.5 py-1 rounded-lg border border-kmf-200">14 Kecamatan</span>
+                                </div>
+                                <div id="admin-overview-district-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2">
+                                    <!-- Diisi dinamis via App.renderAdminOverview() -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ==================== 2. MODUL SENSUS & E-KTA ==================== -->
+                        <div id="admin-module-sensus" class="admin-module-section hidden space-y-4">
+                            <!-- Sub-nav Tabs Sensus -->
+                            <div class="flex items-center gap-2 border-b border-slate-200 pb-2">
+                                <button onclick="App.switchAdminSensusSubTab('pending')" id="admin-subtab-pending" class="px-4 py-2 rounded-xl text-xs font-bold bg-kmf-600 text-white transition flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Menunggu Verifikasi
+                                    <span id="admin-badge-pending-tab" class="bg-white/20 px-2 py-0.5 rounded-full text-[10.5px]">0</span>
+                                </button>
+                                <button onclick="App.switchAdminSensusSubTab('approved')" id="admin-subtab-approved" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition flex items-center gap-1.5 cursor-pointer">
+                                    <i class="fa-solid fa-users"></i> Direktori Alumni Terdata
+                                    <span id="admin-badge-approved-tab" class="bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full text-[10.5px]">0</span>
+                                </button>
+                            </div>
+
+                            <!-- Sub-view 2A: Antrean Pending -->
+                            <div id="admin-sensus-pending-view" class="space-y-3">
+                                <div id="admin-pending-container" class="space-y-3">
+                                    <!-- Dinamis via JS -->
+                                </div>
+                            </div>
+
+                            <!-- Sub-view 2B: Master Direktori Alumni Terdata -->
+                            <div id="admin-sensus-approved-view" class="hidden space-y-3">
+                                <!-- Multi-criteria Filter Box (Kecamatan + Pondok + Guru) -->
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+                                    <div class="flex flex-wrap items-center justify-between gap-2">
+                                        <h4 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                                            <i class="fa-solid fa-filter text-kmf-600"></i> Filter Multi-Dimensi Direktori Alumni
+                                        </h4>
+                                        <button onclick="App.resetAdminAlumniFilters()" class="text-xs font-semibold text-slate-500 hover:text-kmf-700 cursor-pointer">
+                                            Reset Filter
+                                        </button>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+                                        <!-- Kata Kunci -->
+                                        <div>
+                                            <label class="block text-[10.5px] font-semibold text-slate-600 mb-1">Cari Nama / No WA / Angkatan</label>
+                                            <div class="relative">
+                                                <input type="text" id="admin-filter-keyword" oninput="App.renderAdminApprovedAlumni()" placeholder="Ketik kata kunci..." class="w-full text-xs pl-8 pr-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Filter Kecamatan -->
+                                        <div>
+                                            <label class="block text-[10.5px] font-semibold text-slate-600 mb-1">Wilayah Kecamatan</label>
+                                            <select id="admin-filter-kecamatan" onchange="App.renderAdminApprovedAlumni()" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                                <option value="">Semua Kecamatan (14 Kec)</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Filter Pondok di Kajen -->
+                                        <div>
+                                            <label class="block text-[10.5px] font-semibold text-slate-600 mb-1">Asrama / Pondok di Kajen</label>
+                                            <select id="admin-filter-pondok" onchange="App.renderAdminApprovedAlumni()" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                                <option value="">Semua Pondok Kajen</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Filter Masyayikh Diangsu -->
+                                        <div>
+                                            <label class="block text-[10.5px] font-semibold text-slate-600 mb-1">Guru / Masyayikh Diangsu</label>
+                                            <select id="admin-filter-guru" onchange="App.renderAdminApprovedAlumni()" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-kmf-500">
+                                                <option value="">Semua Guru / Masyayikh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Approved Alumni Cards List -->
+                                <div id="admin-approved-container" class="space-y-2.5">
+                                    <!-- Dinamis via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ==================== 3. MODUL BURSA USAHA ==================== -->
+                        <div id="admin-module-usaha" class="admin-module-section hidden space-y-4">
+                            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between flex-wrap gap-2">
+                                <div>
+                                    <h3 class="font-bold text-xs sm:text-sm text-slate-800 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-store text-blue-600"></i> Katalog Produk & Toko Santri KMF Demak
+                                    </h3>
+                                    <p class="text-[11px] text-slate-500">Kelola dan kurasi usaha alumni yang dipromosikan di bursa santri.</p>
+                                </div>
+                                <div class="text-xs font-bold bg-blue-50 text-blue-700 px-3 py-1.5 rounded-xl border border-blue-200">
+                                    Total Usaha: <span id="admin-usaha-total-badge">0</span>
+                                </div>
+                            </div>
+                            <div id="admin-usaha-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <!-- Dinamis via JS -->
+                            </div>
+                        </div>
+
+                        <!-- ==================== 4. MODUL SELAPANAN ==================== -->
+                        <div id="admin-module-selapanan" class="admin-module-section hidden space-y-4">
+                            <!-- Ringkasan Kehadiran Selapanan -->
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="bg-white p-3.5 rounded-2xl border border-emerald-200 text-center space-y-1">
+                                    <div class="text-xs font-bold text-emerald-700">Hadir</div>
+                                    <div class="text-xl font-black text-slate-800" id="admin-rsvp-stat-hadir">0</div>
+                                </div>
+                                <div class="bg-white p-3.5 rounded-2xl border border-amber-200 text-center space-y-1">
+                                    <div class="text-xs font-bold text-amber-700">Ragu-ragu</div>
+                                    <div class="text-xl font-black text-slate-800" id="admin-rsvp-stat-ragu">0</div>
+                                </div>
+                                <div class="bg-white p-3.5 rounded-2xl border border-slate-200 text-center space-y-1">
+                                    <div class="text-xs font-bold text-slate-500">Izin / Belum</div>
+                                    <div class="text-xl font-black text-slate-800" id="admin-rsvp-stat-izin">0</div>
+                                </div>
+                            </div>
+
+                            <!-- Daftar Buku Tamu & Doa Restu -->
+                            <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-bold text-xs sm:text-sm text-slate-800 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-book-open text-purple-600"></i> Buku Tamu & Titipan Doa Restu Santri
+                                    </h3>
+                                    <button onclick="App.renderAdminSelapanan()" class="text-xs text-kmf-700 hover:underline font-semibold cursor-pointer">
+                                        Perbarui
+                                    </button>
+                                </div>
+                                <div id="admin-selapanan-container" class="space-y-2.5">
+                                    <!-- Dinamis via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ==================== 5. MODUL PENGATURAN & DATABASE ==================== -->
+                        <div id="admin-module-settings" class="admin-module-section hidden space-y-4">
+                            <!-- Integrasi GAS -->
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-4 max-w-2xl">
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-sm">Integrasi Google Apps Script (GAS)</h3>
+                                    <p class="text-xs text-slate-500">Koneksi cloud langsung ke Web App URL Google Spreadsheet Anda.</p>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block text-xs font-medium text-slate-700">URL Web App Google Apps Script</label>
+                                    <input type="url" id="admin-gas-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kmf-500 focus:outline-none">
+                                    <p class="text-[10px] text-slate-400">Jika dikosongkan, aplikasi beroperasi menggunakan penyimpanan lokal (LocalStorage/Offline PWA).</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="App.saveGasSettings()" class="bg-kmf-600 text-white font-semibold text-xs px-4 py-2 rounded-xl hover:bg-kmf-700 transition cursor-pointer">
+                                        Simpan Pengaturan
+                                    </button>
+                                    <button onclick="App.pingGasConnection()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs px-3.5 py-2 rounded-xl transition cursor-pointer">
+                                        Test Koneksi (Ping)
+                                    </button>
+                                </div>
+
+                                <!-- Sinkronisasi Tajuk/Header Database 28 Kolom -->
+                                <div class="pt-4 border-t border-slate-100 space-y-2">
+                                    <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5 text-emerald-700">
+                                        <i class="fa-solid fa-table-columns"></i> Sinkronisasi 28 Kolom Database Spreadsheet
+                                    </h4>
+                                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                                        Menyelaraskan tajuk kolom dan menggeser baris lama di sheet <strong>Pending</strong> dan <strong>Alumni</strong> menjadi 28 kolom standar tanpa menghapus data pendaftar.
+                                    </p>
+                                    <button id="btn-sync-headers" onclick="App.syncSpreadsheetHeaders()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                                        <i class="fa-solid fa-arrows-rotate"></i> Sinkronkan 28 Kolom Spreadsheet Sekarang
+                                    </button>
+                                </div>
+
+                                <!-- Ubah PIN Pengurus -->
+                                <div class="pt-4 border-t border-slate-100 space-y-3">
+                                    <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5 text-amber-700">
+                                        <i class="fa-solid fa-key"></i> Keamanan & PIN Pengurus
+                                    </h4>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                        <div>
+                                            <label class="block text-[11px] font-medium text-slate-600 mb-1">PIN Pengurus Baru</label>
+                                            <input type="password" id="admin-new-pin-input" placeholder="Ketik 4-6 angka" maxlength="8" class="w-full text-xs px-3 py-2 border border-slate-300 rounded-xl focus:ring-2 focus:ring-kmf-500 focus:outline-none">
+                                        </div>
+                                        <div class="flex items-end">
+                                            <button onclick="App.changeAdminPin()" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs px-4 py-2 rounded-xl transition cursor-pointer w-full sm:w-auto">
+                                                Simpan PIN Baru
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
