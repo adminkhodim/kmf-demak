@@ -55,7 +55,7 @@ const App = {
         const path = window.location.pathname.toLowerCase();
         const hash = window.location.hash.toLowerCase();
         const pageParam = urlParams.get('page') || urlParams.get('tab');
-        if (path.endsWith('/admin') || hash === '#admin' || pageParam === 'admin') {
+        if (path === '/admin' || path === '/admin/' || path.endsWith('/admin') || path.endsWith('/admin/') || hash === '#admin' || pageParam === 'admin') {
             setTimeout(() => {
                 this.navigateTo('admin');
             }, 100);
