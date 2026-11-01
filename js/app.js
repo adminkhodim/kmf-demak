@@ -2208,6 +2208,39 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
     },
 
     /**
+     * Membagikan Tautan & Ajakan Memasang Web App PWA KMF Demak ke WhatsApp
+     */
+    shareAppToWhatsApp: function() {
+        const text = 
+`*Assalamu’alaikum Warahmatullahi Wabarakatuh* 🌿✨
+
+Sahabat Santri & Alumni Perguruan Islam Mathali'ul Falah (Kajen, Pati) di Kabupaten Demak dan sekitarnya:
+
+Kini telah hadir *Aplikasi Web Resmi (PWA) KMF Demak* sebagai wadah ukhuwah, direktori alumni salaf, dan kemaslahatan santri.
+
+📲 *Aplikasi ini dapat dipasang (install) langsung di layar utama HP Android & iPhone tanpa unduh di Playstore:*
+👉 Kunjungi link: *https://www.kmf.my.id*
+
+🌟 *Layanan & Fitur Unggulan:*
+1️⃣ *Sensus Mandiri & e-KTA Digital*: Penerbitan Kartu Tanda Anggota resmi santri.
+2️⃣ *Direktori Sanad Kajen*: Pemetaan alumni berdasarkan asrama/pondok dan guru/masyayikh yang diangsu.
+3️⃣ *Bursa Usaha Santri*: Dukungan ekonomi dan produk wirausaha santri se-Kabupaten Demak.
+4️⃣ *Portal Ibadah & Warta*: Jadwal sholat akurat wilayah Demak, amalan salaf, dan agenda selapanan.
+
+💡 *Cara Pasang Cepat di HP:*
+• Buka link: *https://www.kmf.my.id*
+• Klik tombol *"Pasang"* di menu atas, atau pilih menu browser lalu klik *"Tambahkan ke Layar Utama / Add to Home Screen"*.
+
+Mari kita sebarkan tautan ini kepada keluarga dan sahabat alumni Mathali'ul Falah di Kota Wali Kabupaten Demak.
+
+_Syukron Katsiron,_
+*Pengurus Cabang KMF Kabupaten Demak*`;
+
+        const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(waUrl, '_blank');
+    },
+
+    /**
      * ==========================================
      * AUTENTIKASI PENGGUNA & KTA SANTRI DIGITAL
      * ==========================================

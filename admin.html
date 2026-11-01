@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SIM KMF Demak | Portal Administrasi Pengurus Cabang</title>
     
+    <!-- Open Graph / WhatsApp / Facebook (Logo KMF Demak 512x512) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.kmf.my.id/admin">
+    <meta property="og:site_name" content="KMF Demak - Keluarga Mathali'ul Falah">
+    <meta property="og:title" content="SIM KMF Demak - Portal Administrasi Pengurus Cabang">
+    <meta property="og:description" content="Portal Administrasi Resmi Pengurus Cabang KMF Kabupaten Demak. Sistem Informasi Manajemen Sensus Santri & Alumni Mathali'ul Falah.">
+    <meta property="og:image" content="https://www.kmf.my.id/assets/img/logo.png">
+    <meta property="og:image:secure_url" content="https://www.kmf.my.id/assets/img/logo.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+
     <!-- Favicon & PWA Icons -->
     <link rel="icon" type="image/png" href="assets/icons/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
@@ -289,6 +301,13 @@
                     <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-blue-600"></i>
                     <span>Portal Publik</span>
                 </a>
+
+                <!-- Tombol Share WA Ajakan Pasang App -->
+                <button type="button" onclick="App.shareAppToWhatsApp()" title="Bagikan Ajakan Pasang App ke WhatsApp"
+                    class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/90 transition shadow-2xs cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-xs"></i>
+                    <span>Share App WA</span>
+                </button>
 
                 <!-- Notifikasi Bell -->
                 <button type="button" onclick="App.switchAdminModule('sensus', 'pending')" title="Antrean Sensus Pending"
