@@ -3454,6 +3454,18 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
             if (subTitleEl) subTitleEl.textContent = moduleMeta[this.currentAdminModule].subtitle;
         }
 
+        const topbarBreadcrumb = document.getElementById('admin-topbar-breadcrumb');
+        const breadcrumbNames = {
+            overview: 'Dashboard Utama',
+            sensus: 'Sensus & e-KTA Alumni',
+            usaha: 'Bursa Usaha Santri',
+            selapanan: 'Presensi Selapanan',
+            settings: 'Konfigurasi & Database'
+        };
+        if (topbarBreadcrumb && breadcrumbNames[this.currentAdminModule]) {
+            topbarBreadcrumb.textContent = breadcrumbNames[this.currentAdminModule];
+        }
+
         // 6. Muat Data Modul
         if (this.currentAdminModule === 'overview') {
             await this.renderAdminOverview();
@@ -3904,6 +3916,56 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh
         window.KMF_API.setAdminPin(newPin);
         if (input) input.value = '';
         alert(`Alhamdulillah! PIN Pengurus berhasil diubah menjadi: ${newPin}\nSimpan PIN ini baik-baik.`);
+    },
+
+    saveGasUrlFromAdmin: function() {
+        const urlInput = document.getElementById('admin-gas-url-input');
+        const url = (urlInput?.value || '').trim();
+        if (!url) {
+            alert('Mohon masukkan URL Google Apps Script yang valid.');
+            return;
+        }
+        window.KMF_API.setGasUrl(url);
+        alert('URL Google Apps Script berhasil disimpan!');
+    },
+
+    toggleAdminSidebarCollapse: function() {
+        const sidebar = document.getElementById('admin-sidebar');
+        if (!sidebar) return;
+        const isCollapsed = sidebar.classList.contains('w-20');
+        if (isCollapsed) {
+            sidebar.classList.remove('w-20');
+            sidebar.classList.add('w-64', 'lg:w-72');
+        } else {
+            sidebar.classList.remove('w-64', 'lg:w-72');
+            sidebar.classList.add('w-20');
+        }
+    },
+
+    handleAdminGlobalSearch: function(query) {
+        if (!query || query.trim() === '') return;
+        const q = query.toLowerCase().trim();
+        if (q.includes('sensus') || q.includes('alumni') || q.includes('pending') || q.includes('kajen') || q.includes('guru') || q.includes('pondok')) {
+            this.switchAdminModule('sensus');
+            const kwInput = document.getElementById('admin-filter-keyword');
+            if (kwInput) {
+                kwInput.value = query;
+                this.renderAdminApprovedAlumni();
+            }
+        } else if (q.includes('usaha') || q.includes('toko') || q.includes('produk') || q.includes('bursa')) {
+            this.switchAdminModule('usaha');
+        } else if (q.includes('selapan') || q.includes('rsvp') || q.includes('tamu') || q.includes('presensi')) {
+            this.switchAdminModule('selapanan');
+        } else if (q.includes('pin') || q.includes('gas') || q.includes('sheet') || q.includes('database') || q.includes('setting')) {
+            this.switchAdminModule('settings');
+        } else {
+            this.switchAdminModule('sensus', 'approved');
+            const kwInput = document.getElementById('admin-filter-keyword');
+            if (kwInput) {
+                kwInput.value = query;
+                this.renderAdminApprovedAlumni();
+            }
+        }
     },
 
     refreshAdminData: async function() {
